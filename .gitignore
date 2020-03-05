@@ -12,3 +12,5 @@ athome*
 seed
 indexer
 *.tr*
+std.error.log
+results/
