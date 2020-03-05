@@ -1,6 +1,12 @@
 # Sampled Continuous Active Learning
 Sampled Continuous Active Learning (SCAL) applied to medical articles
 
+**Coordinating professor:** Guilherme Dal Bianco ([github](https://github.com/dbguilherme), [lattes]( http://lattes.cnpq.br/5152594034228273))
+
+**Participants:** [Emili Willinghoefer](https://github.com/Emiliwillinghoefer), [Jean Carlo Hilger](https://github.com/jeanchilger) and [Matheus Vinícius Todescato](https://github.com/mvtodescato)
+
+**NOTE:** Previously work were made in [mvtodescato's CAL fork](https://github.com/mvtodescato/CAL), however, since we don't intend to merge it with the original upstream, we decided to create another repository, therefore all modifications since 5 March, 2020 will be made in this repository.
+
 ## Installation
 
 1. `git clone https://github.com/HTAustin/CAL.git`
