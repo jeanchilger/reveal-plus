@@ -1,5 +1,5 @@
-# Sampled Continuous Active Learning
-Sampled Continuous Active Learning (SCAL) applied to medical articles
+# Scalable Continuous Active Learning
+Scalable Continuous Active Learning (SCAL) applied to medical articles
 
 **Coordinating professor:** Guilherme Dal Bianco ([github](https://github.com/dbguilherme), [lattes]( http://lattes.cnpq.br/5152594034228273))
 
