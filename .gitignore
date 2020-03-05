@@ -9,6 +9,6 @@ athome*
 *.tfdf
 *.concordance
 *.stderr
-*tr*
 seed
 indexer
+*.tr*
