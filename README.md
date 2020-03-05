@@ -9,7 +9,7 @@ Sampled Continuous Active Learning (SCAL) applied to medical articles
 
 ## Installation
 
-1. `git clone https://github.com/HTAustin/CAL.git`
+1. `git clone https://github.com/JeanCHilger/SCAL.git`
 2. Intall Sofia-ML package: https://code.google.com/archive/p/sofia-ml/
 3. Make the kissdb indexer. `cd CAL && make`
 4. Change the path for Sofia-ML in doAll_Baseline
