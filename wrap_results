@@ -6,7 +6,7 @@ source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
 # Controls how many time results will be taken
-SAMPLES=3
+SAMPLES=1
 
 CORPLIST=("toyDataset")
 RESULT_DIR="result/baseline"
