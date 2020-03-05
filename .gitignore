@@ -1,0 +1,14 @@
+*.doc
+*.svm.fil
+*.df
+N
+result/
+all_results/
+tr0*
+athome*
+*.tfdf
+*.concordance
+*.stderr
+*tr*
+seed
+indexer

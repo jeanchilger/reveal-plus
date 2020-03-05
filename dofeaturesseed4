@@ -1,0 +1,50 @@
+#!/bin/bash
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+export LANG=C
+TOPIC=$2
+CORP=$3
+
+: '
+    find é utilizado para realizar buscas.
+        * $1 diz onde a busca deve ser realizada;
+        * -type f especifica que a entrada é um arquivo;
+        * -exec CMD {} irá executar o comando CMD para cada
+            busca bem sucedida (encontrou);
+'
+
+: '
+    $1 contém o arquivo com a query: $TOPIC.seed.doc
+'
+
+N=`find $1 -type f | wc -l`
+
+: '
+    sort -k3 está sendo aplicado na saída de ./dosteminline
+'
+
+try "Executing ./dosteminline4 and creating $TOPIC/concordance.$1..." 35
+(
+    find $1 -type f -exec ./dosteminline4 {} \; | sort -k3 > $TOPIC/concordance.$1
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+echo -e "${GREEN}Finished ./dosteminline4${END}"
+
+cat -n $CORP.df | join -13 -23 - $TOPIC/concordance.$1 | sort -k4,4 -k2,2n > $TOPIC/tfdf.$1.sort
+
+N=`cat N`
+echo N $N
+
+echo -e "${BLUE}Executing ./dotfidfinline...${END}"
+
+# código de saída 10 mesmo quando funciona
+./dotfidfinline $N < $TOPIC/tfdf.$1.sort > $TOPIC/svm.$1.fil
+
+echo -e "${GREEN}Finished ./dotfidfinline.${END}"

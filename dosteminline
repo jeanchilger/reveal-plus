@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./porter $1 | sed -e 's/[^a-z0-9]/ /g' -e 's/  */\n/g' | egrep -v '^$|[0-9]' | sort | uniq -c | sed -e "s,^,$1," -e 's/.*\///'

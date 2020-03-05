@@ -1,0 +1,563 @@
+#!/bin/bash
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+echo "${ABS_PATH}/handle_errors"
+
+SKIP_DATA_EXTRACTION=$1; shift
+
+PURPOSE=baseline
+JUDGECLASS=$1; shift
+
+TOPICS_CONSIDERED=("$@");
+
+CORPLIST=("${JUDGECLASS}")
+SOFIA="/home/jean/Documents/tar-toolkit-core-copy/sofia-ml-read-only/sofia-ml"
+
+
+contains() {
+    : '
+        Utility function that returns true if a given
+        value is within the given array and false otherwise.
+
+        $1 -> value to check
+        $2... -> array
+    '
+
+    value=$1; shift
+    array=("$@")
+
+    for v in "${array[@]}"; do
+        if [[ $v == $value ]]; then
+            true
+            return
+        fi
+    done
+
+    false
+    return
+}
+
+: '
+    Percorre cada item listado em
+    CORPLIST.
+'
+for CORP in "${CORPLIST[@]}"; do
+
+    pushd Corpus # pushd <dir> é semelhante à cd <dir>
+
+    echo -e "${BLUE}Preparando dataset...${END}"
+
+    if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
+        ./dofast4 "$CORP"
+    fi
+
+    cp "$CORP".df ../"$CORP".df
+
+    cp "$CORP".svm.fil ../"$CORP".svm.fil
+
+    popd # popd é semelhante ao cd ..
+    : '
+        IFS significa Internal Field Separator (separador interno de campos) e
+            é utilizado pelo bash para dizer como fazer a separação de palavras,
+            ou seja, como identificar palavras (o valor padrã é um espaço em branco " ").
+
+        read <line> permite ler um arquivo linha por linha. -r diz ao bash para não
+            permitir que barra invevrtida escape caracteres. IFS="" faz com que
+            espaços em brancos no começo e no fim não sejam removidos durante a leitura.
+
+        Sintaxe para leitura de arquivos linha por linha:
+            while IFS="" read -r line; do
+                <comandos que irão tratar $line>
+            done < input_file
+    '
+    while IFS='' read -r line || [[ -n $line ]]; do # arquivo de entrada: judgement/$CORP.topic.stemming.txt
+
+        : '
+        read -ra TEXT atribui o conteúdo de $line a um array chamado TEXT. Neste caso,
+            os elementos da linha são separados em cada ":" e cada um vira um elemento do array.
+        '
+        IFS=':' read -ra TEXT <<< "$line"
+
+        TOPIC="${TEXT[0]}"
+
+        if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
+            echo -e "${YELLOW}Skipping topic '$TOPIC'.${END}"
+            continue
+        fi
+
+        QUERY="${TEXT[1]}"
+
+        if [[ -z $TOPIC ]]; then
+            throw $EMPTY_VARIABLE_EXCEPTION "Variable TOPIC is empty"
+
+        elif [[ -z $QUERY ]]; then
+            throw $EMPTY_VARIABLE_EXCEPTION "Variable QUERY is empty"
+
+        fi
+
+        echo -e "${WHITE}Topic${END}:$TOPIC"
+        echo -e "${WHITE}Query${END}:$QUERY"
+
+        ######
+        try "Creating directories to store results..." 69 71
+        (
+            rm -rf result/"$PURPOSE"/"$CORP"/"$TOPIC"/
+            mkdir -p result/"$PURPOSE"/"$CORP"/
+            mkdir -p result/dump/"$PURPOSE"/"$CORP"/
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        echo -e "${GREEN}Done.${END}"
+
+        ######
+        try "Creating topic directory topic (${TOPIC})..." 82 83
+        (
+            rm -rf $TOPIC
+            mkdir $TOPIC
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        echo -e "${GREEN}Done.${END}"
+
+        ######
+        try "Creating file 'N' with number of documents..." 98
+        (
+            : '
+                wc -l mostra o número de linhas de um arquivo. Assim, "N" armazena
+                    o número de linhas do arquivo "$CORP.svm.fil".
+            '
+            echo `wc -l < "$CORP".svm.fil` > N
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        echo -e "${GREEN}Done.${END}"
+
+        pushd $TOPIC
+
+        echo "$QUERY" > "$TOPIC".seed.doc
+
+        : '
+            cut é utilizado para selecionar (cortar) partes de um arquivo.
+
+                -f permite selecionar com base em um campo (neste caso
+                o primeiro: -f1 ou -f 1).
+
+                -d especifica o delimitador, utilizado para separar os campos.
+
+                cut -d " " -f 1 forma campos dividindo cada linha nos espaços em
+                branco e seleciona a primeira coluna.
+
+            sed é um editor (não interativo) que permite, dentre outras coisas,
+                realizar substituições em uma entrada de texto.
+
+                -e <script> diz para executar <script>. Neste caso não é necessário
+                pois há apenas um script/comando.
+
+                em "s/.*/& &/", s informa que será executada uma substituição no texto
+                de entrada. .* é o pattern que deve ser substituido pelo pattern & &.
+                    .* representa qualquer caracter exceto quebra de linha, ou seja,
+                    permite selecionar uma linha inteira.
+
+                    & representa toda a string encontrada.
+
+                então sed "s/.*/& &/" duplica o conteúdo de cada linha
+                de um arquivo.
+        '
+        ######
+        try "Preparing 'docfils' file with all documents..." 139 140
+        (
+            cut -d' ' -f1 ../$CORP.svm.fil | sed -e 's/.*/& &/' > docfil
+            cut -d' ' -f1 docfil | cat -n > docfils
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        echo -e "${GREEN}Done.${END}"
+
+        : '
+            Os arquivos new$N armazenam os documentos rotulados
+                na iteração $N.
+        '
+
+        ######
+        try "Preparing relevance calculation files..." 150 160
+        (
+            touch rel.$TOPIC.fil
+            touch prel.$TOPIC
+
+            rm -rf prevalence.rate
+            touch prevalence.rate
+
+            rm -rf rel.rate
+            touch rel.rate
+
+            rm -f new[0-9][0-9].$TOPIC tail[0-9][0-9].$TOPIC self*.$TOPIC gold*.$TOPIC
+            touch new00.$TOPIC
+            # cria o arquivo para não dar erros
+            # touch sub_new00.$TOPIC
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        echo -e "${GREEN}Done.${END}"
+
+        : '
+            NDOCS armazena a quantidade de linhas dentro de docfils, que corresponde
+                ao número de documentos.
+            NDUN é o número de documentos já treinados.
+            L é o número de documentos que serão treinados na iteração.
+        '
+        NDOCS=`cat docfils | wc -l`
+        NDUN=0
+        L=1
+        R=100
+        export LAMBDA=0.0001
+
+        : '
+            $TOPIC.seed.doc armazena a query para $TOPIC
+        '
+
+        cp $TOPIC.seed.doc ../$TOPIC.seed.doc
+
+        popd
+
+        echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
+
+        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP
+
+        echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
+
+        pushd $TOPIC
+
+        : '
+            sed -e "s/[^ ]*/0/ <file> substitui a primeira coluna de <file> para 0"
+        '
+
+        ######
+        try "Preparing ../$CORP.svm.fil (runs ../dosplit) and $TOPIC.synthetic.seed..." 218 219
+        (
+            sed -e 's/[^ ]*/0/' ../$CORP.svm.fil | ../dosplit
+            sed -e 's/[^ ]*/1/' svm.$TOPIC.seed.doc.fil > $TOPIC.synthetic.seed
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        echo -e "${GREEN}Done.${END}"
+
+        for x in 0 1 2 3 4 5 6 7 8 9 ; do
+
+            for y in 0 1 2 3 4 5 6 7 8 9 ; do
+
+                if [ $NDUN -lt $NDOCS ] ; then
+                    export N=$x$y
+
+                    ######
+                    try "Preparing trainset..." 236 238
+                    (
+                        cp $TOPIC.synthetic.seed trainset
+
+                        cut -f2 docfils | sort -R | head -$R | sort | join - ../$CORP.svm.fil | sed -e's/[^ ]*/-1/' >> trainset
+
+                    ) 2> $STD_ERROR_OUT
+
+                    catch || {
+                        exit_on_error
+                    }
+
+                    echo -e "${GREEN}Done.${END}"
+
+                    ######
+                    try "Preparing seed (and x)..."
+                    (
+                        # cat new[0-9][0-9].$TOPIC > seed
+                        cat sub_new[0-9][0-9].$TOPIC > seed
+                        cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' > x
+                        cat seed | sort | join -v1 - rel.$TOPIC.fil | sort -R | head -50000 | sed -e 's/^/-1 /' >> x
+
+                    ) 2> $STD_ERROR_OUT
+
+                    catch || {
+                        exit_on_error
+                    }
+
+                    echo -e "${GREEN}Done.${END}"
+
+                    ######
+                    try "Preparing trainset (pt 2)..." 269 270
+                    (
+                        sort -k2 x | join -12 - ../$CORP.svm.fil | cut -d' ' -f2- | sort -n >> trainset
+                        # sed 's/$/#empty/' trainset > trainset #isso deve corrigir o erro segmentation fault (é um bug do sofia-ml) mas aí aparece um erro de floating point exception
+
+                    ) 2> $STD_ERROR_OUT
+
+                    catch || {
+                        exit_on_error
+                    }
+
+                    echo -e "${GREEN}Done.${END}"
+
+                    : '
+                        grep -E <pattern> <file> busca <pattern> dentro de <file> e mostra
+                            as linhas que possuem um padrão;
+                            * grep -E "^1\b" trainset retorna todas as linhas que começam com
+                                1 (e que tenham um espaço após o 1);
+                    '
+
+                    # Calculate relevant documents prevalence rate in the traning set
+
+                    RELTRAINDOC=`grep -E "^1\b" trainset | wc -l` # Número de documentos relevantes em trainset
+
+                    NOTRELTRAINDOC=`grep -E "^-1\b" trainset | wc -l` # Número de docs não relevantes em trainset
+
+                    : '
+                        bc é utilizado para realizar cálculos matemáticos
+                    '
+
+                    PREVALENCERATE=`echo "scale=4; $RELTRAINDOC / ($RELTRAINDOC + $NOTRELTRAINDOC)" | bc` # taxa de documentos
+                                                                                                          # relevantes
+
+                    echo $RELTRAINDOC $NOTRELTRAINDOC $PREVALENCERATE >> prevalence.rate
+
+
+                    : '
+                        Parametros do sofia-ml:
+                            * --learner_type logreg-pegasos: Utiliza regressão logística com atualizações
+                                do Pegasos. Pegasos SVM é um algoritmo de aprendizagem;
+                            * --loop_type roc: --loop_type controla como os exemplos são selecionados;
+                            * --lambda: parametro de regularização do Pegasos;
+                            * --iterations: número de passos do gradiente estocástico (stochastic gradient);
+                            * --dimensionality: dimensão do dataset - índice do maior feature de treino + 1;
+
+                            * --test_file: especifica o arquivo a ser usado para teste;
+                            * --model_in: lê o modelo do arquivo especificado (o modelo será utilizado para treino/teste);
+                            * --results_file: especifica o arquivo onde os resultados de teste (quando --test_file for especificado) serão escritos;
+                    '
+
+                    ######
+                    try "Training (Running SOFIA-ML)..." 321 323
+                    (
+
+                        $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 200000 --training_file trainset --dimensionality 9300000 --model_out svm_model
+
+                        RES=$?
+                        # cat svm_model
+
+                    ) 2> $STD_ERROR_OUT
+
+                    catch || {
+                        exit_on_error
+                    }
+
+                    echo -e "${GREEN}Finished SOFIA-ML.${END}"
+
+                    : '
+                        $? armazena o estatus de saída do comando executado mais recentemente:
+                            0 se o comando executou normalmente, outro valor caso contrário.
+                    '
+
+                    echo $RES
+
+                    # se o modelo foi treinado com sucesso, ele será testado
+                    if [[ "$RES" -eq "0" ]] ; then
+                        for z in svm.test.* ; do
+                            ######
+
+                            try "Testing previously created model (running sofia-ml) $z..." 346
+                            (
+                                $SOFIA --test_file $z --dimensionality 9300000 --model_in svm_model --results_file pout.$z
+
+                            ) 2> $STD_ERROR_OUT
+
+                            catch || {
+                                echo $ERROR_CODE
+                                exit_on_error
+                            }
+
+                            echo -e "${GREEN}Finished testing with $z.${END}"
+                        done
+
+                    else
+                        ######
+                        try "Preparing pout.svm.test.1..." 364 365
+                        (
+                            rm -f pout.svm.test.*
+                            cut -f2 docfils | sort -R | cat -n | sort -k2 | sed -e 's/ */-/' > pout.svm.test.1
+
+                        ) 2> $STD_ERROR_OUT
+
+                        catch || {
+                            exit_on_error
+                        }
+
+                        echo -e "${GREEN}Done.${END}"
+                    fi
+
+                    : '
+                        shuf aleatoriza o arquivo passado (gera permutações aleatórias,
+                            das linhas do arquivo);
+
+                        sort é utilizado para ordenar o conteúdo de arquivos
+                            -r diz que a ordenanação será na ordem reversa.
+
+                            -g compara de acordo com o valor numérico geral (principal
+                                diferença para a flag -n é que -g reconhece número em
+                                notação científica: 1.28e-3).
+
+                            -s estabiliza a ordenação.
+
+                        join -o permite espicificar a ordem dos campos na saída
+                          - join -o2.2,1.2 está especificando que a saída deverá conter o
+                            segundo campo do segundo arquivo (2.2) seguido do segundo campo do
+                            primeiro arquivo (1.2)
+
+                        join -t permite especificar o separador
+                    '
+
+                    ######
+                    try "Starting SCAL process $N\nPreparing ranking.$N.$TOPIC..."
+                    (
+                        cat new[0-9][0-9].$TOPIC > seed.$TOPIC
+                        cut -f1 pout.svm.test.* | ../fixnum | cat -n | join -o2.2,1.2 -t$'\t' - docfils | sort -k1 -n  > inlr.out.$N.$TOPIC
+
+                        echo -e "${BLUE}\tinlr.out size =`wc -l < inlr.out.$N.$TOPIC` docfils  `wc -l <docfils `${END}"
+
+                        sort -n seed.$TOPIC > temp
+                        cat temp | join  -v2 - inlr.out.$N.$TOPIC -2 1 | shuf |  sort -k 2 -r -g -s  > ranking.$N.$TOPIC
+
+
+                    ) 2> $STD_ERROR_OUT
+
+                    catch || {
+                        exit_on_error
+                    }
+
+                    echo -e "${GREEN}Done.${END}"
+
+                    ######
+                    try "Preparing new$N.$TOPIC..." 388 395
+                    (
+                        echo -e "${BLUE}\tranking size `wc -l < ranking.$N.$TOPIC`${END}"
+                        cat ranking.$N.$TOPIC | cut -d' ' -f1 > new$N.$TOPIC
+                        cp new$N.$TOPIC U$N
+
+                        # cut -f1 pout.svm.test.* | ../fixnum | cat -n | join -o2.2,1.2 -t$'\t' - docfils > inlr.out
+                        # sort seed | join -v2 - inlr.out | sort -rn -k2 | cut -d' ' -f1 > new$N.$TOPIC
+                        cat new[0-9][0-9].$TOPIC > x
+
+                        if [ "$N" != "99" ] ; then
+                            # adiciona as primeiras $L linhas de new$N.$TOPIC para y e depois denovo para new$N.$TOPIC
+                            head -$L new$N.$TOPIC > y
+                            mv y new$N.$TOPIC
+                        fi
+
+                    ) 2> $STD_ERROR_OUT
+
+                    catch || {
+                        exit_on_error
+                    }
+
+                    echo -e "${GREEN}Done.${END}"
+
+                    : '
+                        x armazena new($N - 1).$TOPIC
+                    '
+
+                    # Limita o número de documentos
+                    if [ $L -le 30 ]; then
+                        b=$L
+                    else
+                        b=30
+                    fi
+
+                    : '
+                        o arquivo sub_new$N armazena os documentos rotulados que
+                            serão usados no treino (até 30 documentos selecionados
+                            aleatoriamente de new$N).
+                    '
+                    shuf -n $b new$N.$TOPIC > sub_new$N.$TOPIC
+
+                    echo -e "${BLUE}Number of labeled pairs: `wc -l < sub_new$N.$TOPIC`${END}"
+
+                    # judgefile é o arquivo que diz quais docs são os positivos
+                    python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.Judged.doc.list --record=$TOPIC.record.list
+
+                    # o arquivo rel.$TOPIC.Judged.doc.list contém os docs relevantes
+
+                    cat rel.$TOPIC.Judged.doc.list >> rel.$TOPIC.fil
+                    cat rel.$TOPIC.Judged.doc.list > rel.$TOPIC.$N.Judged.doc.list
+
+                    : '
+                        rel.$TOPIC.fil armazena todos os resultados da execução de doJudgementMain.py
+                        enquanto rel.$TOPIC.$N.Judged.doc.list armazena o resultado da última execução
+                    '
+
+                    RELFINDDOC=`wc -l < rel.$TOPIC.Judged.doc.list`
+
+                    alreadyLabeledDocs=`cat sub_new[0-9][0-9].$TOPIC  | wc -l`
+                    allDocs=`cat new[0-9][0-9].$TOPIC  | wc -l`
+
+                    echo "rel $RELFINDDOC L $L b $b  alreadyLabeledDocs $alreadyLabeledDocs  allDocs $allDocs REL $RELRATE CURRENTREL $CURRENTREL relevant docs `wc -l < rel.$TOPIC.fil` "
+
+                    aux=$((($RELFINDDOC*$L)/$b))
+                    Rel=$(($Rel+$aux*1000))
+
+
+                    # scale=4 diz ao bc para usar 4 casas decimais
+                    RELRATE=`echo "scale=4; $RELFINDDOC / $L" | bc` # taxa de relevância da iteração
+                    CURRENTREL=`wc -l < rel.$TOPIC.fil` # número de relevantes até agora
+                    echo $RELFINDDOC $L $b $RELRATE $CURRENTREL >> rel.rate
+
+                    # adiciona ' 1' ao final de cada linha de rel.$TOPIC.fil e manda o resultado para prel.$TOPIC
+                    sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
+
+                    cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
+
+                    NDUN=$((NDUN+L))
+                    L=$((L+(L+9)/10))
+                fi
+            done
+        done
+
+        rm -rf svm.test.*
+        popd
+
+        mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+        rm $TOPIC.seed.doc
+
+    done < "judgement/$CORP.topic.stemming.txt"
+
+    echo -e "${WHITE}Apos finalizar o método o numero de docs recuperados do método  será o top total documentos acessados até a ultima executação que encontrou documentos relevantes. Por exemplo, se a execução N =20 foi a ultima a achar documentos releventas na amostragem deve-se pegar os top ~300 como relevantes. Essa será saida do método. Ou seja, o arquivo rel.rate armazena os relevantes recuperados, é só usar ele para implementar isso.${END}"
+
+
+    rm -rf "$CORP".svm.fil
+    rm "$CORP".df
+
+    rm N
+
+    # Generate LSI from tfdf
+    # python clustering/doLSI.py --input=tfdf_oldreut --output=LSIVector/"$CORP".lsi.dump --mapping=LSIVector/"$CORP".mapping.dump --latent=200 --choice=entropy --normalization=yes
+
+done

@@ -1,0 +1,84 @@
+#!/bin/bash
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+X=`pwd`/$1 # caminho do arquivo contendo a query
+F=`pwd`/Corpus/dofast4
+
+: '
+    $$ armazena o pid da shell atual, assim xxx$$
+    cria um diretório com "nome único".
+'
+
+try "Creating /tmp/xxx$$ and deleting /tmp/dotf*line..." 12 13
+(
+    mkdir /tmp/xxx$$
+    rm -rf /tmp/dotf*line
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+: '
+    ln -s <src> <dest> cria um link de <src> em <dest>.
+'
+
+try "Creating links to /tmp..." 28 29
+(
+    ln -s `pwd`/Corpus/tar4 /tmp/xxx$$
+    ln -s `pwd`/dotf*line /tmp
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+echo -e "${GREEN}Done.${END}" > /dev/tty
+
+######
+# try "Creating 'thing' directory and compressing it..." 42 45
+# (
+    cd /tmp/xxx$$
+
+    mkdir thing
+    cp $X thing/doc
+
+    : '
+        cria o arquivo thing.tgz utilizando o conteúdo de thing
+    '
+    tar zcf thing.tgz thing
+
+# ) 2> $STD_ERROR_OUT
+#
+# catch || {
+#     exit_on_error
+# }
+
+
+# if [[ ! -d /tmp/xxxx$$/thing ]]; then
+#     throw $DIRECTORY_NOT_EXISTS_EXCEPTION "Directory /tmp/xxxx$$/thing is missing."
+#
+# elif [[ ! -f /tmp/xxxx$$/thing.tgz ]]; then
+#     throw $FILE_NOT_EXISTS_EXCEPTION "File /tmp/xxxx$$/thing.tgz is missing."
+#
+# fi
+
+echo -e "${GREEN}Done.${END}" > /dev/tty
+
+# try "Running ./dofast4 ($F) on thing..." 62
+# (
+    $F thing
+
+# ) 2> $STD_ERROR_OUT
+#
+# catch || {
+#     exit_on_error
+# }
+
+echo -e "${GREEN}Finished ./dofast4${END}" > /dev/tty
+
+cat thing.concordance

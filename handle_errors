@@ -1,0 +1,95 @@
+#!/bin/bash
+
+source "${ABS_PATH}/colors"
+
+CODE_START=""
+CODE_END=""
+
+export STD_ERROR_OUT="std.error.log"
+
+export EMPTY_VARIABLE_EXCEPTION=12
+
+try() {
+    set +e
+    if (( $# > 0 )); then
+        echo -e "${BLUE}${1}${END}" > /dev/tty
+
+        if (( $# > 1 )); then
+            CODE_START=$2
+
+            if (( $# > 2 )); then
+                CODE_END=$3
+            else
+                CODE_END=$CODE_START
+            fi
+        fi
+    fi
+}
+
+catch() {
+    export ERROR_CODE=$?
+
+    return $ERROR_CODE
+}
+
+throw() {
+    EXCEPTION_CODE=$1
+    EXCEPTION_MSG=""
+    output_msg=""
+    if (( $# > 1 )); then
+        EXCEPTION_MSG=$2
+    fi
+
+    case $EXCEPTION_CODE in
+
+        $EMPTY_VARIABLE_EXCEPTION )
+            output_msg="${output_msg}${RED}EMPTY VARIABLE EXCEPTION: \n"
+
+            if [[ -n $EXCEPTION_MSG ]]; then
+                output_msg="${output_msg}\t${EXCEPTION_MSG}\nAborting..."
+
+            else
+                output_msg="${output_msg}\tAn important variable is empty.\nAborting..."
+
+            fi
+
+            echo -e $output_msg > /dev/tty
+
+            exit $EMPTY_VARIABLE_EXCEPTION
+
+            ;;
+
+    esac
+}
+
+__get_error_log_msg() {
+    STD_ERROR=""
+
+    while IFS="" read -r line; do
+        STD_ERROR="${STD_ERROR}${line}\n"
+    done < $STD_ERROR_OUT
+
+    echo -ne $STD_ERROR
+
+    export ERROR_MSG=`echo -ne $STD_ERROR`
+}
+
+exit_on_error() {
+    output_msg=""
+    if [[ $ERROR_CODE ]]; then
+        output_msg="${output_msg}${RED}ERROR "
+
+        if [[ $CODE_START == $CODE_END ]]; then
+            output_msg="${output_msg}near line ${CODE_START} "
+
+        else
+            output_msg="${output_msg}near lines ${CODE_START} and ${CODE_END} "
+        fi
+
+        echo -e "${output_msg}Aborting...${END}" > /dev/tty
+
+        echo -e "\t${RED}LOG:${END} `__get_error_log_msg`"
+
+        exit $ERROR_CODE
+    fi
+}

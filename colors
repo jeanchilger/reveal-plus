@@ -1,0 +1,11 @@
+#!/bin/bash
+
+RED="\e[31;1m"
+GREEN="\e[32;1m"
+BLUE="\e[34;1m"
+WHITE="\e[37;1m"
+MAGENTA="\e[35;1m"
+YELLOW="\e[33;1m"
+
+
+END="\e[0m"

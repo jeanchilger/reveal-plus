@@ -1,0 +1,61 @@
+#!/bin/bash
+
+export ABS_PATH=`pwd`
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+# Controls how many time results will be taken
+SAMPLES=3
+
+CORPLIST=("toyDataset")
+RESULT_DIR="result/baseline"
+
+ALL_RESULTS_HELPER="all_results/runs.describe.txt"
+
+# Topics to be used in doAll_Baseline_4gram.
+# Topics omited are ignored.
+TOPICS_CONSIDERED=("tr0" "tr3")
+
+# creates directory to store samples results
+rm -rf all_results
+mkdir all_results
+
+# creates directry to store definitive results
+rm -rf results
+mkdir results
+
+touch $ALL_RESULTS_HELPER
+
+for CORP in "${CORPLIST[@]}"; do
+
+    echo -e "${YELLOW}CORP: $CORP. ${END}"
+
+    for i in $(seq -f "%02g" ${SAMPLES}); do
+
+        echo -e "${MAGENTA}Running sample ${i}.${END}"
+
+        rm -rf all_results/result-${i}
+        mkdir all_results/result-${i}
+
+        # skips data extraction after first time executed (saves time)
+        if [[ $i == "01" ]]; then
+            bash doAll_Baseline_4gram_Dependent false $CORP "${TOPICS_CONSIDERED[@]}"
+        else
+            bash doAll_Baseline_4gram_Dependent true $CORP "${TOPICS_CONSIDERED[@]}"
+        fi
+
+        # put result in another location
+        for topic in `ls ${RESULT_DIR}/${CORP}/`; do
+            cp ${RESULT_DIR}/${CORP}/${topic}/rel.rate all_results/result-${i}/rel.${topic}.rate
+
+            # topic execution_number result_file
+            echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
+        done
+
+    done
+done
+
+echo -e "${MAGENTA}Finished taking results...\nComputing mean and standard deviation of samples.${END}"
+
+python3 buildResults.py $ALL_RESULTS_HELPER

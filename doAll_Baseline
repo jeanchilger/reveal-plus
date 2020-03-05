@@ -1,0 +1,213 @@
+#!/bin/bash
+#Assume the index has been built
+# rm -rf lemurindex
+# mkdir lemurindex
+# mkdir corpdata
+# cd corpdata ; tar xf ../$ZIPF ; cd ../ 
+# python clustering/generateLemurIndexXML.py --index=diskindex --raw=~/TREC/Corpus/robust04  --xmloutput=index/disk.xml
+# ~/Develop/lemur/bin/IndriBuildIndex index/disk.xml
+# rm -rf corpdata
+
+
+PURPOSE=baseline
+JUDGECLASS="oldreut"
+
+#CORPLIST=("robust04_0" "robust04_1" "robust04_2" "robust04_3" "robust04_4" "robust04_5")
+#CORPLIST=("FBIS" "FT" "FR" "LA")
+CORPLIST=("oldreut")
+SOFIA="/home/matheus/Documents/tar-toolkit-core-copy/sofia-ml-read-only/sofia-ml"
+MAXTHREADS=4
+
+for CORP in "${CORPLIST[@]}"
+   do
+      # if ! [ -e Corpus/"$CORP".tgz ] ; then
+      # tar -cvzf Corpus/"$CORP".tgz Corpus/"$CORP"/
+      # fi 
+      
+   
+      pushd Corpus
+      
+      # if [ ! -e "$CORP".svm.fil ] || [ ! -e "$CORP".df ]; then
+         ./dofast "$CORP"
+      # fi
+      
+      cp "$CORP".df ../"$CORP".df
+      sort -k1,1 "$CORP".svm.fil > "$CORP".svm.fil.sorted; mv "$CORP".svm.fil.sorted "$CORP".svm.fil
+      cp "$CORP".svm.fil ../"$CORP".svm.fil
+      
+      popd
+
+      KEYSIZE=$(awk 'BEGIN{a=0}{len = length($1); a=a<len?len:a}END{print a}' "$CORP".svm.fil)
+      VALSIZE=$(awk 'BEGIN{a=0}{len = length($0); a=a<len?len:a}END{print a}' "$CORP".svm.fil)
+      KEYSIZE=$((KEYSIZE+2))
+      VALSIZE=$((VALSIZE+2))
+      echo "Indexing $CORP.svm.fil, keysize = $KEYSIZE, valsize = $VALSIZE"
+      ./indexer "$CORP".svm.fil "$CORP".db $KEYSIZE $VALSIZE || (echo "Error creating db"; exit 1)
+
+      while IFS='' read -r line || [[ -n $line ]]; do
+         IFS=':' read -ra TEXT <<< "$line"
+
+         TOPIC="${TEXT[0]}"
+         QUERY="${TEXT[1]}"
+         echo "$TOPIC"
+         echo "$QUERY"
+
+         rm -rf result/"$PURPOSE"/"$CORP"/"$TOPIC"/
+         mkdir -p result/"$PURPOSE"/"$CORP"/
+         mkdir -p result/dump/"$PURPOSE"/"$CORP"/
+         
+         rm -rf $TOPIC
+         mkdir $TOPIC
+
+
+         echo `wc -l < "$CORP".svm.fil` > N
+         pushd $TOPIC 
+
+         echo "$QUERY" > "$TOPIC".seed.doc
+
+       
+
+
+         cut -d' ' -f1 ../$CORP.svm.fil | sed -e 's/.*/& &/' > docfil
+         cut -d' ' -f1 docfil | cat -n > docfils
+         
+
+
+         touch rel.$TOPIC.fil
+         
+         #cut -f2 docfil | join - $TOPIC.seed.sorted | cut -d' ' -f2 >> rel.$TOPIC.fil
+
+         touch prel.$TOPIC
+         rm -rf prevalence.rate
+         touch prevalence.rate
+         rm -rf rel.rate
+         touch rel.rate
+
+
+         rm -f new[0-9][0-9].$TOPIC tail[0-9][0-9].$TOPIC self*.$TOPIC gold*.$TOPIC
+         touch new00.$TOPIC
+
+
+         NDOCS=`cat docfils | wc -l`
+         NDUN=0
+         L=1
+         R=100
+         export LAMBDA=0.0001
+
+         cp $TOPIC.seed.doc ../$TOPIC.seed.doc
+         popd
+
+         ./dofeaturesseed $TOPIC.seed.doc $TOPIC $CORP
+         pushd $TOPIC
+         sed -e 's/[^ ]*/0/' ../$CORP.svm.fil | ../dosplit
+         sed -e 's/[^ ]*/1/' svm.$TOPIC.seed.doc.fil > $TOPIC.synthetic.seed
+
+
+         for x in {0..9} ; do
+            for y in {0..9} ; do
+            if [ $NDUN -lt $NDOCS ] ; then
+               export N=$x$y
+               cp $TOPIC.synthetic.seed trainset
+               #cut -f2 docfils | join -v1 - rel.$TOPIC.fil > $TOPIC.allNoRel.docfils
+               #cut -f1 $TOPIC.allNoRel.docfils | sort -R | head -$R | sort | join - ../svm.fil | sed -e's/[^ ]*/-1/' >> trainset
+               cut -f2 docfils | shuf -n $R | sort | ../indexer ../"$CORP".db $KEYSIZE $VALSIZE | sed -e's/[^ ]*/-1/' >> trainset1 &
+
+               (
+               cat new[0-9][0-9].$TOPIC > seed
+               #cut -f2 docfil | join - $TOPIC.clusteringJudged.doc.sorted | cut -d' ' -f2 >> seed
+               cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' > x
+               #cat seed | sort | join -v1 - rel.$TOPIC.fil | join -v1 - $TOPIC.clusteringNotRel.doc.sorted | sort -R | head -50000 | sed -e 's/^/-1 /' >> x
+               cat seed | sort | join -v1 - rel.$TOPIC.fil | shuf -n 50000 | sed -e 's/^/-1 /' >> x
+               cut -d' ' -f2 x | ../indexer ../$CORP.db $KEYSIZE $VALSIZE | cut -d' ' -f2- |\
+                   paste -d' ' <(cut -d' ' -f1 x) - | sort -n > trainset2
+               ) &
+               wait
+               cat trainset1 trainset2 >> trainset
+               rm trainset1 trainset2
+
+
+               #Calculate relevant documents prevalence rate in the traning set
+
+               RELTRAINDOC=`grep -E "^1\b" trainset | wc -l`
+               NOTRELTRAINDOC=`grep -E "^-1\b" trainset | wc -l`
+               PREVALENCERATE=`echo "scale=4; $RELTRAINDOC / ($RELTRAINDOC + $NOTRELTRAINDOC)" | bc`
+               echo $RELTRAINDOC $NOTRELTRAINDOC $PREVALENCERATE >> prevalence.rate
+               
+
+               $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA\
+                   --iterations 200000 --training_file trainset --dimensionality 3300000 --model_out svm_model
+               #/home/user/svmlight/svm_learn trainset
+
+               RES=$?
+               echo $RES
+               if [ "$RES" -eq "0" ] ; then
+                  for z in svm.test.* ; do
+                     while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
+                         sleep 1
+                     done
+                     $SOFIA --test_file $z --dimensionality 3300000 --model_in svm_model --results_file pout.$z &
+                     #/home/user/svmlight/svm_classify $z svm_model pout.$z
+                  done
+                  wait
+               else
+                  rm -f pout.svm.test.*
+                  cut -f2 docfils | sort -R | cat -n | sort -k2 | sed -e 's/ */-/' > pout.svm.test.1
+               fi
+               cut -f1 pout.svm.test.* | ../fixnum | cat -n | join -o2.2,1.2 -t$'\t' - docfils > inlr.out
+               sort seed | join -v2 - inlr.out | sort -rn -k2 | cut -d' ' -f1 > new$N.$TOPIC
+               cat new[0-9][0-9].$TOPIC > x
+               if [ "$N" != "99" ] ; then
+                  head -$L new$N.$TOPIC > y ; mv y new$N.$TOPIC
+               fi
+
+               #sed -e 's/.*\///' -e 's/.*/"&"/' new$N.$TOPIC | tr '\n' ',' | sed -e 's/^/[/' -e 's/,$/]/' | curl -XPOST -H 'Content-Type:application/json' "$TRSERVER/judge/$LOGIN/$TOPIC" -d @- | tr '}' '\n' | grep 'judgement.:1' | cut -d'"' -f4 | sort | join -o2.2 - docfil >> rel.$TOPIC.fil
+               # python ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=new$N.$TOPIC --output=rel.$TOPIC.Judged.doc.list --memorydumpfile=judge.effort.$TOPIC."$PURPOSE".dump
+               python2 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=new$N.$TOPIC --output=rel.$TOPIC.Judged.doc.list --record=$TOPIC.record.list
+               # rm -rf rel.$TOPIC.Judged.doc.list
+               # touch rel.$TOPIC.Judged.doc.list
+               # while IFS='' read -r line || [[ -n $line ]]; do
+               #    RELFLAG=`cat ../judgement/qrels.$JUDGECLASS.list | grep "$TOPIC 0 $line 1" | wc -l`
+
+               #    if [ $RELFLAG -gt "0" ] ; then
+               #       echo $line 1 >> rel.$TOPIC.Judged.doc.list
+               #       echo $line 1 >> $TOPIC.record.list
+               #    else
+               #       echo $line 0 >> $TOPIC.record.list
+               #    fi
+               # done < new$N.$TOPIC
+               cat rel.$TOPIC.Judged.doc.list >> rel.$TOPIC.fil
+               cat rel.$TOPIC.Judged.doc.list > rel.$TOPIC.$N.Judged.doc.list
+
+               RELFINDDOC=`wc -l < rel.$TOPIC.Judged.doc.list`
+               RELRATE=`echo "scale=4; $RELFINDDOC / $L" | bc`
+               CURRENTREL=`wc -l < rel.$TOPIC.fil`
+               echo $RELFINDDOC $L $RELRATE $CURRENTREL >> rel.rate
+
+               sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
+               
+               cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
+               
+               NDUN=$((NDUN+L))
+               L=$((L+(L+9)/10))
+            fi
+            done
+         done
+         # cp judge.effort.$TOPIC."$PURPOSE".dump ../result/dump/"$PURPOSE"/"$CORP"/judge.effort.$TOPIC."$PURPOSE".dump
+
+         rm -rf svm.test.*
+         popd
+
+         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+         rm $TOPIC.seed.doc
+
+      done < "judgement/$CORP.topic.stemming.txt"
+      rm -rf "$CORP".svm.fil
+      rm "$CORP".df
+      rm "$CORP".db
+
+      rm N
+
+      #Generate LSI from tfdf
+      #python clustering/doLSI.py --input=tfdf_oldreut --output=LSIVector/"$CORP".lsi.dump --mapping=LSIVector/"$CORP".mapping.dump --latent=200 --choice=entropy --normalization=yes
+
+   done

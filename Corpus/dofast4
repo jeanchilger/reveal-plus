@@ -1,0 +1,60 @@
+#!/bin/bash
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+export LANG=C
+CORP=$1
+
+: '
+    zcat permite ver o conteúdo de um arquivo comprimido
+        sem ter que descomprimi-lo.
+
+    o conteúdo dentro de $CORP.tgz é passado para tar4
+        (que aparenta ser um programa compilado).
+
+    a saída de tar4 é ordenada de forma crescente (considerando
+        a ordem na tabela ASCII) com base na terceira coluna (a saída de
+        `.tar4 /dev/stdin` deve ser no formato de colunas).
+
+    os erros que ocorrerem são enviados para dofast.stderr (<arquivo1> 2> <arquivo2>
+        significa enviar o stderror de <arquivo1> para <arquivo2>).
+'
+
+zcat $CORP.tgz | ./tar4 /dev/stdin | sort -k3 > $CORP.concordance 2> dofast.stderr
+
+######
+try "Building $CORP.tfdf" 28 35
+(
+    mv df $CORP.df
+    : '
+    o join está sendo feito no terceiro campo do primeiro arquivo (-13) e no terceiro
+    campo do segundo arquivo (-23). O hífen significa que o join irá ocorrer entre o
+    conteúdo do arquivo anterior ($CORP.df) e o que for "digitado" depois ($CORP.concordance).
+    '
+
+    cat -n $CORP.df | join -13 -23 - $CORP.concordance | sort -k4,4 -k2,2n > $CORP.tfdf
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+echo -e "${GREEN}Done.${END}"
+
+N=`cat N`
+echo N $N
+
+######
+# try "Running ../dotfidfinline..." 50
+# (
+    ../dotfidfinline $N < $CORP.tfdf > $CORP.svm.fil
+
+# ) 2> $STD_ERROR_OUT
+#
+# catch || {
+#     exit_on_error
+# }
+
+# echo -e "${GREEN}Finished ../dotfidfinline.${END}"

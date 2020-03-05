@@ -1,0 +1,20 @@
+#!/bin/bash
+
+export LANG=C
+CORP=$1
+#
+#N=`find $1 -type f | wc -l`
+#find $1 -type f -exec ~/featurekit/dosteminline {} \; | sort -k3 | tee concordance.$1 | sed -e 's/.* //' | uniq -c > vocab.$1
+
+zcat $CORP.tgz | ./tar /dev/stdin | sort -k3 > $CORP.concordance 2> dofast.stderr
+#find $1 -name '*.vocab' -exec grep -H . {} \; 2> /dev/null  | sort -k3 > concordance.$1
+#find $1 -name '*vocab' -exec cat {} \; 2> /dev/null | sed -e 's/.* //' | sort | uniq -c > vocab.$1
+
+#join -o1.1,1.2 -v1 -12 vocab.$1 ~/featurekit/english.stop.stem | grep -v '^1 ' > df.$1
+mv df $CORP.df
+cat -n $CORP.df | join -13 -23 - $CORP.concordance | sort -k4,4 -k2,2n > $CORP.tfdf
+
+N=`cat N`
+echo N $N
+../dotfidfinline $N < $CORP.tfdf > $CORP.svm.fil
+
