@@ -1,5 +1,5 @@
-# Sampled Continuous Active Learning
-Sampled Continuous Active Learning (SCAL) applied to medical articles
+# Scalable Continuous Active Learning
+Scalable Continuous Active Learning (SCAL) applied to medical articles
 
 **Coordinating professor:** Guilherme Dal Bianco ([github](https://github.com/dbguilherme), [lattes]( http://lattes.cnpq.br/5152594034228273))
 
@@ -9,15 +9,14 @@ Sampled Continuous Active Learning (SCAL) applied to medical articles
 
 ## Installation
 
-1. `git clone https://github.com/JeanCHilger/SCAL.git`
-2. Intall Sofia-ML package: https://code.google.com/archive/p/sofia-ml/
-3. Make the kissdb indexer. `cd CAL && make`
-4. Change the path for Sofia-ML in doAll_Baseline
-```
-SOFIA="/the/path/to/sofia-ml-read-only/src/sofia-ml"
-```
+1. Clone the repository: `git clone https://github.com/JeanCHilger/SCAL.git`
+2. Make kissdb indexer (from inside repository folder): `make`
+
+Ready to use
 
 ## Usage
+
+We are working only with the `4-gram` version.
 
 ### Running a single time
 1. Apply 4-gram tf-idf features: `bash doAll_Baseline_4gram`;

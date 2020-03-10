@@ -1,17 +1,53 @@
 #!/bin/bash
 
-export ABS_PATH=`pwd`
+LINE_ARGUMENTS=$#
+
+if [[ $LINE_ARGUMENTS -eq 0 ]]; then
+    export ABS_PATH=`pwd`
+
+    JUDGECLASS="toyDataset"
+    
+else
+    SKIP_DATA_EXTRACTION=$1; shift
+    JUDGECLASS=$1; shift
+    TOPICS_CONSIDERED=("$@");
+
+fi
 
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
+echo "${ABS_PATH}/handle_errors"
+
 
 PURPOSE=baseline
-JUDGECLASS=("MedicalDB");
-
 
 CORPLIST=("${JUDGECLASS}")
-SOFIA="/home/guilherme/Downloads/tar-toolkit-core-copy//sofia-ml-read-only/sofia-ml"
+SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
+echo $JUDGECLASS
+contains() {
+    : '
+        Utility function that returns true if a given
+        value is within the given array and false otherwise.
+
+        $1 -> value to check
+        $2... -> array
+    '
+
+
+    value=$1; shift
+    array=("$@")
+
+    for v in "${array[@]}"; do
+        if [[ $v == $value ]]; then
+            true
+            return
+        fi
+    done
+
+    false
+    return
+}
 
 : '
     Iterate over items in CORPLIST
@@ -22,7 +58,13 @@ for CORP in "${CORPLIST[@]}"; do
 
     echo -e "${BLUE}Preparando dataset...${END}"
 
-    ./dofast4 "$CORP"
+    if [[ $LINE_ARGUMENTS -gt 0 ]]; then
+        if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
+            ./dofast4 "$CORP"
+        fi
+    else
+        ./dofast4 "$CORP"
+    fi
 
     cp "$CORP".df ../"$CORP".df
 
@@ -38,6 +80,15 @@ for CORP in "${CORPLIST[@]}"; do
         IFS=':' read -ra TEXT <<< "$line"
 
         TOPIC="${TEXT[0]}"
+
+        # Skips topics not considered
+        if [[ $LINE_ARGUMENTS -gt 0 ]]; then
+            if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
+                echo -e "${YELLOW}Skipping topic '$TOPIC'.${END}"
+                continue
+            fi
+        fi
+
         QUERY="${TEXT[1]}"
 
         : '
@@ -397,37 +448,7 @@ for CORP in "${CORPLIST[@]}"; do
                 fi
             done
         done
-#         echo "select the top 95% relevant documents  from the last ranking"
-#         
-#         echo " 20: Estimate ρ̂ = 1.05 "
-#         export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDUN  " | bc`
-#         echo "prevalence $prevalence"        
-#         export m=`echo "scale=5; ($prevalence * $NDUN ) * 0.95 " | bc`           
-#         prevalence_int=${m%.*}
-#         
-#         python selectRound.py store_estimation $prevalence_int
-#        
-#        
-#         export j=`cat flagOut `
-#         
-#         export t=`wc -l < U$j`
-#          
-#          
-#          
-#          
-#         temp=$(($NDUN-$t))
-#         tail -$temp newtopic.sort > result
-# 
-#         echo "valor t =$t valor j =$j valor temp =$temp"
-# 
-# 
-#         export r=`cat result | sort | uniq | join - rel.$TOPIC.fil | uniq | wc -l`
-# 
-#         total=`wc -l < rel.$TOPIC.fil`
-#         recall=`echo "scale=5; ($r / $total)" | bc`
-#         precisao=`echo "scale=5; ($r / $temp)" | bc`
-#         echo "resultado final $r ------$temp  recall $recall  precisao $precisao"
-#         
+         
         
     echo "select the top 95% relevant documents  from the last ranking"
         
@@ -465,7 +486,7 @@ for CORP in "${CORPLIST[@]}"; do
         rm -rf svm.test.*
         popd
 
-       # mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+        mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
         rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"

@@ -40,9 +40,9 @@ for CORP in "${CORPLIST[@]}"; do
 
         # skips data extraction after first time executed (saves time)
         if [[ $i == "01" ]]; then
-            bash doAll_Baseline_4gram_Dependent false $CORP "${TOPICS_CONSIDERED[@]}"
+            bash doAll_Baseline_4gram false $CORP "${TOPICS_CONSIDERED[@]}"
         else
-            bash doAll_Baseline_4gram_Dependent true $CORP "${TOPICS_CONSIDERED[@]}"
+            bash doAll_Baseline_4gram true $CORP "${TOPICS_CONSIDERED[@]}"
         fi
 
         # put result in another location
