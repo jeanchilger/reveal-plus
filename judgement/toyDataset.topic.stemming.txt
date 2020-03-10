@@ -1,2 +1,1 @@
 tr0:Learn to Rank
-tr2:Lorem ipsum dolor sit amet

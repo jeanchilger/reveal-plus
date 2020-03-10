@@ -7,11 +7,11 @@ source "${ABS_PATH}/colors"
 
 
 PURPOSE=baseline
-JUDGECLASS=("toyDataset");
+JUDGECLASS=("MedicalDB");
 
 
 CORPLIST=("${JUDGECLASS}")
-SOFIA="/home/jean/Documents/tar-toolkit-core-copy/sofia-ml-read-only/sofia-ml"
+SOFIA="/home/guilherme/Downloads/tar-toolkit-core-copy//sofia-ml-read-only/sofia-ml"
 
 : '
     Iterate over items in CORPLIST
@@ -383,21 +383,94 @@ for CORP in "${CORPLIST[@]}"; do
 
                     cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
 
+                    echo "compute the Estimate ρ̂  of each round" 
+                    
+                    Temp_A=$(($RELFINDDOC*$L))
+                    Temp_B=$(($Temp_A/$b))
+                    export Estimate=$(($Estimate+$Temp_B))
+                    
+                    echo "${N%.*} $Estimate" >> store_estimation
+                    echo -e "${GREEN} $Temp_A $Temp_B $b $L Estimate rate is $Estimate"
+                    
                     NDUN=$((NDUN+L))
                     L=$((L+(L+9)/10))
                 fi
             done
         done
+#         echo "select the top 95% relevant documents  from the last ranking"
+#         
+#         echo " 20: Estimate ρ̂ = 1.05 "
+#         export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDUN  " | bc`
+#         echo "prevalence $prevalence"        
+#         export m=`echo "scale=5; ($prevalence * $NDUN ) * 0.95 " | bc`           
+#         prevalence_int=${m%.*}
+#         
+#         python selectRound.py store_estimation $prevalence_int
+#        
+#        
+#         export j=`cat flagOut `
+#         
+#         export t=`wc -l < U$j`
+#          
+#          
+#          
+#          
+#         temp=$(($NDUN-$t))
+#         tail -$temp newtopic.sort > result
+# 
+#         echo "valor t =$t valor j =$j valor temp =$temp"
+# 
+# 
+#         export r=`cat result | sort | uniq | join - rel.$TOPIC.fil | uniq | wc -l`
+# 
+#         total=`wc -l < rel.$TOPIC.fil`
+#         recall=`echo "scale=5; ($r / $total)" | bc`
+#         precisao=`echo "scale=5; ($r / $temp)" | bc`
+#         echo "resultado final $r ------$temp  recall $recall  precisao $precisao"
+#         
+        
+    echo "select the top 95% relevant documents  from the last ranking"
+        
+        echo " 20: Estimate ρ̂ = 1.05 "
+        export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDOCS  " | bc`
+        echo "prevalence $prevalence"        
+        export m=`echo "scale=5; ($prevalence * $NDOCS ) * 0.90 " | bc`           
+        prevalence_int=${m%.*}
+        
+        python3 ../selectRound.py store_estimation $prevalence_int
+       
+       
+        export j=`cat flagOut`
+        
+        export t=`wc -l < U$j`
+         
+         
+         
+         
+        temp=$(($NDOCS-$t))
+        sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
+        tail -$temp sorted_ranking > result
 
+        echo "valor t =$t valor j =$j valor temp =$temp NDOCS=$NDOCS"
+
+
+        export r=`cat result | sort | uniq | join - rel.$TOPIC.fil | uniq | wc -l`
+
+        total=`wc -l < rel.$TOPIC.fil`
+        recall=`echo "scale=5; ($r / $total)" | bc`
+        precisao=`echo "scale=5; ($r / $temp)" | bc`
+        echo "resultado final $r ------$temp  recall $recall  precisao $precisao"     
+        
+        
         rm -rf svm.test.*
         popd
 
-        mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+       # mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
         rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 
-    echo -e "${WHITE}Apos finalizar o método o numero de docs recuperados do método  será o top total documentos acessados até a ultima executação que encontrou documentos relevantes. Por exemplo, se a execução N =20 foi a ultima a achar documentos releventas na amostragem deve-se pegar os top ~300 como relevantes. Essa será saida do método. Ou seja, o arquivo rel.rate armazena os relevantes recuperados, é só usar ele para implementar isso.${END}"
+   # echo -e "${WHITE}Apos finalizar o método o numero de docs recuperados do método  será o top total documentos acessados até a ultima executação que encontrou documentos relevantes. Por exemplo, se a execução N =20 foi a ultima a achar documentos releventas na amostragem deve-se pegar os top ~300 como relevantes. Essa será saida do método. Ou seja, o arquivo rel.rate armazena os relevantes recuperados, é só usar ele para implementar isso.${END}"
 
 
     rm -rf "$CORP".svm.fil
