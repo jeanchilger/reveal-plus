@@ -10,21 +10,25 @@ if [[ $LINE_ARGUMENTS -eq 0 ]]; then
 else
     SKIP_DATA_EXTRACTION=$1; shift
     JUDGECLASS=$1; shift
+    PRINT=$1; shift
     TOPICS_CONSIDERED=("$@");
 
 fi
 
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
-
-echo "${ABS_PATH}/handle_errors"
+if [[ $PRINT == "y" ]]; then
+    echo "${ABS_PATH}/handle_errors"
+fi
 
 
 PURPOSE=baseline
 
 CORPLIST=("${JUDGECLASS}")
 SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
-echo $JUDGECLASS
+if [[ $PRINT == "y" ]]; then
+    echo $JUDGECLASS
+fi
 contains() {
     : '
         Utility function that returns true if a given
@@ -55,7 +59,7 @@ contains() {
 for CORP in "${CORPLIST[@]}"; do
 
     pushd Corpus # pushd <dir> é semelhante à cd <dir>
-
+    
     echo -e "${BLUE}Preparando dataset...${END}"
 
     if [[ $LINE_ARGUMENTS -gt 0 ]]; then
@@ -66,9 +70,9 @@ for CORP in "${CORPLIST[@]}"; do
         ./dofast4 "$CORP"
     fi
 
-    cp "$CORP".df ../"$CORP".df
+    cp "$CORP".df ../"$CORP".df > /dev/null
 
-    cp "$CORP".svm.fil ../"$CORP".svm.fil
+    cp "$CORP".svm.fil ../"$CORP".svm.fil &> /dev/null  #não está funcionando a saída para o buraco negro do processador
 
     popd # popd é semelhante ao cd ..
     : '
@@ -105,8 +109,16 @@ for CORP in "${CORPLIST[@]}"; do
         echo -e "${WHITE}Topic${END}:$TOPIC"
         echo -e "${WHITE}Query${END}:$QUERY"
 
+        if [[ $PRINT == "n" ]]; then
+            echo -e "${RED}     Método em execução..."
+        fi
+
         ######
-        try "Creating directories to store results..."
+        if [[ $PRINT == "y" ]]; then
+            echo "Creating directories to store results..."
+        fi
+
+        try 
         (
             rm -rf result/"$PURPOSE"/"$CORP"/"$TOPIC"/
             mkdir -p result/"$PURPOSE"/"$CORP"/
@@ -118,10 +130,13 @@ for CORP in "${CORPLIST[@]}"; do
             exit_on_error
         }
 
-        echo -e "${GREEN}Done.${END}"
-
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Done.${END}"
+            echo "Creating topic directory topic (${TOPIC})..."
+        fi
         ######
-        try "Creating topic directory topic (${TOPIC})..."
+        
+        try 
         (
             rm -rf $TOPIC
             mkdir $TOPIC
@@ -131,11 +146,14 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-
-        echo -e "${GREEN}Done.${END}"
-
+        
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Done.${END}"
+            echo "Creating file 'N' with number of documents..."
+        fi
         ######
-        try "Creating file 'N' with number of documents..."
+        
+        try 
         (
             : '
                 Creates a `N` file with number of all docs
@@ -147,15 +165,20 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-
-        echo -e "${GREEN}Done.${END}"
-
+        
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Done.${END}"
+            echo "Preparing 'docfils' file with all documents..."
+        fi    
+        
         pushd $TOPIC
 
         echo "$QUERY" > "$TOPIC".seed.doc
 
         ######
-        try "Preparing 'docfils' file with all documents..."
+        
+        
+        try 
         (
             cut -d' ' -f1 ../$CORP.svm.fil | sed -e 's/.*/& &/' > docfil
             cut -d' ' -f1 docfil | cat -n > docfils
@@ -165,16 +188,17 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-
-        echo -e "${GREEN}Done.${END}"
-
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Done.${END}"
+            echo "Preparing relevance calculation files..."
+        fi
         : '
             The `new$N` files keeps the files used on
                 the $N-th iteration
         '
 
         ######
-        try "Preparing relevance calculation files..."
+        try 
         (
             touch rel.$TOPIC.fil
             touch prel.$TOPIC
@@ -193,9 +217,9 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-
-        echo -e "${GREEN}Done.${END}"
-
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Done.${END}"
+        fi
         # Total number of documents
         NDOCS=`cat docfils | wc -l`
         # Number of documents already labeled
@@ -213,17 +237,18 @@ for CORP in "${CORPLIST[@]}"; do
         cp $TOPIC.seed.doc ../$TOPIC.seed.doc
 
         popd
-
-        echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
-
-        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP
-
-        echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
-
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
+        fi
+        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP #aqui tem q arrumar os prints
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
+            "Preparing ../$CORP.svm.fil (runs ../dosplit) and $TOPIC.synthetic.seed..."
+        fi
         pushd $TOPIC
 
         ######
-        try "Preparing ../$CORP.svm.fil (runs ../dosplit) and $TOPIC.synthetic.seed..."
+        try 
         (
             sed -e 's/[^ ]*/0/' ../$CORP.svm.fil | ../dosplit
             sed -e 's/[^ ]*/1/' svm.$TOPIC.seed.doc.fil > $TOPIC.synthetic.seed
@@ -233,8 +258,9 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-
-        echo -e "${GREEN}Done.${END}"
+        if [[ $PRINT == "y" ]]; then
+            echo -e "${GREEN}Done.${END}"
+        fi
 
         for x in 0 1 2 3 4 5 6 7 8 9 ; do
 
@@ -244,7 +270,10 @@ for CORP in "${CORPLIST[@]}"; do
                     export N=$x$y
 
                     ######
-                    try "Preparing trainset..."
+                    if [[ $PRINT == "y" ]]; then
+                        echo "Preparing trainset..."
+                    fi
+                    try 
                     (
                         cp $TOPIC.synthetic.seed trainset
 
@@ -255,11 +284,12 @@ for CORP in "${CORPLIST[@]}"; do
                     catch || {
                         exit_on_error
                     }
-
-                    echo -e "${GREEN}Done.${END}"
-
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Done.${END}"
+                        echo "Preparing seed (and x)..."
+                    fi
                     ######
-                    try "Preparing seed (and x)..."
+                    try 
                     (
                         cat sub_new[0-9][0-9].$TOPIC > seed
                         cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' > x
@@ -270,11 +300,12 @@ for CORP in "${CORPLIST[@]}"; do
                     catch || {
                         exit_on_error
                     }
-
-                    echo -e "${GREEN}Done.${END}"
-
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Done.${END}"
+                        echo "Preparing trainset (pt 2)..."
+                    fi
                     ######
-                    try "Preparing trainset (pt 2)..."
+                    try 
                     (
                         sort -k2 x | join -12 - ../$CORP.svm.fil | cut -d' ' -f2- | sort -n >> trainset
 
@@ -283,9 +314,9 @@ for CORP in "${CORPLIST[@]}"; do
                     catch || {
                         exit_on_error
                     }
-
-                    echo -e "${GREEN}Done.${END}"
-
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Done.${END}"
+                    fi
                     # Calculate relevant documents prevalence rate in the traning set
                     RELTRAINDOC=`grep -E "^1\b" trainset | wc -l`
 
@@ -296,10 +327,13 @@ for CORP in "${CORPLIST[@]}"; do
                     echo $RELTRAINDOC $NOTRELTRAINDOC $PREVALENCERATE >> prevalence.rate
 
                     ######
-                    try "Training (Running SOFIA-ML)..."
+                    if [[ $PRINT == "y" ]]; then
+                        echo "Training (Running SOFIA-ML)..."
+                    fi
+                    try 
                     (
 
-                        $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 200000 --training_file trainset --dimensionality 9300000 --model_out svm_model
+                        $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 200000 --training_file trainset --dimensionality 9300000 --model_out svm_model &> /dev/null
 
                         RES=$?
 
@@ -309,15 +343,19 @@ for CORP in "${CORPLIST[@]}"; do
                         exit_on_error
                     }
 
-                    echo -e "${GREEN}Finished SOFIA-ML.${END}"
-
-                    echo $RES
-
+                    
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Finished SOFIA-ML.${END}"
+                        echo $RES
+                    fi
                     if [[ "$RES" -eq "0" ]] ; then
                         for z in svm.test.* ; do
 
                             ######
-                            try "Testing previously created model (running sofia-ml) $z..."
+                            if [[ $PRINT == "y" ]]; then
+                                echo "Testing previously created model (running sofia-ml) $z..."
+                            fi
+                            try 
                             (
                                 $SOFIA --test_file $z --dimensionality 9300000 --model_in svm_model --results_file pout.$z
 
@@ -327,50 +365,57 @@ for CORP in "${CORPLIST[@]}"; do
                                 echo $ERROR_CODE
                                 exit_on_error
                             }
-
+                            if [[ $PRINT == "y" ]]; then
                             echo -e "${GREEN}Finished testing with $z.${END}"
+                            fi
                         done
 
                     else
                         ######
-                        try "Preparing pout.svm.test.1..."
+                        if [[ $PRINT == "y" ]]; then
+                            echo "Preparing pout.svm.test.1..."
+                        fi
+                        try 
                         (
                             rm -f pout.svm.test.*
                             cut -f2 docfils | sort -R | cat -n | sort -k2 | sed -e 's/ */-/' > pout.svm.test.1
 
                         ) 2> $STD_ERROR_OUT
-
-                        catch || {
-                            exit_on_error
-                        }
-
-                        echo -e "${GREEN}Done.${END}"
+toyDataset
+                        if [[ $PRINT == "y" ]]; then
+                            echo -e "${GREEN}Done.${END}"
+                        fi
                     fi
 
                     ######
-                    try "Starting SCAL process $N\nPreparing ranking.$N.$TOPIC..."
+                    if [[ $PRINT == "y" ]]; then
+                        echo "Starting SCAL process $N\nPreparing ranking.$N.$TOPIC..."
+                    fi
+                    try 
                     (
                         cat new[0-9][0-9].$TOPIC > seed.$TOPIC
                         cut -f1 pout.svm.test.* | ../fixnum | cat -n | join -o2.2,1.2 -t$'\t' - docfils | sort -k1 -n  > inlr.out.$N.$TOPIC
-
-                        echo -e "${BLUE}\tinlr.out size =`wc -l < inlr.out.$N.$TOPIC` docfils  `wc -l <docfils `${END}"
-
+                        if [[ $PRINT == "y" ]]; then
+                            echo -e "${BLUE}\tinlr.out size =`wc -l < inlr.out.$N.$TOPIC` docfils  `wc -l <docfils `${END}"
+                        fi
                         sort -n seed.$TOPIC > temp
                         cat temp | join  -v2 - inlr.out.$N.$TOPIC -2 1 | shuf |  sort -k 2 -r -g -s  > ranking.$N.$TOPIC
-
-
                     ) 2> $STD_ERROR_OUT
 
                     catch || {
                         exit_on_error
                     }
-
-                    echo -e "${GREEN}Done.${END}"
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Done.${END}"
+                        echo "Preparing new$N.$TOPIC..."
+                    fi
 
                     ######
-                    try "Preparing new$N.$TOPIC..."
+                    try 
                     (
-                        echo -e "${BLUE}\tranking size `wc -l < ranking.$N.$TOPIC`${END}"
+                        if [[ $PRINT == "y" ]]; then
+                            echo -e "${BLUE}\tranking size `wc -l < ranking.$N.$TOPIC`${END}"
+                        fi
                         cat ranking.$N.$TOPIC | cut -d' ' -f1 > new$N.$TOPIC
                         cp new$N.$TOPIC U$N
 
@@ -386,9 +431,9 @@ for CORP in "${CORPLIST[@]}"; do
                     catch || {
                         exit_on_error
                     }
-
-                    echo -e "${GREEN}Done.${END}"
-
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Done.${END}"
+                    fi
                     : '
                         x armazena new($N - 1).$TOPIC
                     '
@@ -405,9 +450,9 @@ for CORP in "${CORPLIST[@]}"; do
                             documents from the documents to be used in the iteration.
                     '
                     shuf -n $b new$N.$TOPIC > sub_new$N.$TOPIC
-
-                    echo -e "${BLUE}Number of labeled pairs: `wc -l < sub_new$N.$TOPIC`${END}"
-
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${BLUE}Number of labeled pairs: `wc -l < sub_new$N.$TOPIC`${END}"
+                    fi
                     # judgefile tells which are the positive docs
                     python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.Judged.doc.list --record=$TOPIC.record.list
 
@@ -420,9 +465,9 @@ for CORP in "${CORPLIST[@]}"; do
 
                     alreadyLabeledDocs=`cat sub_new[0-9][0-9].$TOPIC  | wc -l`
                     allDocs=`cat new[0-9][0-9].$TOPIC  | wc -l`
-
-                    echo "rel $RELFINDDOC L $L b $b  alreadyLabeledDocs $alreadyLabeledDocs  allDocs $allDocs REL $RELRATE CURRENTREL $CURRENTREL relevant docs `wc -l < rel.$TOPIC.fil` "
-
+                    if [[ $PRINT == "y" ]]; then
+                        echo "rel $RELFINDDOC L $L b $b  alreadyLabeledDocs $alreadyLabeledDocs  allDocs $allDocs REL $RELRATE CURRENTREL $CURRENTREL relevant docs `wc -l < rel.$TOPIC.fil` "
+                    fi
                     aux=$((($RELFINDDOC*$L)/$b))
                     Rel=$(($Rel+$aux*1000))
 
@@ -433,16 +478,17 @@ for CORP in "${CORPLIST[@]}"; do
                     sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
 
                     cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
-
-                    echo "compute the Estimate ρ̂  of each round" 
-                    
+                    if [[ $PRINT == "y" ]]; then
+                        echo "compute the Estimate ρ̂  of each round" 
+                    fi
                     Temp_A=$(($RELFINDDOC*$L))
                     Temp_B=$(($Temp_A/$b))
                     export Estimate=$(($Estimate+$Temp_B))
                     
                     echo "${N%.*} $Estimate" >> store_estimation
-                    echo -e "${GREEN} $Temp_A $Temp_B $b $L Estimate rate is $Estimate"
-                    
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN} $Temp_A $Temp_B $b $L Estimate rate is $Estimate"
+                    fi
                     NDUN=$((NDUN+L))
                     L=$((L+(L+9)/10))
                 fi
