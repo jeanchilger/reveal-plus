@@ -15,7 +15,7 @@ ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 # Topics to be used in doAll_Baseline_4gram.
 # Topics omited are ignored.
-TOPICS_CONSIDERED=("tr0")
+TOPICS_CONSIDERED=("tr7")
 
 # creates directory to store samples results
 rm -rf all_results

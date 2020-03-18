@@ -10,8 +10,10 @@ F=`pwd`/Corpus/dofast4
     $$ armazena o pid da shell atual, assim xxx$$
     cria um diretório com "nome único".
 '
-
-try "Creating /tmp/xxx$$ and deleting /tmp/dotf*line..." 12 13
+if [[ $PRINT == "y" ]]; then
+    echo "Creating /tmp/xxx$$ and deleting /tmp/dotf*line..." 
+fi
+try
 (
     mkdir /tmp/xxx$$
     rm -rf /tmp/dotf*line
@@ -25,8 +27,10 @@ catch || {
 : '
     ln -s <src> <dest> cria um link de <src> em <dest>.
 '
-
-try "Creating links to /tmp..." 28 29
+if [[ $PRINT == "y" ]]; then
+    echo "Creating links to /tmp..." 
+fi
+try
 (
     ln -s `pwd`/Corpus/tar4 /tmp/xxx$$
     ln -s `pwd`/dotf*line /tmp
@@ -36,9 +40,9 @@ try "Creating links to /tmp..." 28 29
 catch || {
     exit_on_error
 }
-
-echo -e "${GREEN}Done.${END}" > /dev/tty
-
+if [[ $PRINT == "y" ]]; then
+    echo -e "${GREEN}Done.${END}" > /dev/tty
+fi
 ######
 # try "Creating 'thing' directory and compressing it..." 42 45
 # (
@@ -66,9 +70,9 @@ echo -e "${GREEN}Done.${END}" > /dev/tty
 #     throw $FILE_NOT_EXISTS_EXCEPTION "File /tmp/xxxx$$/thing.tgz is missing."
 #
 # fi
-
-echo -e "${GREEN}Done.${END}" > /dev/tty
-
+if [[ $PRINT == "y" ]]; then
+    echo -e "${GREEN}Done.${END}" > /dev/tty
+fi
 # try "Running ./dofast4 ($F) on thing..." 62
 # (
     $F thing
@@ -78,7 +82,7 @@ echo -e "${GREEN}Done.${END}" > /dev/tty
 # catch || {
 #     exit_on_error
 # }
-
-echo -e "${GREEN}Finished ./dofast4${END}" > /dev/tty
-
+if [[ $PRINT == "y" ]]; then
+    echo -e "${GREEN}Finished ./dofast4${END}" > /dev/tty
+fi
 cat thing.concordance

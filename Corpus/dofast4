@@ -5,7 +5,7 @@ source "${ABS_PATH}/colors"
 
 export LANG=C
 CORP=$1
-
+PRINT=$2
 : '
     zcat permite ver o conteúdo de um arquivo comprimido
         sem ter que descomprimi-lo.
@@ -24,7 +24,10 @@ CORP=$1
 zcat $CORP.tgz | ./tar4 /dev/stdin | sort -k3 > $CORP.concordance 2> dofast.stderr
 
 ######
-try "Building $CORP.tfdf" 28 35
+if [[ $PRINT == "y" ]]; then
+    echo "Building $CORP.tfdf"
+fi
+try
 (
     mv df $CORP.df
     : '
@@ -40,11 +43,11 @@ try "Building $CORP.tfdf" 28 35
 catch || {
     exit_on_error
 }
-
-echo -e "${GREEN}Done.${END}"
-
 N=`cat N`
-echo N $N
+if [[ $PRINT == "y" ]]; then
+    echo -e "${GREEN}Done.${END}"
+    echo N $N
+fi
 
 ######
 # try "Running ../dotfidfinline..." 50

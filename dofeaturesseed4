@@ -6,6 +6,7 @@ source "${ABS_PATH}/colors"
 export LANG=C
 TOPIC=$2
 CORP=$3
+PRINT=$4
 
 : '
     find é utilizado para realizar buscas.
@@ -24,8 +25,10 @@ N=`find $1 -type f | wc -l`
 : '
     sort -k3 está sendo aplicado na saída de ./dosteminline
 '
-
-try "Executing ./dosteminline4 and creating $TOPIC/concordance.$1..." 35
+if [[ $PRINT == "y" ]]; then
+    echo "Executing ./dosteminline4 and creating $TOPIC/concordance.$1..."
+fi
+try
 (
     find $1 -type f -exec ./dosteminline4 {} \; | sort -k3 > $TOPIC/concordance.$1
 
@@ -34,17 +37,19 @@ try "Executing ./dosteminline4 and creating $TOPIC/concordance.$1..." 35
 catch || {
     exit_on_error
 }
-
-echo -e "${GREEN}Finished ./dosteminline4${END}"
-
+if [[ $PRINT == "y" ]]; then
+    echo -e "${GREEN}Finished ./dosteminline4${END}"
+fi
 cat -n $CORP.df | join -13 -23 - $TOPIC/concordance.$1 | sort -k4,4 -k2,2n > $TOPIC/tfdf.$1.sort
 
 N=`cat N`
-echo N $N
 
-echo -e "${BLUE}Executing ./dotfidfinline...${END}"
-
+if [[ $PRINT == "y" ]]; then
+    echo N $N
+    echo -e "${BLUE}Executing ./dotfidfinline...${END}"
+fi
 # código de saída 10 mesmo quando funciona
 ./dotfidfinline $N < $TOPIC/tfdf.$1.sort > $TOPIC/svm.$1.fil
-
-echo -e "${GREEN}Finished ./dotfidfinline.${END}"
+if [[ $PRINT == "y" ]]; then
+    echo -e "${GREEN}Finished ./dotfidfinline.${END}"
+fi

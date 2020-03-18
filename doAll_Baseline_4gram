@@ -67,12 +67,12 @@ for CORP in "${CORPLIST[@]}"; do
             ./dofast4 "$CORP"
         fi
     else
-        ./dofast4 "$CORP"
+        ./dofast4 "$CORP" $PRINT
     fi
 
     cp "$CORP".df ../"$CORP".df > /dev/null
 
-    cp "$CORP".svm.fil ../"$CORP".svm.fil &> /dev/null  #não está funcionando a saída para o buraco negro do processador
+    cp "$CORP".svm.fil ../"$CORP".svm.fil 
 
     popd # popd é semelhante ao cd ..
     : '
@@ -240,7 +240,7 @@ for CORP in "${CORPLIST[@]}"; do
         if [[ $PRINT == "y" ]]; then
             echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
         fi
-        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP #aqui tem q arrumar os prints
+        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP $PRINT 
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
             "Preparing ../$CORP.svm.fil (runs ../dosplit) and $TOPIC.synthetic.seed..."
@@ -496,8 +496,7 @@ toyDataset
         done
          
         
-    echo "select the top 95% relevant documents  from the last ranking"
-        
+        echo "select the top 95% relevant documents  from the last ranking"
         echo " 20: Estimate ρ̂ = 1.05 "
         export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDOCS  " | bc`
         echo "prevalence $prevalence"        
