@@ -25,7 +25,7 @@ fi
 PURPOSE=baseline
 
 CORPLIST=("${JUDGECLASS}")
-SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
+SOFIA="/home/matheus/Documents/tar-toolkit-core-copy/sofia-ml-read-only/sofia-ml"
 if [[ $PRINT == "y" ]]; then
     echo $JUDGECLASS
 fi
@@ -357,7 +357,7 @@ for CORP in "${CORPLIST[@]}"; do
                             fi
                             try 
                             (
-                                $SOFIA --test_file $z --dimensionality 9300000 --model_in svm_model --results_file pout.$z
+                                $SOFIA --test_file $z --dimensionality 9300000 --model_in svm_model --results_file pout.$z &> /dev/null
 
                             ) 2> $STD_ERROR_OUT
 
