@@ -15,7 +15,7 @@ ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 # Topics to be used in doAll_Baseline_4gram.
 # Topics omited are ignored.
-TOPICS_CONSIDERED=("tr19" "tr13" "tr18" "tr19")
+TOPICS_CONSIDERED=("tr18")
 
 # creates directory to store samples results
 rm -rf all_results
@@ -28,7 +28,8 @@ mkdir results
 touch $ALL_RESULTS_HELPER
 
 echo "Would you like to print DEBUG messages?(y=yes,n=no)"
-read print
+#read print
+print='y'
 for CORP in "${CORPLIST[@]}"; do
 
     echo -e "${YELLOW}CORP: $CORP. ${END}"
@@ -39,12 +40,15 @@ for CORP in "${CORPLIST[@]}"; do
 
         rm -rf all_results/result-${i}
         mkdir all_results/result-${i}
-
+        
         # skips data extraction after first time executed (saves time)
-        if [[ $i == "01" ]]; then
-            bash doAll_Baseline_4gram false $CORP $print "${TOPICS_CONSIDERED[@]}"
-        else
+
+        if [ -f "$CORP.svm.fil" ]; then
+            
             bash doAll_Baseline_4gram true $CORP $print "${TOPICS_CONSIDERED[@]}"
+        else
+
+            bash doAll_Baseline_4gram false $CORP $print "${TOPICS_CONSIDERED[@]}"
         fi
 
         # put result in another location

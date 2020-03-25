@@ -276,7 +276,6 @@ for CORP in "${CORPLIST[@]}"; do
         (
             sed -e 's/[^ ]*/1/' svm.$TOPIC.seed.doc.fil > $TOPIC.synthetic.seed
             echo  "Preparing $TOPIC.synthetic.seed..."
-<<<<<<< HEAD
 
         ) 2> $STD_ERROR_OUT
 
@@ -306,8 +305,7 @@ for CORP in "${CORPLIST[@]}"; do
                 rm ../"$CORP".db
                 ../indexer $CORP.svm.fil "$CORP".db $KEYSIZE $VALSIZE || (echo "Error creating db"; exit 1)
             fi
-=======
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+
 
         ) 2> $STD_ERROR_OUT
 
@@ -317,43 +315,7 @@ for CORP in "${CORPLIST[@]}"; do
     
         
         
-<<<<<<< HEAD
-#         if [[ $LINE_ARGUMENTS -gt 0 ]]; then
-#             if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
-        
-=======
-      
-         try 
-        (
-        
-            #key value database kissdb             
-            KEYSIZE=$(awk 'BEGIN{a=0}{len = length($1); a=a<len?len:a}END{print a}' $CORP.svm.fil)
-            VALSIZE=$(awk 'BEGIN{a=0}{len = length($0); a=a<len?len:a}END{print a}' $CORP.svm.fil)
-            KEYSIZE=$((KEYSIZE+2))
-            VALSIZE=$((VALSIZE+2))
-            
-            if [[ $PRINT == "y" ]]; then
-                echo "Indexing $CORP, keysize = $KEYSIZE, valsize = $VALSIZE"            
-           
-            fi
-            
-            if [ -f "$CORP".db ]; then              
-            
-                rm ../"$CORP".db
-                ../indexer $CORP.svm.fil "$CORP".db $KEYSIZE $VALSIZE || (echo "Error creating db"; exit 1)
-            fi
 
-        ) 2> $STD_ERROR_OUT
-
-        catch || {
-            exit_on_error
-        }
-        
-        
-#         if [[ $LINE_ARGUMENTS -gt 0 ]]; then
-#             if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
-        
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
          
 #             fi
 #         fi
@@ -381,11 +343,7 @@ for CORP in "${CORPLIST[@]}"; do
                     try 
                     (
                         cp $TOPIC.synthetic.seed trainset
-<<<<<<< HEAD
-                        
-=======
 
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
                         cut -f2 docfils | shuf -n $R | sort | .././indexer "$CORP".db $KEYSIZE $VALSIZE | sed -e's/[^ ]*/-1/' >> trainset
                         
                     ) 2> $STD_ERROR_OUT
@@ -448,11 +406,9 @@ for CORP in "${CORPLIST[@]}"; do
                     try 
                     (
 
-<<<<<<< HEAD
+
                         $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 2000000 --training_file trainset --dimensionality 3300000  --model_out svm_model &> saida_classificador
-=======
-                        $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 2000000 --training_file trainset --dimensionality 3300000  --model_out svm_model &> /dev/null
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+
 
                         RES=$?
 
@@ -473,27 +429,19 @@ for CORP in "${CORPLIST[@]}"; do
                         for z in svm.test.* ; do
 
                             ######
-<<<<<<< HEAD
-                           
-=======
-                            if [[ $PRINT == "y" ]]; then
-                                echo "Testing previously created model (running sofia-ml) $z..."
-                            fi
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+
                             
                             while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
                                 sleep 1
                             done   
-                            
+                         
                             
                             
                             try 
                             (
-<<<<<<< HEAD
+
                                 $SOFIA --test_file $z --dimensionality 3300000 --model_in svm_model --results_file pout.$z &> saida_classificador & 
-=======
-                                $SOFIA --test_file $z --dimensionality 3300000 --model_in svm_model --results_file pout.$z &> /dev/null &
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+
 
                             ) 2> $STD_ERROR_OUT
 
@@ -503,12 +451,10 @@ for CORP in "${CORPLIST[@]}"; do
                             }
                            
                         done
-<<<<<<< HEAD
+
                         wait
                         #waiting all threads complete their work
-=======
-                        wait#waiting all threads complete their work
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+
                     else
                         ######
                        
@@ -519,11 +465,7 @@ for CORP in "${CORPLIST[@]}"; do
 
                         ) 2> $STD_ERROR_OUT
 
-<<<<<<< HEAD
-                        
-                         
-=======
->>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+
                         if [[ $PRINT == "y" ]]; then
                             echo -e "${GREEN}Done.${END}"
                         fi
