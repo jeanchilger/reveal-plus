@@ -728,11 +728,11 @@ for CORP in "${CORPLIST[@]}"; do
         echo "resultado final $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
         
         
-        rm -rf svm.test.*
-        popd
-
-        mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-        rm $TOPIC.seed.doc
+#         rm -rf svm.test.*
+#         popd
+# 
+#         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+#         rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 
