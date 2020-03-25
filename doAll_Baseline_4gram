@@ -721,6 +721,8 @@ for CORP in "${CORPLIST[@]}"; do
         NumberDocument=$(($NDOCS-$t))
         sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
         tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result_ranking.$TOPIC
+        
+        n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
         cat ssarp* result_ranking.$TOPIC >> result 
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
@@ -738,7 +740,7 @@ for CORP in "${CORPLIST[@]}"; do
         
         
         
-        echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${BLUE}"
+        echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${END}"
         ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
         
         

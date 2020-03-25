@@ -3,8 +3,10 @@ Discretizando treino e teste de acordo com os bins TUBE
 ../discretize_TUBE.pl train-B50 train_nohead.arff 50 lac_train_TUBE.txt.tr13
 dddddddddddddd  train-B50 train_nohead.arff **** lac_train_TUBE.txt.tr13*** 
  roda o ALAC ....
-starting alac test threshold  ../../alac5  lac_train_TUBEfinal.txt.tr13 103  with size 21
+starting alac test threshold  ../../alac5  lac_train_TUBEfinal.txt.tr13 103  with size 24
+inserting instance 103011 into alac_lac_train_TUBEfinal.txt.tr13 CLASS=1
+inserting instance 103010 into alac_lac_train_TUBEfinal.txt.tr13 CLASS=0
 instance 103010 already inserted... terminating
-total of 0 instances inserted into training set
+total of 2 instances inserted into training set
 Gerando o treino a partir das instancias selecionadas em cada particao..ssss
 gerando arquivo SVM treino..

@@ -1,11 +1,11 @@
 execution number 115 the file have 50
 Discretizando treino e teste de acordo com os bins TUBE
-../discretize_TUBE.pl train-B50 train_nohead.arff 50 lac_train_TUBE.txt.tr18
-dddddddddddddd  train-B50 train_nohead.arff **** lac_train_TUBE.txt.tr18*** 
+../discretize_TUBE.pl train-B50 train_nohead.arff 50 lac_train_TUBE.txt.tr13
+dddddddddddddd  train-B50 train_nohead.arff **** lac_train_TUBE.txt.tr13*** 
  roda o ALAC ....
-starting alac test threshold  ../../alac5  lac_train_TUBEfinal.txt.tr18 115  with size 25
-inserting instance 115010 into alac_lac_train_TUBEfinal.txt.tr18 CLASS=0
-instance 115010 already inserted... terminating
+starting alac test threshold  ../../alac5  lac_train_TUBEfinal.txt.tr13 115  with size 23
+inserting instance 115008 into alac_lac_train_TUBEfinal.txt.tr13 CLASS=0
+instance 115008 already inserted... terminating
 total of 1 instances inserted into training set
 Gerando o treino a partir das instancias selecionadas em cada particao..ssss
 gerando arquivo SVM treino..
