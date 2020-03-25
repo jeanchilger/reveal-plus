@@ -16,14 +16,12 @@ while ($line = <F1>) {
     @vals = split(/ /, $line,2);
     
     if($vals[0] > 1000*$vez){
-#       print "-----------$vals[0]-----------$vez\n";
-      $j=$vals[0]-1000*$vez;
-      print F2 "$j $vals[1]";
-	print F3 "$line";
+
+       $j=$vals[0]-1000*$vez;
+      # print "-----------$vals[0]-----------$vez ---- $j\n";
+       print F2 "$j $vals[1]";
+       print F3 "$line";
 
     }
-#    else{
-#      print F3 "$line";
-#    }
 
 }

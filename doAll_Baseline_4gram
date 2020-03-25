@@ -12,6 +12,8 @@ else
     JUDGECLASS=$1; shift
     PRINT=$1; shift
     TOPICS_CONSIDERED=("$@");
+    rules=5
+    
 
 fi
 
@@ -151,6 +153,8 @@ for CORP in "${CORPLIST[@]}"; do
         (
             rm -rf $TOPIC
             mkdir $TOPIC
+            #echo "cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb"
+            cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -253,7 +257,7 @@ for CORP in "${CORPLIST[@]}"; do
         if [[ $PRINT == "y" ]]; then
             echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
         fi
-        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP $PRINT 
+        ./dofeaturesseed $TOPIC.seed.doc $TOPIC $CORP $PRINT 
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
             
@@ -295,14 +299,14 @@ for CORP in "${CORPLIST[@]}"; do
         
             
             
-            if [[ $PRINT == "y" ]]; then
-                echo "Indexing $CORP, keysize = $KEYSIZE, valsize = $VALSIZE"            
-           
-            fi
             
-            if [ ! -f "$CORP.db" ]; then              
             
-                rm ../"$CORP".db
+            if [ ! -f "../$CORP.db" ]; then              
+                
+                if [[ $PRINT == "y" ]]; then
+                    echo "Indexing $CORP, keysize = $KEYSIZE, valsize = $VALSIZE"                       
+                fi
+                
                 ../indexer $CORP.svm.fil "$CORP".db $KEYSIZE $VALSIZE || (echo "Error creating db"; exit 1)
             fi
 
@@ -541,6 +545,9 @@ for CORP in "${CORPLIST[@]}"; do
                     fi
                     
                  
+                   
+                 
+                 
                     # judgefile tells which are the positive docs
                     python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.Judged.doc.list --record=$TOPIC.record.list
 
@@ -625,7 +632,7 @@ for CORP in "${CORPLIST[@]}"; do
                        
                         echo "executando alac $rules"
                             cd ../SSARP/run/
-                            ./SSARPX.sh out.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out.$N.$TOPIC.arff $TOPIC $flag_allac_first_time 5
+                            ./SSARPX.sh out.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out.$N.$TOPIC.arff $TOPIC $flag_allac_first_time $rules
                             flag_allac_first_time=$(($flag_allac_first_time+1))
                             cat label.$N.$TOPIC > /tmp/ssarp$N.$TOPIC
                             cd -
@@ -713,19 +720,26 @@ for CORP in "${CORPLIST[@]}"; do
          
         NumberDocument=$(($NDOCS-$t))
         sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
-        tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result
-        cat ssarp* >> result 
+        tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result_ranking.$TOPIC
+        tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
+        cat ssarp* result_ranking.$TOPIC >> result 
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
 
-        export relNumber=`cat result | sort | uniq | join - rel.$TOPIC.fil | uniq | wc -l`
+        export relNumber=`cat result | sort | uniq | join - goldendb | uniq | wc -l`
         NumberDocument=`cat result | sort | uniq | wc -l`
         
         
-        total=`wc -l < rel.$TOPIC.fil`
+        total=`wc -l < goldendb`
         recall=`echo "scale=5; ($relNumber / $total)" | bc`
         precisao=`echo "scale=5; ($relNumber / $NumberDocument)" | bc`
         echo "resultado final $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
+        
+        
+        
+        
+        echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${BLUE}"
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
         
         
 #         rm -rf svm.test.*
