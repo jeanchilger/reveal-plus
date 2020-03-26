@@ -64,10 +64,10 @@ for CORP in "${CORPLIST[@]}"; do
 
     if [[ $LINE_ARGUMENTS -gt 0 ]]; then
         if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
-            ./dofast4 "$CORP"
+            ./dofast "$CORP"
         fi
     else
-        ./dofast4 "$CORP" $PRINT
+        ./dofast "$CORP" $PRINT
     fi
 
     cp "$CORP".df ../"$CORP".df > /dev/null
@@ -240,7 +240,7 @@ for CORP in "${CORPLIST[@]}"; do
         if [[ $PRINT == "y" ]]; then
             echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
         fi
-        ./dofeaturesseed4 $TOPIC.seed.doc $TOPIC $CORP $PRINT 
+        ./dofeaturesseed $TOPIC.seed.doc $TOPIC $CORP $PRINT 
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
             "Preparing ../$CORP.svm.fil (runs ../dosplit) and $TOPIC.synthetic.seed..."
