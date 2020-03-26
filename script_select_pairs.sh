@@ -203,13 +203,13 @@
     cat out_after_ssarp.$TOPIC | sort | uniq > temp
     cp temp out_after_ssarp.$TOPIC
    
-    r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l`
+    r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
     finalpares=`wc -l < out_after_ssarp.$TOPIC`
-    total=`wc -l < rel.$TOPIC.fil`
+    total=`wc -l < goldendb`
     echo "total de relevantes $total"
     recall=`echo "scale=6; ($r / $total)" | bc`
     precisao=`echo "scale=6; ($r / $finalpares)" | bc`
-    #echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda
+    #echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda
     #$perda_ac "
     echo "positivos $r total $finalpares recal  $recall precision $precision perda $perda_ac"
 	

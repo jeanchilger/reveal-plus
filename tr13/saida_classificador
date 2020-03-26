@@ -1,0 +1,6 @@
+Reading model from: svm_model
+   Done.
+Reading test data from: svm.test.001
+Time to read test data: 0.627311
+Time to make test prediction results: 0.004357
+Writing test results to: pout.svm.test.00     Done.
