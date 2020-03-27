@@ -5,7 +5,7 @@ LINE_ARGUMENTS=$#
 if [[ $LINE_ARGUMENTS -eq 0 ]]; then
     export ABS_PATH=`pwd`
 
-    JUDGECLASS="MedicalDB"
+    JUDGECLASS="toyDataset"
     
 else
     SKIP_DATA_EXTRACTION=$1; shift
@@ -154,7 +154,7 @@ for CORP in "${CORPLIST[@]}"; do
             rm -rf $TOPIC
             mkdir $TOPIC
             #echo "cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb"
-            cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb
+            cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 | sort > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
