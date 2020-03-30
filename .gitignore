@@ -10,7 +10,15 @@ athome*
 *.concordance
 *.stderr
 seed
-indexer
 *.tr*
 std.error.log
 results/
+tr[0-20]/
+*.arff
+*.db
+*.svd
+bfg-1.13.0.jar
+final_treina*
+label.*
+log_ssarp_stoping*
+trainset.*
