@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#convert letor to weka
+#
+# convert_letor_to_weka train.txt 64
+#
+printf "@relation documents\n\n";
+# for f in $(seq 1 $2); do 
+# 	printf "@attribute F$f numeric\n";
+# done
+
+printf "@attribute relevance {";
+(cat $1 | gawk '{ print $1 }' | sort -un > v; cat v | gawk '{ if (NR==1) printf("%i",$1); else printf(", %i",$1); }';rm v)
+
+printf "}\n\n@data\n"
+(cat $1 | gawk -v FEAT="$2" '{ split($2,a,":"); if(a[1]=="1") {INI=2;} else {INI=3; split($3,a,":");} FIM=INI+FEAT-1; printf("%f",a[2]); for (i=INI+1;i<=FIM;i++) { split($i,a,":"); printf(", %f",a[2]) } printf(", %i\n",$1) }')

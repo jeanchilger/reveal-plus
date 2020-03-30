@@ -1,0 +1,1212 @@
+Loglikeli Estimator. Counts =  2 47 3 8  (Total = 60 / 4 bins). LLK= 0.34956447804415813
+Loglikeli Estimator. Counts =  1 0 4 1 33 2 2 5 11 1  (Total = 60 / 10 bins). LLK= 1.2861867758127072
+Loglikeli Estimator. Counts =  3 3 34 16 4  (Total = 60 / 5 bins). LLK= 0.8700053817902879
+Loglikeli Estimator. Counts =  2 15 2 7 3 26 1 3 1  (Total = 60 / 9 bins). LLK= 0.3502254559992525
+Loglikeli Estimator. Counts =  1 4 2 42 8 2 1  (Total = 60 / 7 bins). LLK= 0.36116368597175885
+Loglikeli Estimator. Counts =  1 55 2 1 1  (Total = 60 / 5 bins). LLK= 0.10321748088462553
+Loglikeli Estimator. Counts =  2 13 4 26 2 11 2  (Total = 60 / 7 bins). LLK= 0.6857728607589009
+Loglikeli Estimator. Counts =  59 1  (Total = 60 / 2 bins). LLK= -0.018250985521429782
+Loglikeli Estimator. Counts =  5 2 50 3  (Total = 60 / 4 bins). LLK= 0.5350933756906998
+Loglikeli Estimator. Counts =  58 2  (Total = 60 / 2 bins). LLK= 0.06839490172461755
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  2 47 3 8  (Total = 60 / 4 bins). LLK= 0.34956447804415813
+Loglikeli Estimator. Counts =  1 0 3 1 32 4 4 3 11 1  (Total = 60 / 10 bins). LLK= 1.394992938792656
+Loglikeli Estimator. Counts =  1 2 4 0 29 5 13 2 1 3  (Total = 60 / 10 bins). LLK= 1.5789634242658126
+Loglikeli Estimator. Counts =  16 39 5  (Total = 60 / 3 bins). LLK= 0.15253248893944793
+Loglikeli Estimator. Counts =  5 38 2 11 3 1  (Total = 60 / 6 bins). LLK= 0.30336231084183185
+Loglikeli Estimator. Counts =  60  (Total = 60 / 1 bins). LLK= -0.0370412716803491
+Loglikeli Estimator. Counts =  14 2 30 14  (Total = 60 / 4 bins). LLK= 0.2639717028022259
+Loglikeli Estimator. Counts =  55 5  (Total = 60 / 2 bins). LLK= 0.053095451430666574
+Loglikeli Estimator. Counts =  1 0 2 2 48 2 0 2 2 1  (Total = 60 / 10 bins). LLK= 0.4402300409320353
+Loglikeli Estimator. Counts =  1 0 1 0 2 40 3 12 1  (Total = 60 / 9 bins). LLK= 0.03235942113175723
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  59  (Total = 59 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2992 75009 8035 0 5505 0 4622 12083 16372 846  (Total = 125464 / 10 bins). LLK= 1.5497507936308113
+Loglikeli Estimator. Counts =  1633 93697 2429 0 2339 0 2175 16584 5998 609  (Total = 125464 / 10 bins). LLK= 0.7842128666107457
+Loglikeli Estimator. Counts =  5045 16177 2989 0 3372 0 74607 2519 16026 4729  (Total = 125464 / 10 bins). LLK= 0.9953891509859089
+Loglikeli Estimator. Counts =  757 6177 40654 5782 0 6946 44827 3965 7266 9090  (Total = 125464 / 10 bins). LLK= 1.4660052731155135
+Loglikeli Estimator. Counts =  5857 90682 0 2953 0 2698 0 2492 15630 5152  (Total = 125464 / 10 bins). LLK= 0.9650104530652834
+Loglikeli Estimator. Counts =  1668 9256 17088 3516 0 3645 74498 2439 8672 4682  (Total = 125464 / 10 bins). LLK= 1.0298260882585093
+Loglikeli Estimator. Counts =  4923 82607 0 6878 0 5567 0 4730 10712 10047  (Total = 125464 / 10 bins). LLK= 1.6932597265688585
+Loglikeli Estimator. Counts =  4386 11914 2792 0 2914 0 86937 2212 10937 3372  (Total = 125464 / 10 bins). LLK= 0.9752640272854851
+Loglikeli Estimator. Counts =  4316 14115 3361 0 3860 0 79229 2583 14434 3566  (Total = 125464 / 10 bins). LLK= 1.1259386314778355
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2995 75022 8039 0 5491 0 4624 12077 16370 846  (Total = 125464 / 10 bins). LLK= 1.5494724706076946
+Loglikeli Estimator. Counts =  1639 93689 2421 0 2335 0 2178 16597 5995 610  (Total = 125464 / 10 bins). LLK= 0.7861150625572806
+Loglikeli Estimator. Counts =  5112 16275 3012 0 3363 0 74464 2533 15984 4721  (Total = 125464 / 10 bins). LLK= 0.9967241528782548
+Loglikeli Estimator. Counts =  736 6020 39989 5556 0 6861 45357 4060 7641 9244  (Total = 125464 / 10 bins). LLK= 1.455214186515848
+Loglikeli Estimator. Counts =  6087 91203 0 2819 0 2665 0 2418 15286 4986  (Total = 125464 / 10 bins). LLK= 0.9597502518013401
+Loglikeli Estimator. Counts =  1369 9712 17151 3387 0 3566 73967 2513 8992 4807  (Total = 125464 / 10 bins). LLK= 1.014532505499982
+Loglikeli Estimator. Counts =  5100 84638 0 6569 0 5444 0 4439 9612 9662  (Total = 125464 / 10 bins). LLK= 1.6886791684681626
+Loglikeli Estimator. Counts =  4695 15676 3184 81634 0 2598 0 2377 11384 3916  (Total = 125464 / 10 bins). LLK= 0.9792285779462905
+Loglikeli Estimator. Counts =  3703 14576 3511 0 4082 0 78695 2691 14509 3697  (Total = 125464 / 10 bins). LLK= 1.1967900033139771
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2995 75022 8039 0 5491 0 4624 12077 16370 846  (Total = 125464 / 10 bins). LLK= 1.5494724706076946
+Loglikeli Estimator. Counts =  1639 93689 2421 0 2335 0 2178 16597 5995 610  (Total = 125464 / 10 bins). LLK= 0.7861150625572806
+Loglikeli Estimator. Counts =  5112 16275 3012 0 3363 0 74464 2533 15984 4721  (Total = 125464 / 10 bins). LLK= 0.9967241528782548
+Loglikeli Estimator. Counts =  736 6020 39989 5556 0 6861 45357 4060 7641 9244  (Total = 125464 / 10 bins). LLK= 1.455214186515848
+Loglikeli Estimator. Counts =  6087 91203 0 2819 0 2665 0 2418 15286 4986  (Total = 125464 / 10 bins). LLK= 0.9597502518013401
+Loglikeli Estimator. Counts =  1369 9712 17151 3387 0 3566 73967 2513 8992 4807  (Total = 125464 / 10 bins). LLK= 1.014532505499982
+Loglikeli Estimator. Counts =  5100 84638 0 6569 0 5444 0 4439 9612 9662  (Total = 125464 / 10 bins). LLK= 1.6886791684681626
+Loglikeli Estimator. Counts =  4695 15676 3184 81634 0 2598 0 2377 11384 3916  (Total = 125464 / 10 bins). LLK= 0.9792285779462905
+Loglikeli Estimator. Counts =  3703 14576 3511 0 4082 0 78695 2691 14509 3697  (Total = 125464 / 10 bins). LLK= 1.1967900033139771
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2995 75022 8039 0 5491 0 4624 12077 16370 846  (Total = 125464 / 10 bins). LLK= 1.5494724706076946
+Loglikeli Estimator. Counts =  1639 93689 2421 0 2335 0 2178 16597 5995 610  (Total = 125464 / 10 bins). LLK= 0.7861150625572806
+Loglikeli Estimator. Counts =  5112 16275 3012 0 3363 0 74464 2533 15984 4721  (Total = 125464 / 10 bins). LLK= 0.9967241528782548
+Loglikeli Estimator. Counts =  736 6020 39989 5556 0 6861 45357 4060 7641 9244  (Total = 125464 / 10 bins). LLK= 1.455214186515848
+Loglikeli Estimator. Counts =  6087 91203 0 2819 0 2665 0 2418 15286 4986  (Total = 125464 / 10 bins). LLK= 0.9597502518013401
+Loglikeli Estimator. Counts =  1369 9712 17151 3387 0 3566 73967 2513 8992 4807  (Total = 125464 / 10 bins). LLK= 1.014532505499982
+Loglikeli Estimator. Counts =  5100 84638 0 6569 0 5444 0 4439 9612 9662  (Total = 125464 / 10 bins). LLK= 1.6886791684681626
+Loglikeli Estimator. Counts =  4695 15676 3184 81634 0 2598 0 2377 11384 3916  (Total = 125464 / 10 bins). LLK= 0.9792285779462905
+Loglikeli Estimator. Counts =  3703 14576 3511 0 4082 0 78695 2691 14509 3697  (Total = 125464 / 10 bins). LLK= 1.1967900033139771
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2995 75022 8039 0 5491 0 4624 12077 16370 846  (Total = 125464 / 10 bins). LLK= 1.5494724706076946
+Loglikeli Estimator. Counts =  1639 93689 2421 0 2335 0 2178 16597 5995 610  (Total = 125464 / 10 bins). LLK= 0.7861150625572806
+Loglikeli Estimator. Counts =  5112 16275 3012 0 3363 0 74464 2533 15984 4721  (Total = 125464 / 10 bins). LLK= 0.9967241528782548
+Loglikeli Estimator. Counts =  736 6020 39989 5556 0 6861 45357 4060 7641 9244  (Total = 125464 / 10 bins). LLK= 1.455214186515848
+Loglikeli Estimator. Counts =  6087 91203 0 2819 0 2665 0 2418 15286 4986  (Total = 125464 / 10 bins). LLK= 0.9597502518013401
+Loglikeli Estimator. Counts =  1369 9712 17151 3387 0 3566 73967 2513 8992 4807  (Total = 125464 / 10 bins). LLK= 1.014532505499982
+Loglikeli Estimator. Counts =  5100 84638 0 6569 0 5444 0 4439 9612 9662  (Total = 125464 / 10 bins). LLK= 1.6886791684681626
+Loglikeli Estimator. Counts =  4695 15676 3184 81634 0 2598 0 2377 11384 3916  (Total = 125464 / 10 bins). LLK= 0.9792285779462905
+Loglikeli Estimator. Counts =  3703 14576 3511 0 4082 0 78695 2691 14509 3697  (Total = 125464 / 10 bins). LLK= 1.1967900033139771
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2991 83048 5501 0 4623 0 3867 8219 16369 846  (Total = 125464 / 10 bins). LLK= 1.5224498937419615
+Loglikeli Estimator. Counts =  1629 93688 2413 0 2340 0 2181 16595 6006 612  (Total = 125464 / 10 bins). LLK= 0.7845143424300134
+Loglikeli Estimator. Counts =  5029 16143 3002 0 3341 0 74653 2522 16043 4731  (Total = 125464 / 10 bins). LLK= 1.0000001673533556
+Loglikeli Estimator. Counts =  733 5980 39991 5591 0 6780 45392 4086 7697 9214  (Total = 125464 / 10 bins). LLK= 1.4555385044598008
+Loglikeli Estimator. Counts =  5839 90261 0 2959 0 2690 0 2560 16580 4575  (Total = 125464 / 10 bins). LLK= 0.9639054819469696
+Loglikeli Estimator. Counts =  1575 10193 14868 3270 0 3540 74676 2634 9611 5097  (Total = 125464 / 10 bins). LLK= 1.0188484890884688
+Loglikeli Estimator. Counts =  4182 87062 0 6227 0 5201 0 4154 9145 9493  (Total = 125464 / 10 bins). LLK= 1.6388471140693717
+Loglikeli Estimator. Counts =  5494 13088 2685 0 2918 85819 0 2271 10343 2846  (Total = 125464 / 10 bins). LLK= 0.9553316870032041
+Loglikeli Estimator. Counts =  4232 12925 3074 0 3311 0 81185 2428 14591 3718  (Total = 125464 / 10 bins). LLK= 1.0339788193394344
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2991 75022 8024 0 5506 0 4620 12083 16372 846  (Total = 125464 / 10 bins). LLK= 1.5368543656927736
+Loglikeli Estimator. Counts =  1644 93702 2422 0 2336 0 2173 16581 5995 611  (Total = 125464 / 10 bins). LLK= 0.7821518118434915
+Loglikeli Estimator. Counts =  5034 16133 3005 0 3359 0 74607 2502 16075 4749  (Total = 125464 / 10 bins). LLK= 0.9943817890151319
+Loglikeli Estimator. Counts =  744 6016 40196 5656 0 6873 45311 4007 7508 9153  (Total = 125464 / 10 bins). LLK= 1.4597028738198756
+Loglikeli Estimator. Counts =  6015 90805 0 2900 0 2657 0 2464 15506 5117  (Total = 125464 / 10 bins). LLK= 0.959590704737041
+Loglikeli Estimator. Counts =  1659 9246 17081 3493 0 3610 74476 2445 8727 4727  (Total = 125464 / 10 bins). LLK= 1.0156696397318852
+Loglikeli Estimator. Counts =  4672 80960 0 7134 0 5873 0 5039 11443 10343  (Total = 125464 / 10 bins). LLK= 1.7095604296104194
+Loglikeli Estimator. Counts =  4606 12705 2806 0 3085 0 84238 2325 11898 3801  (Total = 125464 / 10 bins). LLK= 0.9840742141386253
+Loglikeli Estimator. Counts =  4049 12740 3055 0 3367 0 85001 2354 11383 3515  (Total = 125464 / 10 bins). LLK= 1.0463189181208743
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2999 75040 8042 0 5481 0 4629 12063 16364 846  (Total = 125464 / 10 bins). LLK= 1.5613202271006974
+Loglikeli Estimator. Counts =  1630 93684 2421 0 2337 0 2186 16590 6004 612  (Total = 125464 / 10 bins). LLK= 0.7839513776930959
+Loglikeli Estimator. Counts =  4999 16104 3002 0 3318 0 74626 2516 16143 4756  (Total = 125464 / 10 bins). LLK= 0.9968326431511099
+Loglikeli Estimator. Counts =  6561 39391 5426 0 6598 0 49968 3144 5840 8536  (Total = 125464 / 10 bins). LLK= 1.4294590688451874
+Loglikeli Estimator. Counts =  6102 90841 0 2879 0 2705 0 2421 15383 5133  (Total = 125464 / 10 bins). LLK= 0.9576250308100074
+Loglikeli Estimator. Counts =  10898 17040 3503 0 3628 0 74511 2449 8740 4695  (Total = 125464 / 10 bins). LLK= 1.0291341475449092
+Loglikeli Estimator. Counts =  4667 81193 0 7034 0 5957 0 5022 11414 10177  (Total = 125464 / 10 bins). LLK= 1.713818465230111
+Loglikeli Estimator. Counts =  4084 14733 3110 0 3360 0 82209 2375 12607 2986  (Total = 125464 / 10 bins). LLK= 1.020734253942401
+Loglikeli Estimator. Counts =  4718 14156 3365 0 3819 78017 0 2544 15075 3770  (Total = 125464 / 10 bins). LLK= 1.0936757555832353
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  2999 75040 8042 0 5481 0 4629 12063 16364 846  (Total = 125464 / 10 bins). LLK= 1.5613202271006974
+Loglikeli Estimator. Counts =  1630 93684 2421 0 2337 0 2186 16590 6004 612  (Total = 125464 / 10 bins). LLK= 0.7839513776930959
+Loglikeli Estimator. Counts =  4999 16104 3002 0 3318 0 74626 2516 16143 4756  (Total = 125464 / 10 bins). LLK= 0.9968326431511099
+Loglikeli Estimator. Counts =  6561 39391 5426 0 6598 0 49968 3144 5840 8536  (Total = 125464 / 10 bins). LLK= 1.4294590688451874
+Loglikeli Estimator. Counts =  6102 90841 0 2879 0 2705 0 2421 15383 5133  (Total = 125464 / 10 bins). LLK= 0.9576250308100074
+Loglikeli Estimator. Counts =  10898 17040 3503 0 3628 0 74511 2449 8740 4695  (Total = 125464 / 10 bins). LLK= 1.0291341475449092
+Loglikeli Estimator. Counts =  4667 81193 0 7034 0 5957 0 5022 11414 10177  (Total = 125464 / 10 bins). LLK= 1.713818465230111
+Loglikeli Estimator. Counts =  4084 14733 3110 0 3360 0 82209 2375 12607 2986  (Total = 125464 / 10 bins). LLK= 1.020734253942401
+Loglikeli Estimator. Counts =  4718 14156 3365 0 3819 78017 0 2544 15075 3770  (Total = 125464 / 10 bins). LLK= 1.0936757555832353
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+<<<<<<< HEAD
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  3011 75054 8052 0 5475 0 4609 12059 16358 846  (Total = 125464 / 10 bins). LLK= 1.5359486960121853
+Loglikeli Estimator. Counts =  1635 93686 2424 0 2333 0 2181 16593 6000 612  (Total = 125464 / 10 bins). LLK= 0.7837892311029931
+Loglikeli Estimator. Counts =  5060 16182 2999 0 3362 0 74581 2519 16030 4731  (Total = 125464 / 10 bins). LLK= 0.9968664915185433
+Loglikeli Estimator. Counts =  6929 40794 5906 0 7025 0 44747 3895 7127 9041  (Total = 125464 / 10 bins). LLK= 1.4844749505805581
+Loglikeli Estimator. Counts =  5777 90246 0 2920 0 2725 0 2524 16676 4596  (Total = 125464 / 10 bins). LLK= 0.9619218655107238
+Loglikeli Estimator. Counts =  1585 10162 14880 3247 0 3531 74417 2668 10460 4514  (Total = 125464 / 10 bins). LLK= 1.0100942294939528
+Loglikeli Estimator. Counts =  4800 81571 0 7004 0 5750 0 4839 11196 10304  (Total = 125464 / 10 bins). LLK= 1.6963932064880054
+Loglikeli Estimator. Counts =  5317 13183 2747 0 2893 86449 0 2314 10093 2468  (Total = 125464 / 10 bins). LLK= 0.9724376646699314
+Loglikeli Estimator. Counts =  4944 13574 3280 0 3593 0 79908 2538 13498 4129  (Total = 125464 / 10 bins). LLK= 1.102724808130081
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  837 1891 31916 1861 0 2087 70158 2256 11750 2708  (Total = 125464 / 10 bins). LLK= 0.6808095070385007
+Loglikeli Estimator. Counts =  3011 75054 8052 0 5475 0 4609 12059 16358 846  (Total = 125464 / 10 bins). LLK= 1.5359486960121853
+Loglikeli Estimator. Counts =  1635 93686 2424 0 2333 0 2181 16593 6000 612  (Total = 125464 / 10 bins). LLK= 0.7837892311029931
+Loglikeli Estimator. Counts =  5060 16182 2999 0 3362 0 74581 2519 16030 4731  (Total = 125464 / 10 bins). LLK= 0.9968664915185433
+Loglikeli Estimator. Counts =  6929 40794 5906 0 7025 0 44747 3895 7127 9041  (Total = 125464 / 10 bins). LLK= 1.4844749505805581
+Loglikeli Estimator. Counts =  5777 90246 0 2920 0 2725 0 2524 16676 4596  (Total = 125464 / 10 bins). LLK= 0.9619218655107238
+Loglikeli Estimator. Counts =  1585 10162 14880 3247 0 3531 74417 2668 10460 4514  (Total = 125464 / 10 bins). LLK= 1.0100942294939528
+Loglikeli Estimator. Counts =  4800 81571 0 7004 0 5750 0 4839 11196 10304  (Total = 125464 / 10 bins). LLK= 1.6963932064880054
+Loglikeli Estimator. Counts =  5317 13183 2747 0 2893 86449 0 2314 10093 2468  (Total = 125464 / 10 bins). LLK= 0.9724376646699314
+Loglikeli Estimator. Counts =  4944 13574 3280 0 3593 0 79908 2538 13498 4129  (Total = 125464 / 10 bins). LLK= 1.102724808130081
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125463  (Total = 125463 / 1 bins). LLK= NaN
+=======
+>>>>>>> 698e2b9ac701c78ba9088b959c55de9954a03f79
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  29934 1705 69461 2162 0 2152 0 1968 14267 3704  (Total = 125353 / 10 bins). LLK= 0.5800903693887132
+Loglikeli Estimator. Counts =  6098 58370 0 6937 0 6415 0 4589 38411 4533  (Total = 125353 / 10 bins). LLK= 1.4701891102853497
+Loglikeli Estimator. Counts =  9487 23541 3725 0 4191 0 64353 2643 8767 8646  (Total = 125353 / 10 bins). LLK= 1.0814823270834872
+Loglikeli Estimator. Counts =  1204 13782 79530 3568 0 3201 0 2938 17312 3818  (Total = 125353 / 10 bins). LLK= 1.124040328695369
+Loglikeli Estimator. Counts =  4012 30703 8163 51959 0 7328 0 5234 8590 9364  (Total = 125353 / 10 bins). LLK= 1.9889710524971569
+Loglikeli Estimator. Counts =  6191 16247 4179 0 4565 0 75019 2934 10735 5483  (Total = 125353 / 10 bins). LLK= 1.2974457420116978
+Loglikeli Estimator. Counts =  7857 16447 4533 0 5020 72222 0 3601 12047 3626  (Total = 125353 / 10 bins). LLK= 1.4578295041770808
+Loglikeli Estimator. Counts =  4077 15070 4314 0 4800 0 77308 3103 12097 4584  (Total = 125353 / 10 bins). LLK= 1.4005054609776664
+Loglikeli Estimator. Counts =  5090 13469 4003 0 4779 0 76553 2899 14684 3876  (Total = 125353 / 10 bins). LLK= 1.3264204294353854
+Loglikeli Estimator. Counts =  5826 77985 0 8879 0 7197 0 5725 14157 5584  (Total = 125353 / 10 bins). LLK= 2.081895406517779
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN
+Loglikeli Estimator. Counts =  125352  (Total = 125352 / 1 bins). LLK= NaN

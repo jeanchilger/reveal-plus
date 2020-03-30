@@ -1,0 +1,611 @@
+/*
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program; if not, write to the Free Software
+ *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+/*
+ *    AddJitter.java
+ *    Copyright (C) 1999 University of Waikato
+ *
+ */
+
+package weka.filters.unsupervised.attribute;
+
+import weka.filters.*;
+import java.io.*;
+import java.util.*;
+import weka.core.*;
+import weka.oops.Oops;
+
+/** 
+ * Normalizes all numeric values in the given dataset. The resulting
+ * values are in [0,1] for the data used to compute the normalization
+ * intervals.
+ *
+ * @author Gabi Schmidberger (gabi@cs.waikato.ac.nz)
+ * parts of code copied from filter weka.filters.unsupervised.Normalize 
+ * @author Eibe Frank (eibe@cs.waikato.ac.nz) 
+ * @version $Revision: 1.4 $
+ */
+public class AddJitter extends PotentialClassIgnorer implements UnsupervisedFilter,
+                                                                OptionHandler {
+
+  /** Stores which columns to jitter */
+  protected Range m_JitterCols = new Range();
+
+  /** The default columns to jitter */
+  protected String m_DefaultCols;
+
+  /** The default maximum jitter value used */
+  private double m_jitterMax = 0.01;
+
+  /** The flag if the maximum jitter should be found */
+  private boolean m_findD = false;
+
+  /** The random number used */
+  private Random m_random;
+
+  /** The seed used */
+  protected int m_seed = 1;
+  
+  /** The max jitter values for all numeric attributes that are selected for jitter. */
+  private double [] m_dArray;
+
+  /** The max jitter values times two. */
+  private double [] m_dArrayDouble;
+
+  /** Number of attributes in the input format used */
+  protected int m_numAttributes;
+ 
+  /** range of outputtypes for debugging */
+  private Range m_outputTypes = new Range();
+
+  /** Constructor */
+  public AddJitter() {
+
+    m_outputTypes.setUpper(15);
+
+    m_DefaultCols = "first-last";
+    setAttributeIndices("first-last");
+  }
+
+  /**
+   * Returns a string describing this filter
+   *
+   * @return a description of the filter suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String globalInfo() {
+
+    return "Adds or subtracts a jitter value to all values."
+      + "Default maximum jitter is 0.1. ";
+  }
+
+  /**
+   * Sets the format of the input instances.
+   *
+   * @param instanceInfo an Instances object containing the input 
+   * instance structure (any instances contained in the object are 
+   * ignored - only the structure is required).
+   * @return true if the outputFormat may be collected immediately
+   * @exception Exception if the input format can't be set 
+   * successfully
+   */
+  public boolean setInputFormat(Instances instanceInfo) 
+       throws Exception {
+    //Oops.pln("setInputFormat");
+
+    super.setInputFormat(instanceInfo);
+    m_numAttributes = instanceInfo.numAttributes();
+    m_JitterCols.setUpper(m_numAttributes - 1);
+    setOutputFormat(instanceInfo);
+    m_dArray =  null;
+    //Oops.pln("setInputFormat");
+    return true;
+  }
+
+  /**
+   * Input an instance for filtering. Filter requires all
+   * training instances be read before producing output.
+   *
+   * @param instance the input instance
+   * @return true if the filtered instance may now be
+   * collected with output().
+   * @exception IllegalStateException if no input format has been set.
+   */
+  public boolean input(Instance instance) {
+
+    if (getInputFormat() == null) {
+      throw new IllegalStateException("No input instance format defined");
+    }
+    if (m_NewBatch) {
+      resetQueue();
+      m_NewBatch = false;
+    }
+    if (m_dArray == null) {
+      bufferInput(instance);
+      return false;
+    } else {
+      convertInstance(instance);
+      return true;
+    }
+  }
+
+  /**
+   * Signify that this batch of input to the filter is finished. 
+   * If the filter requires all instances prior to filtering,
+   * output() may now be called to retrieve the filtered instances.
+   *
+   * @return true if there are instances pending output
+   * @exception IllegalStateException if no input structure has been defined
+   */
+  public boolean batchFinished() {
+
+    if (getInputFormat() == null) {
+      throw new IllegalStateException("No input instance format defined");
+    }
+    if (m_dArray == null) {
+      m_random = new Random(m_seed);
+      Instances input = getInputFormat();
+      int numInstances = input.numInstances();
+
+      // Find all smallest distances
+      m_dArray = new double[m_numAttributes];
+      m_dArrayDouble = new double[m_numAttributes];
+      for (int attIndex = 0; attIndex < m_numAttributes; attIndex++) {
+	m_dArray[attIndex] = 0.0;
+
+	if (m_JitterCols.isInRange(attIndex) && 
+	    input.attribute(attIndex).isNumeric() &&
+	    (input.classIndex() != attIndex)) {
+	  m_dArray[attIndex] = m_jitterMax;
+	  
+	  //Oops.pln("attr "+attIndex+"  maxJitter "+m_jitterMax);
+	  //Oops.pln("getFindD() "+getFindD());
+	  if (getFindD()) {
+	    //Oops.pln("starttofindD "+numInstances);
+	    input.sort(attIndex);
+	    m_dArray[attIndex] = Double.MAX_VALUE;
+	    // check through for smallest dist
+	    double firstValue = input.instance(0).value(attIndex);
+	    double secondValue = firstValue;
+	    for (int i = 1; i < numInstances; i++) {
+	      secondValue = input.instance(i).value(attIndex);
+	      //Oops.pln("second "+secondValue+" first "+firstValue);
+	      while ((i < numInstances) &&
+		     (Instance.isMissingValue(secondValue) ||
+		     (secondValue == firstValue))) {
+		i++;
+		if (i < numInstances) {
+		  secondValue = input.instance(i).value(attIndex);
+		}
+		//Oops.pln("second "+secondValue+" first "+firstValue);
+	      }
+	      if (i < numInstances) {
+		double diff = secondValue - firstValue;
+		//Oops.pln("DIFF second "+secondValue+" first "+firstValue);
+		firstValue = secondValue;
+		if (diff > 0.0 && diff < m_dArray[attIndex]) {
+		  m_dArray[attIndex] = diff; 
+		  //Oops.pln("new DIFF "+diff);
+		}
+	      }
+	    }
+	  }
+	}
+      }
+
+      for (int attIndex = 0; attIndex < m_numAttributes; attIndex++) {
+	m_dArrayDouble[attIndex] = m_dArray[attIndex];
+	m_dArray[attIndex] /= 2.0;
+	  //Oops.pln("attr "+attIndex+"  maxJitter "+m_dArray[attIndex]);
+	if (outputTypeSet(0)) {
+	  //Oops.pln("attr "+attIndex+"  maxJitter "+m_dArray[attIndex]);
+	}
+      }
+
+
+      // Convert pending input instances
+      for(int i = 0; i < input.numInstances(); i++) {
+	convertInstance(input.instance(i));
+      }
+    }
+    // Free memory
+    flushInput();
+
+    m_NewBatch = true;
+    return (numPendingOutput() != 0);
+  }
+
+  /**
+   * Convert a single instance over. The converted instance is 
+   * added to the leftEnd of the output queue.
+   *
+   * @param instance the instance to convert
+   */
+  private void convertInstance(Instance instance) {
+  
+    //Oops.pln("convertInstance");
+    Instance inst = null;
+    if (instance instanceof SparseInstance) {
+      double[] vals = instance.toDoubleArray();
+      double[] newVals = new double[m_numAttributes];
+      int[] newIndices = new int[instance.numAttributes()];
+      int ind = 0;
+
+      for (int attrIndex = 0; attrIndex < m_numAttributes; attrIndex++) {
+	double value; 
+	if ((m_JitterCols.isInRange(attrIndex)) && 
+	    (instance.attribute(attrIndex).isNumeric()) &&
+	    (!Instance.isMissingValue(vals[attrIndex])) &&
+	    (getInputFormat().classIndex() != attrIndex)) {
+	  // next random value
+	  double r = m_random.nextDouble() * m_dArrayDouble[attrIndex];
+          value = vals[attrIndex] - m_dArray[attrIndex] + r;
+	} else {
+	  value = vals[attrIndex];
+	}
+	if (value != 0.0) {
+	  newVals[ind] = value;
+	  newIndices[ind] = attrIndex;
+	  ind++;
+	}
+      }
+
+      double[] tempVals = new double[ind];
+      int[] tempInd = new int[ind];
+      System.arraycopy(newVals, 0, tempVals, 0, ind);
+      System.arraycopy(newIndices, 0, tempInd, 0, ind);
+      inst = new SparseInstance(instance.weight(), tempVals, tempInd,
+                                m_numAttributes);
+    } else {
+      double[] vals = instance.toDoubleArray();
+      for (int attrIndex = 0; attrIndex < m_numAttributes; attrIndex++) {
+	if (instance.attribute(attrIndex).isNumeric() &&
+	    (!Instance.isMissingValue(vals[attrIndex])) &&
+	    (getInputFormat().classIndex() != attrIndex)) {
+	  double r = m_random.nextDouble() * m_dArrayDouble[attrIndex];
+          vals[attrIndex] -=  m_dArray[attrIndex] + r;
+	}
+      }	
+      inst = new Instance(instance.weight(), vals);
+    }
+    inst.setDataset(instance.dataset());
+    push(inst);
+  }
+
+  /**
+   * Returns the tip text for this property
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String seedTipText() {
+    return "random number seed";
+  }
+
+  /**
+   * Gets the value for the random seed
+   *
+   * @return the setting of the seed
+   */
+  public int getSeed() {
+    return m_seed;
+  }
+
+  /**
+   * Sets the value for the random seed
+   * @param seed the new seed value
+   */
+  public void setSeed(int seed) {
+    m_seed = seed;
+  }
+
+  /**
+   * Returns the tip text for this property
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String jitterMaxTipText() {
+    return "random number jitterMax";
+  }
+
+  /**
+   * Gets the value for the random jitterMax
+   *
+   * @return the setting of the jitterMax
+   */
+  public double getJitterMax() {
+    return m_jitterMax;
+  }
+
+  /**
+   * Sets the value for the random seed
+   * @param jitterMax the new jitterMax value
+   */
+  public void setJitterMax(double jitterMax) {
+    m_jitterMax = jitterMax;
+  }
+
+  /**
+   * Returns the tip text for this property
+   *
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String findDTipText() {
+
+    return "Set find a value for jitter max. If true, the maximum jitter"
+      + " value is set to half of the minimum distance found between all "
+      + " instances when sorted, if false this value is set to default or"
+      + " the value given by option D.";
+  }
+
+  /**
+   * Gets whether the supplied columns are to be removed or kept
+   *
+   * @return true if the supplied columns will be kept
+   */
+  public boolean getFindD() {
+
+    return m_findD;
+  }
+
+  /**
+   * Sets wheter the maximum jitter value should be found or taken 
+   * from the D option.
+   * @param findD the new findD flag
+   */
+  public void setFindD(boolean findD) {
+
+    m_findD = findD;;
+  }
+
+  /**
+   * Returns the tip text for this property
+   *
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String attributeIndicesTipText() {
+    return "Specify range of attributes to act on."
+      + " This is a comma separated list of attribute indices, with"
+      + " \"first\" and \"last\" valid values. Specify an inclusive"
+      + " range with \"-\". E.g: \"first-3,5,6-10,last\".";
+  }
+
+  /**
+   * Gets the current range selection
+   *
+   * @return a string containing a comma separated list of ranges
+   */
+  public String getAttributeIndices() {
+
+    return m_JitterCols.getRanges();
+  }
+
+  /**
+   * Sets which attributes are to be Jittered (only numeric
+   * attributes among the selection will be Jittered).
+   *
+   * @param rangeList a string representing the list of attributes. Since
+   * the string will typically come from a user, attributes are indexed from
+   * 1. <br>
+   * eg: first-3,5,6-last
+   * @exception IllegalArgumentException if an invalid range list is supplied 
+   */
+  public void setAttributeIndices(String rangeList) {
+
+    m_JitterCols.setRanges(rangeList);
+  }
+
+  /**
+   * Returns the tip text for this property
+   *
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String invertSelectionTipText() {
+
+    return "Set attribute selection mode. If false, only selected"
+      + " (numeric) attributes in the range will be jittered; if"
+      + " true, only non-selected attributes will be jittered.";
+  }
+
+  /**
+   * Gets whether the supplied columns are to be removed or kept
+   *
+   * @return true if the supplied columns will be kept
+   */
+  public boolean getInvertSelection() {
+
+    return m_JitterCols.getInvert();
+  }
+
+  /**
+   * Sets whether selected columns should be removed or kept. If true the 
+   * selected columns are kept and unselected columns are deleted. If false
+   * selected columns are deleted and unselected columns are kept.
+   *
+   * @param invert the new invert setting
+   */
+  public void setInvertSelection(boolean invert) {
+
+    m_JitterCols.setInvert(invert);
+  }
+
+  /**
+   * Parses the options for this object. Valid options are: <p>
+   * 
+   * @param options the list of options as an array of strings
+   * @exception Exception if an option is not supported
+   */
+  public void setOptions(String[] options) throws Exception {
+    
+    // output data 
+    String outputRange = Utils.getOption('O', options);
+    setOutputTypes(outputRange);
+
+    setInvertSelection(Utils.getFlag('V', options));
+    String convertList = Utils.getOption('R', options);
+    if (convertList.length() != 0) {
+      setAttributeIndices(convertList);
+    } else {
+      setAttributeIndices(m_DefaultCols);
+    }
+    
+   // set max jitter value 
+    String dString = Utils.getOption('D', options);
+    if (dString.length() > 0)
+      setJitterMax((new Double(dString)).doubleValue());
+
+    // flag min distance between values
+    boolean setfind = Utils.getFlag('F', options);
+    setFindD(Utils.getFlag('F', options));
+
+   // set seed for random
+    String seedString = Utils.getOption('S', options);
+    if (seedString.length() > 0)
+      setSeed(Integer.parseInt(seedString));
+
+    if (getInputFormat() != null) {
+      setInputFormat(getInputFormat());
+    }
+  }
+  
+  /**
+   * Gets the current settings of the filter.
+   *
+   * @return an array of strings suitable for passing to setOptions
+   */
+  public String [] getOptions() {
+    
+    String [] options = new String [12];
+    int current = 0;
+    
+    if (getInvertSelection()) {
+      options[current++] = "-V";
+    }
+    options[current++] = "-R"; options[current++] = getAttributeIndices();
+    
+    if (getFindD()) {
+      options[current++] = "-F";
+    }
+
+    options[current++] = "-D";
+    options[current++] = ""+ getJitterMax();
+
+    options[current++] = "-S";
+    options[current++] = ""+ getSeed();
+
+    while (current < options.length) {
+      options[current++] = "";
+    }
+    return options;
+  }
+
+  /**
+   * Gets an enumeration describing the available options.
+   *
+   * @return an enumeration of all the available options.
+   */
+  public Enumeration listOptions() {
+
+    Vector newVector = new Vector(3);
+
+    newVector.addElement(new Option(
+              "\tSpecifies list of columns to jitter. First"
+	      + " and last are valid indexes.\n"
+	      + "\t(default: first-last)",
+              "R", 1, "-R <col1,col2-col4,...>"));
+
+    newVector.addElement(new Option(
+              "\tInvert matching sense of column indexes.",
+              "V", 0, "-V"));
+
+    newVector.addElement(new Option(
+              "\tSet the maximum jitter value to half of the smallest "
+	      +"distance between two neighboring values",
+              "F", 0, "-F"));
+
+     newVector.addElement(new Option(
+              "\tSet a maximum jitter value (default = 0.1)."
+	      + "Not relevant if option F is used.",
+              "D", 0, "-D value"));
+
+     newVector.addElement(new Option(
+              "\tSet a different random seed (default = 1).",
+              "S", 0, "-S num"));
+
+    return newVector.elements();
+  }
+  
+  /**
+   * Return a string representing the range of output types, that
+   * are switched on.
+   * @return string representing the range of output
+   */
+  public String getOutputTypes() { 
+    return m_outputTypes.getRanges();
+  }
+
+  /**
+   * Switches the outputs on that are requested from the option O
+   * @param list list of integers, all are used for an output type
+   */
+  public void setOutputTypes(String list) { 
+    if (list.length() == 0) return;
+    m_outputTypes.setRanges(list);
+    m_outputTypes.setUpper(15);
+
+    /**  1 -> 0  all maxJitter values */
+   }
+
+  /**
+   * Return true if the outputtype is set
+   * @param num value that is reserved for a specific outputtype
+   * @return return true if the output type is set
+   */
+  public boolean outputTypeSet(int num) {
+    // return false;
+    return (m_outputTypes.isInRange(num));
+  }
+
+  /**
+   * Main method for testing this class.
+   *
+   * @param argv should contain arguments to the filter: 
+   * use -h for help
+   */
+  public static void main(String [] argv) {
+
+    try {
+      if (Utils.getFlag('b', argv)) {
+ 	Filter.batchFilterFile(new AddJitter(), argv);
+      } else {
+	Filter.filterFile(new AddJitter(), argv);
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.out.println(ex.getMessage());
+    }
+  }
+}
+
+
+
+
+
+
+
+

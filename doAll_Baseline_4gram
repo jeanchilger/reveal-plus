@@ -727,6 +727,7 @@ for CORP in "${CORPLIST[@]}"; do
         n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
 
+
         cat ssarp* result_ranking.$TOPIC >> result.$TOPIC 
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
@@ -751,7 +752,10 @@ for CORP in "${CORPLIST[@]}"; do
         
 #         rm -rf svm.test.*
 
+
          popd
+
+=======
 
 # 
 #         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
