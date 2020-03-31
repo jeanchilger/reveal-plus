@@ -140,6 +140,7 @@ for CORP in "${CORPLIST[@]}"; do
         (
             rm -rf $TOPIC
             mkdir $TOPIC
+            cat judgement/qrels.$CORP.list | grep $TOPIC | cut -d' ' -f3 > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -509,23 +510,27 @@ toyDataset
         export j=`cat flagOut`
         
         export t=`wc -l < U$j`
-         
-         
-         
-         
         temp=$(($NDOCS-$t))
+        NumberDocument=$(($NDOCS-$t))
         sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
-        tail -$temp sorted_ranking > result
+        tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result_ranking.$TOPIC
+        
+        n=$(($NDOCS-$prevalence_int))
+        tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
+        cat result_ranking.$TOPIC >> result 
+        cat sub_new* >> result
+        echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
-        echo "valor t =$t valor j =$j valor temp =$temp NDOCS=$NDOCS"
 
-
-        export r=`cat result | sort | uniq | join - rel.$TOPIC.fil | uniq | wc -l`
-
-        total=`wc -l < rel.$TOPIC.fil`
-        recall=`echo "scale=5; ($r / $total)" | bc`
-        precisao=`echo "scale=5; ($r / $temp)" | bc`
-        echo "resultado final $r ------$temp  recall $recall  precisao $precisao"     
+        NumberDocument=`cat result | sort | uniq |  join - goldendb | uniq | wc -l > n_docs_ranking`
+        NumberDocument=`cat n_docs_ranking`
+        echo "Number $NumberDocument"
+        
+        
+        total=`wc -l < goldendb`
+        recall=`echo "scale=5; ($NumberDocument / $total)" | bc`
+        precisao=`echo "scale=5; ($NumberDocument / $temp)" | bc`
+        echo "resultado final $r ------$temp  recall: $recall  precisao: $precisao total: $total"     
         
         
         rm -rf svm.test.*
