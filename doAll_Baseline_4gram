@@ -69,7 +69,7 @@ for CORP in "${CORPLIST[@]}"; do
 
     if [[ $LINE_ARGUMENTS -gt 0 ]]; then
         if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
-            ./dofast4 "$CORP" $PRINT
+            ./dofast "$CORP" $PRINT
             cp "$CORP".df ../"$CORP".df > /dev/null
 
             cp "$CORP".svm.fil ../"$CORP".svm.fil 
@@ -741,7 +741,7 @@ for CORP in "${CORPLIST[@]}"; do
         total=`wc -l < goldendb`
         recall=`echo "scale=5; ($relNumber / $total)" | bc`
         precisao=`echo "scale=5; ($relNumber / $NumberDocument)" | bc`
-        echo "resultado final $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
+        echo "resultado final SCAL $TOPIC - $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
         
         
         
@@ -757,9 +757,9 @@ for CORP in "${CORPLIST[@]}"; do
 
 =======
 
-# 
-#         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-#         rm $TOPIC.seed.doc
+ 
+         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+         rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 
