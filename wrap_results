@@ -15,7 +15,7 @@ ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 # Topics to be used in doAll_Baseline_4gram.
 # Topics omited are ignored.
-TOPICS_CONSIDERED=("tr19" "tr13" "tr18" "tr19")
+TOPICS_CONSIDERED=("tr9")
 
 # creates directory to store samples results
 rm -rf all_results
@@ -50,7 +50,7 @@ for CORP in "${CORPLIST[@]}"; do
         # put result in another location
         for topic in `ls ${RESULT_DIR}/${CORP}/`; do
             cp ${RESULT_DIR}/${CORP}/${topic}/rel.rate all_results/result-${i}/rel.${topic}.rate
-
+            cp ${RESULT_DIR}/${CORP}/${topic}/n_docs_ranking all_results/result-${i}/rel.${topic}.ranking
             # topic execution_number result_file
             echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
         done

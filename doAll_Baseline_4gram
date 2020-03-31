@@ -530,7 +530,10 @@ toyDataset
         total=`wc -l < goldendb`
         recall=`echo "scale=5; ($NumberDocument / $total)" | bc`
         precisao=`echo "scale=5; ($NumberDocument / $temp)" | bc`
-        echo "resultado final $r ------$temp  recall: $recall  precisao: $precisao total: $total"     
+        echo "Precisão: $precisao" >> n_docs_ranking
+        echo "Recall: $recall" >> n_docs_ranking
+        echo "Tamanho ranking: $temp" >> n_docs_ranking
+        echo "resultado final ------ $temp  recall: $recall  precisao: $precisao total: $total"     
         
         
         rm -rf svm.test.*
