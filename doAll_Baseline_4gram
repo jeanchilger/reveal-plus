@@ -155,8 +155,7 @@ for CORP in "${CORPLIST[@]}"; do
         (
             rm -rf $TOPIC
             mkdir $TOPIC
-            #echo "cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb"
-            cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 | sort > $TOPIC/goldendb
+            cat judgement/qrels.$CORP.list | grep $TOPIC | cut -d' ' -f3 > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -716,40 +715,34 @@ for CORP in "${CORPLIST[@]}"; do
         export j=`cat flagOut`
         
         export t=`wc -l < U$j`
-         
-         
-         
-         
+        temp=$(($NDOCS-$t))
         NumberDocument=$(($NDOCS-$t))
         sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
         tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result_ranking.$TOPIC
         
         n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
-
-        cat ssarp* result_ranking.$TOPIC >> result.$TOPIC 
+        cat result_ranking.$TOPIC >> result 
+        cat sub_new* >> result
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
 
-        export relNumber=`cat result.$TOPIC | sort | uniq | join - goldendb | uniq | wc -l`
-        NumberDocument=`cat result.$TOPIC | sort | uniq | wc -l`
-
-       
+        NumberDocument=`cat result | sort | uniq |  join - goldendb | uniq | wc -l > n_docs_ranking`
+        NumberDocument=`cat n_docs_ranking`
+        echo "Number $NumberDocument"
         
         
         total=`wc -l < goldendb`
-        recall=`echo "scale=5; ($relNumber / $total)" | bc`
-        precisao=`echo "scale=5; ($relNumber / $NumberDocument)" | bc`
-        echo "resultado final $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
+        recall=`echo "scale=5; ($NumberDocument / $total)" | bc`
+        precisao=`echo "scale=5; ($NumberDocument / $temp)" | bc`
+        echo "Precisão: $precisao" >> n_docs_ranking
+        echo "Recall: $recall" >> n_docs_ranking
+        echo "Tamanho ranking: $temp" >> n_docs_ranking
+        echo "resultado final ------ $temp  recall: $recall  precisao: $precisao total: $total"     
         
         
-        
-        
-        echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${END}"
-        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
-        
-        
-#         rm -rf svm.test.*
+        rm -rf svm.test.*
+        popd
 
          popd
 
