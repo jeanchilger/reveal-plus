@@ -25,7 +25,7 @@ fi
 PURPOSE=baseline
 
 CORPLIST=("${JUDGECLASS}")
-SOFIA="/home/matheus/Documents/tar-toolkit-core-copy/sofia-ml-read-only/sofia-ml"
+SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
 if [[ $PRINT == "y" ]]; then
     echo $JUDGECLASS
 fi

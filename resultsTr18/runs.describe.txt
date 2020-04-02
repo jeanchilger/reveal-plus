@@ -1,0 +1,10 @@
+tr18 01 all_results/result-01/rel.tr18.rate
+tr18 02 all_results/result-02/rel.tr18.rate
+tr18 03 all_results/result-03/rel.tr18.rate
+tr18 04 all_results/result-04/rel.tr18.rate
+tr18 05 all_results/result-05/rel.tr18.rate
+tr18 06 all_results/result-06/rel.tr18.rate
+tr18 07 all_results/result-07/rel.tr18.rate
+tr18 08 all_results/result-08/rel.tr18.rate
+tr18 09 all_results/result-09/rel.tr18.rate
+tr18 10 all_results/result-10/rel.tr18.rate
