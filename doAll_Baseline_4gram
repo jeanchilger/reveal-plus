@@ -155,7 +155,7 @@ for CORP in "${CORPLIST[@]}"; do
         (
             rm -rf $TOPIC
             mkdir $TOPIC
-            cat judgement/qrels.$CORP.list | grep $TOPIC | cut -d' ' -f3 > $TOPIC/goldendb
+            cat judgement/qrels.$CORP.list | grep $TOPIC | cut -d' ' -f3 | sort   > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -706,7 +706,7 @@ for CORP in "${CORPLIST[@]}"; do
         echo " 20: Estimate ρ̂ = 1.05 "
         export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDOCS  " | bc`
         echo "prevalence $prevalence"        
-        export m=`echo "scale=5; ($prevalence * $NDOCS ) * 0.90 " | bc`           
+        export m=`echo "scale=5; ($prevalence * $NDOCS ) * 0.95 " | bc`           
         prevalence_int=${m%.*}
         
         python3 ../selectRound.py store_estimation $prevalence_int
@@ -728,7 +728,7 @@ for CORP in "${CORPLIST[@]}"; do
 
 
         RevelantDocs=`cat result | sort | uniq |  join - goldendb | uniq | wc -l`
-        NumberDocsResult=`cat result`
+        NumberDocsResult=`wc -l < result`
         echo "Number $NumberDocument"
         
         
