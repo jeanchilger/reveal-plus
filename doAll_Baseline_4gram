@@ -69,7 +69,7 @@ for CORP in "${CORPLIST[@]}"; do
 
     if [[ $LINE_ARGUMENTS -gt 0 ]]; then
         if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
-            ./dofast4 "$CORP" $PRINT
+            ./dofast "$CORP" $PRINT
             cp "$CORP".df ../"$CORP".df > /dev/null
 
             cp "$CORP".svm.fil ../"$CORP".svm.fil 
@@ -324,7 +324,7 @@ for CORP in "${CORPLIST[@]}"; do
          
 #             fi
 #         fi
-        #pushd $TOPIC
+        pushd $TOPIC
         
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Done.${END}"
@@ -569,7 +569,7 @@ for CORP in "${CORPLIST[@]}"; do
                  ############active learning
                     
         
-                    if [ "$NotRel" -lt 3 ] || [ "$Rel" -lt 1000 ]
+                    if [ "$NotRel" -lt 3000000 ] || [ "$Rel" -lt 10000000 ]
                     then            
                         
                         echo "store seed in ssarp file"
@@ -581,14 +581,14 @@ for CORP in "${CORPLIST[@]}"; do
 
                         
                         
-                        
-                        cat  x_negat.*   |  sort -k2  | join - ../$CORP.svm.fil.svd   -2 1 -1 2 > seed_ssarp.$TOPIC            
-                        
-                        
-                        cat  x_posit.* | shuf -n 1 | sort -k2  | join - ../$CORP.svm.fil.svd  -2 1 -1 2 >> seed_ssarp.$TOPIC
+#                         
+#                         cat  x_negat.*   |  sort -k2  | join - ../$CORP.svm.fil.svd   -2 1 -1 2 > seed_ssarp.$TOPIC            
+#                         
+#                         
+#                         cat  x_posit.* | shuf -n 1 | sort -k2  | join - ../$CORP.svm.fil.svd  -2 1 -1 2 >> seed_ssarp.$TOPIC
 
                     
-                        cut -d ' ' -f2- seed_ssarp.$TOPIC  > seed_ssarpB.$TOPIC
+#                         cut -d ' ' -f2- seed_ssarp.$TOPIC  > seed_ssarpB.$TOPIC
             #        
 
                         cp x_posit.$N sub_new_positivo.$N
@@ -722,8 +722,8 @@ for CORP in "${CORPLIST[@]}"; do
         
         n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
-        cat result_ranking.$TOPIC >> result 
-        cat sub_new* >> result
+        cat result_ranking.$TOPIC > result 
+        cat sub_new[0-9][0-9]* >> result
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
 
@@ -741,10 +741,10 @@ for CORP in "${CORPLIST[@]}"; do
         echo "resultado final ------ $temp  recall: $recall  precisao: $precisao total: $total"     
         
         
-        rm -rf svm.test.*
-        popd
+#         rm -rf svm.test.*
+#         popd
 
-         popd
+#          popd
 
 # 
 #         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
