@@ -643,19 +643,26 @@ for CORP in "${CORPLIST[@]}"; do
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
 
-        RevelantDocs=`cat result | sort | uniq |  join - goldendb | uniq | wc -l`
+        RelevantDocs=`cat result | sort | uniq |  join - goldendb | uniq | wc -l`
         NumberDocsResult=`wc -l < result`
-        echo "Number $NumberDocument"
         
         
         totalRelevants=`wc -l < goldendb`
-        recall=`echo "scale=5; ($RevelantDocs / $totalRelevants)" | bc`
-        precisao=`echo "scale=5; ($totalRelevants / $NumberDocsResult)" | bc`
+        recall=`echo "scale=5; ($RelevantDocs / $totalRelevants)" | bc`
+        precisao=`echo "scale=5; ($RelevantDocs / $NumberDocsResult)" | bc`
         echo "Precisão: $precisao" >> n_docs_ranking
         echo "Recall: $recall" >> n_docs_ranking
-        echo "Tamanho ranking: $temp" >> n_docs_ranking
-        echo "resultado final ------ $temp  recall: $recall  precisao: $precisao total: $total"     
-        
+        echo "Tamanho ranking: $NumberDocument" >> n_docs_ranking
+        echo "Numero de positivos encontrados: $RelevantDocs" >>n_docs_ranking
+        echo "----------------------------------------------------------" 
+        echo "RESULTADO FINAL:"
+        echo "    Documentos Rotulados: $NumberDocsResult"
+        echo "    Total de positivos existentes: $totalRelevants"
+        echo "    Positivos encontrados: $RelevantDocs"
+        echo "    Recall: $recall"
+        echo "    Precisao: $precisao"
+        echo "    Tamanho do Ranking Final: $NumberDocument" 
+        echo "----------------------------------------------------------"    
         
 #         rm -rf svm.test.*
 #         popd
