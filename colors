@@ -1,5 +1,17 @@
 #!/bin/bash
 
+RED=""
+GREEN=""
+BLUE=""
+WHITE=""
+MAGENTA=""
+YELLOW=""
+
+
+END=""
+
+: '
+# Uncomment to show colors
 RED="\e[31;1m"
 GREEN="\e[32;1m"
 BLUE="\e[34;1m"
@@ -9,3 +21,4 @@ YELLOW="\e[33;1m"
 
 
 END="\e[0m"
+'

@@ -638,14 +638,25 @@ for CORP in "${CORPLIST[@]}"; do
         
         n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
-        cat result_ranking.$TOPIC > result 
-        cat sub_new[0-9][0-9]* >> result
+
+
+        cat ssarp* result_ranking.$TOPIC >> result.$TOPIC 
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
 
 
-        RevelantDocs=`cat result | sort | uniq |  join - goldendb | uniq | wc -l`
-        NumberDocsResult=`wc -l < result`
-        echo "Number $NumberDocument"
+        export relNumber=`cat result.$TOPIC | sort | uniq | join - goldendb | uniq | wc -l`
+        NumberDocument=`cat result.$TOPIC | sort | uniq | wc -l`
+
+       
+        
+        
+        total=`wc -l < goldendb`
+        recall=`echo "scale=5; ($relNumber / $total)" | bc`
+        precisao=`echo "scale=5; ($relNumber / $NumberDocument)" | bc`
+        echo "resultado final SCAL $TOPIC - $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
+        
+        
+
         
         
         totalRelevants=`wc -l < goldendb`
@@ -660,11 +671,14 @@ for CORP in "${CORPLIST[@]}"; do
 #         rm -rf svm.test.*
 #         popd
 
-#          popd
 
-# 
-#         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-#         rm $TOPIC.seed.doc
+         popd
+
+
+
+ 
+         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+         rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 

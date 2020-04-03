@@ -1,0 +1,12 @@
+execution number 102 the file have 50
+rm: cannot remove 'result_temp_lac_train_TUBE*': No such file or directory
+Discretizando treino e teste de acordo com os bins TUBE
+../discretize_TUBE.pl train-B50 train_nohead.arff 50 lac_train_TUBE.txt.tr19
+dddddddddddddd  train-B50 train_nohead.arff **** lac_train_TUBE.txt.tr19*** 
+ roda o ALAC ....
+starting alac test threshold  ../../alac5  lac_train_TUBEfinal.txt.tr19 102  with size 3
+inserting instance 102001 into alac_lac_train_TUBEfinal.txt.tr19 CLASS=0
+instance 102001 already inserted... terminating
+total of 1 instances inserted into training set
+Gerando o treino a partir das instancias selecionadas em cada particao..ssss
+gerando arquivo SVM treino..

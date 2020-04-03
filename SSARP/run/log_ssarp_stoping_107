@@ -1,0 +1,12 @@
+execution number 107 the file have 50
+Discretizando treino e teste de acordo com os bins TUBE
+../discretize_TUBE.pl train-B50 train_nohead.arff 50 lac_train_TUBE.txt.tr19
+dddddddddddddd  train-B50 train_nohead.arff **** lac_train_TUBE.txt.tr19*** 
+ roda o ALAC ....
+starting alac test threshold  ../../alac5  lac_train_TUBEfinal.txt.tr19 107  with size 15
+inserting instance 107012 into alac_lac_train_TUBEfinal.txt.tr19 CLASS=0
+inserting instance 107001 into alac_lac_train_TUBEfinal.txt.tr19 CLASS=0
+instance 107001 already inserted... terminating
+total of 2 instances inserted into training set
+Gerando o treino a partir das instancias selecionadas em cada particao..ssss
+gerando arquivo SVM treino..
