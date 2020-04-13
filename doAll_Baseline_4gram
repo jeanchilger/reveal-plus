@@ -664,14 +664,14 @@ for CORP in "${CORPLIST[@]}"; do
         echo "    Tamanho do Ranking Final: $NumberDocument" 
         echo "----------------------------------------------------------"    
         
-#         rm -rf svm.test.*
-#         popd
+         #rm -rf svm.test.*
+         popd
 
-#          popd
+         popd
 
 # 
-#         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-#         rm $TOPIC.seed.doc
+         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+         #rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 
