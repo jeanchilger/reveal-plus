@@ -144,7 +144,7 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-
+   
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Done.${END}"
             echo "Creating topic directory topic (${TOPIC})..."
@@ -155,7 +155,7 @@ for CORP in "${CORPLIST[@]}"; do
         (
             rm -rf $TOPIC
             mkdir $TOPIC
-            cat judgement/qrels.$CORP.list | grep $TOPIC | cut -d' ' -f3 | sort   > $TOPIC/goldendb
+            cat judgement/qrels.$CORP.list | grep "$TOPIC " | cut -d' ' -f3 | sort   > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -256,11 +256,11 @@ for CORP in "${CORPLIST[@]}"; do
 
         popd
         if [[ $PRINT == "y" ]]; then
-            echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
+            echo -e "${BLUE}Executing ./dofeaturesseed...${END}"
         fi
         ./dofeaturesseed $TOPIC.seed.doc $TOPIC $CORP $PRINT 
         if [[ $PRINT == "y" ]]; then
-            echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
+            echo -e "${GREEN}Finished ./dofeaturesseed${END}"
             
         fi
         pushd $TOPIC
@@ -640,11 +640,14 @@ for CORP in "${CORPLIST[@]}"; do
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
         cat result_ranking.$TOPIC > result 
         cat sub_new[0-9][0-9]* >> result
+        cat result | sort | uniq > temp
+        mv temp result
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
+        
 
 
-        RelevantDocs=`cat result | sort | uniq |  join - goldendb | uniq | wc -l`
-        NumberDocsResult=`wc -l < result`
+        RevelantDocs=`cat result |  join - goldendb |  wc -l`
+
         
         
         totalRelevants=`wc -l < goldendb`
