@@ -568,7 +568,7 @@ for CORP in "${CORPLIST[@]}"; do
                         
                     fi        
                  ############active learning
-                    
+                      
         
                     if [ "$NotRel" -lt 3 ] || [ "$Rel" -lt 1000 ]
                     then            
