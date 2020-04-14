@@ -7,6 +7,7 @@
 
 trainfile=$1
 numfeatures=$2
+TOPIC=$5
 
 # se o numero de bins nao for especificado, assume que sao 10 bins
 if [ "$3" == "" -o "$4" == "" ]; then
@@ -18,13 +19,13 @@ else
 fi
 
 while [ $i -le $f ]; do
-		suffix="B"$2
+		suffix="B"$2$TOPIC
 		j=1
-		while [ $j -le $numfeatures ]; do 
+		while [ $j -le $numfeatures ]; do
 		  if [ ! -f train-$suffix-$j-0LL.hist ]; then
 		    echo "Creating TUBE file train-$suffix-$j-0LL.hist......."
-		    echo "@relation documents" > attr$j.arff 
-		    echo "" >> attr$j.arff 
+		    echo "@relation documents" > attr$j.arff
+		    echo "" >> attr$j.arff
 		    echo "@attribute F$j numeric" >> attr$j.arff
 		    echo "" >> attr$j.arff
 		    echo "@data" >> attr$j.arff
@@ -36,4 +37,4 @@ while [ $i -le $f ]; do
 		done
 		i=$(($i+1))
 done
-for i in `seq 1 50`; do  mv "train-B50-`echo $i`-0null.hist" "train-B50-`echo $i`-0LL.hist"; done
+for i in `seq 1 50`; do  mv "train-B50$TOPIC-`echo $i`-0null.hist" "train-B50$TOPIC-`echo $i`-0LL.hist"; done

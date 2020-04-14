@@ -41,18 +41,17 @@ for CORP in "${CORPLIST[@]}"; do
         rm -rf all_results/result-${i}
         mkdir all_results/result-${i}
 
+        # skips data extraction after first time executed (saves time)
 
-        for topic in "${TOPICS_CONSIDERED[@]}"; do
-            # skips data extraction if file exists
-            if [ -f "$CORP.svm.fil" ]; then
-                bash doAll_Baseline_4gram true $CORP $print "$topic" &
 
-            else
-                bash doAll_Baseline_4gram false $CORP $print "$topic"
-            fi
-        done
+        if [ -f "$CORP.svm.fil" ]; then
 
-        wait
+            bash doAll_Baseline_4gram true $CORP $print "${TOPICS_CONSIDERED[@]}"
+        else
+
+            bash doAll_Baseline_4gram false $CORP $print "${TOPICS_CONSIDERED[@]}"
+        fi
+
         # put result in another location
         for topic in `ls ${RESULT_DIR}/${CORP}/`; do
             cp ${RESULT_DIR}/${CORP}/${topic}/rel.rate all_results/result-${i}/rel.${topic}.rate

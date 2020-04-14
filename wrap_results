@@ -6,16 +6,16 @@ source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
 # Controls how many time results will be taken
-SAMPLES=5
+SAMPLES=1
 
-CORPLIST=("Hall")
+CORPLIST=("toyDataset")
 RESULT_DIR="result/baseline"
 
 ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 # Topics to be used in doAll_Baseline_4gram.
 # Topics omited are ignored.
-TOPICS_CONSIDERED=("tr19")
+TOPICS_CONSIDERED=("tr0" "tr1")
 
 # creates directory to store samples results
 rm -rf all_results
@@ -40,18 +40,19 @@ for CORP in "${CORPLIST[@]}"; do
 
         rm -rf all_results/result-${i}
         mkdir all_results/result-${i}
-        
-        # skips data extraction after first time executed (saves time)
 
 
-        if [ -f "$CORP.svm.fil" ]; then
-            
-            bash doAll_Baseline_4gram true $CORP $print "${TOPICS_CONSIDERED[@]}"
-        else
+        for topic in "${TOPICS_CONSIDERED[@]}"; do
+            # skips data extraction if file exists
+            if [ -f "$CORP.svm.fil" ]; then
+                bash doAll_Baseline_4gram true $CORP $print "$topic" &
 
-            bash doAll_Baseline_4gram false $CORP $print "${TOPICS_CONSIDERED[@]}"
-        fi
+            else
+                bash doAll_Baseline_4gram false $CORP $print "$topic"
+            fi
+        done
 
+        wait
         # put result in another location
         for topic in `ls ${RESULT_DIR}/${CORP}/`; do
             cp ${RESULT_DIR}/${CORP}/${topic}/rel.rate all_results/result-${i}/rel.${topic}.rate
