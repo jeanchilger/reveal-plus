@@ -646,8 +646,8 @@ for CORP in "${CORPLIST[@]}"; do
         
 
 
-        RevelantDocs=`cat result |  join - goldendb |  wc -l`
-
+        RelevantDocs=`cat result |  join - goldendb |  wc -l`
+        NumberDocsResult=`wc -l < result`
         
         
         totalRelevants=`wc -l < goldendb`
