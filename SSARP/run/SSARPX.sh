@@ -95,13 +95,13 @@ then
 fi
 
 #python3 testeActive.py lac_train_TUBE.txt.$topic 5 /tmp/fullAllacfile.$topic lac_train_TUBE_seed.txt.$topic 0
-cat alac_lac_train_TUBEfinal.txt.tr0
+
 i=1
 while [[ $i -le 1 ]]; do
   # rm alac_lac_train_TUBEfinal.txt
    #rm alac_full_lac_train_TUBEfinal.txt
     echo " roda o ALAC ...."
-  ../run_alac_repeated.sh lac_train_TUBE.txt.$topic  $vez $rules
+  ../run_alac_repeated.sh lac_train_TUBEfinal.txt.$topic  $vez $rules
 #    cat alac_lac_train_TUBEfinal.txt | grep "CLASS=1" | awk '{ print $1 }' |  while read instance; do  sed -i  "/^$instance /d" lac_train_TUBEfinal.txt  ;  done
 #
 #
