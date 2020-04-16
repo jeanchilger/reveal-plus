@@ -1,5 +1,7 @@
 #bin/bash
 
+source "${ABS_PATH}/colors"
+
 FOLDER="XXX" # diretorio a ser criado dentro de cada Fold
 numfeatures=10 # numero de features no treino / teste
 partitions=3 # numero de particoes a ser usado
@@ -9,7 +11,7 @@ binsto=10 # numero de bins (at
 treina_arff=$1".arff"
 
 file_original=$2
-suffix=B$3
+suffix=B$3$6
 numfeatures=$3
 vez=$4
 seed_ssarp=$5
@@ -17,8 +19,6 @@ topic=$6
 time=$7
 rules=$8
 
-
-pushd $topic
 
 echo "execution number "$vez" the file have "$numfeatures;
 
@@ -64,8 +64,6 @@ echo ../discretize_TUBE.pl train-$suffix train_nohead.arff $numfeatures  lac_tra
 ../discretize_TUBE.pl train-$suffix train_nohead.arff $numfeatures  lac_train_TUBE.txt.$topic
 
 
-
-
 # echo  ./updateRows.pl lac_train_TUBE.txt lac_train_TUBEfinal.txt $numfeatures
 ./updateRows.pl lac_train_TUBE.txt.$topic lac_train_TUBEfinal.txt.$topic $vez
 
@@ -97,13 +95,13 @@ then
 fi
 
 #python3 testeActive.py lac_train_TUBE.txt.$topic 5 /tmp/fullAllacfile.$topic lac_train_TUBE_seed.txt.$topic 0
-
+cat alac_lac_train_TUBEfinal.txt.tr0
 i=1
 while [[ $i -le 1 ]]; do
   # rm alac_lac_train_TUBEfinal.txt
    #rm alac_full_lac_train_TUBEfinal.txt
     echo " roda o ALAC ...."
-  ../run_alac_repeated.sh lac_train_TUBEfinal.txt.$topic  $vez $rules
+  ../run_alac_repeated.sh lac_train_TUBE.txt.$topic  $vez $rules
 #    cat alac_lac_train_TUBEfinal.txt | grep "CLASS=1" | awk '{ print $1 }' |  while read instance; do  sed -i  "/^$instance /d" lac_train_TUBEfinal.txt  ;  done
 #
 #
@@ -162,4 +160,3 @@ cut -d' ' -f1 final_treina.arff.$vez.$topic > label.$vez.$topic
 cut -d' ' -f2- final_treina.arff.$vez.$topic >> all_treina.arff
 echo "gerando arquivo SVM treino.."
 #cut -d' ' -f1- final_treina.arff.$vez.$topic >  /tmp/outSSARP.$vez.$topic
-popd
