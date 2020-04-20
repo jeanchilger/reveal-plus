@@ -1,0 +1,377 @@
+/*
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program; if not, write to the Free Software
+ *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+/*
+ *    AddDistance.java
+ *    Copyright (C) 2005 Gabi Schmidberger
+ *
+ */
+
+
+package weka.filters.unsupervised.attribute;
+
+import weka.filters.*;
+import java.io.*;
+import java.util.*;
+import weka.core.*;
+import weka.oops.Oops;
+
+/** 
+ * Sorts the data after the given attribute and adds an attribute that 
+ * contains the distance to the value of the same attribute of the next instance.
+ *
+ * @author Gabi Schmidberger (gabi@cs.waikato.ac.nz) 
+ * @author Eibe Frank (eibe@cs.waikato.ac.nz) 
+ * @version $Revision: 1.4 $
+ */
+public class AddDistance extends Filter
+  implements UnsupervisedFilter, OptionHandler {
+
+  /** name of the attribute */
+  private String m_attributeName = new String("Distance");
+
+  /** previous value */
+  private double m_prevValue = Double.NaN;
+
+  /** The location to insert the new attribute */
+  private SingleIndex m_Insert = new SingleIndex("last"); 
+
+  /** index of the attribute that is considered */
+  private int m_attrIndex = -1;
+
+  /** sorted instances */
+  private Instances m_sortedData = null;
+
+  /** If true then debugmode is on */
+  private boolean m_Debug = false;
+
+  /**
+   * Returns a string describing this filter
+   *
+   * @return a description of the filter suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String globalInfo() {
+
+    return "Sorts the data after the given attribute and adds an attribute that contains the distance to the value of the same attribute of the next instance.";
+  }
+
+  /**
+   * Set the name for the new attribute (Default "density").
+   * @param name the name of the new attribute
+   */
+  public void setName(String name) {
+    m_attributeName = name;
+  }
+
+  /**
+   * Returns the name of the new attribute
+   * @return the name of the new attribute
+   */
+  public String getName() {
+    return m_attributeName;
+  }
+  
+  /**
+   * Returns the tip text for this property
+   *
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String attributeIndexTipText() {
+
+    return "The position (starting from 1) where the attribute will be inserted "
+      + "(first and last are valid indices).";
+  }
+
+  /**
+   * Get the index of the attribute used.
+   *
+   * @return the index of the attribute
+   */
+  public String getAttrIndex() {
+
+    return m_Insert.getSingleIndex();
+  }
+
+  /**
+   * Sets index of the attribute used.
+   *
+   * @param attrIndex the index of the attribute
+   */
+  public void setAttrIndex(String attrIndex) {
+    
+    m_Insert.setSingleIndex(attrIndex);
+  }
+
+  /**
+   * Returns the tip text for this property
+   *
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String debugTipText() {
+    return "Set debug mode. If true then the new attribute will be named with "
+      +"the postfix parse of the supplied expression.";
+  }
+  
+  /**
+   * Set debug mode. Causes the new attribute to be named with the postfix
+   * parse of the expression
+   * @param d true if debug mode is to be used
+   */
+  public void setDebug(boolean d) {
+    m_Debug = d;
+  }
+
+  /**
+   * Gets whether debug is set
+   * @return true if debug is set
+   */
+  public boolean getDebug() {
+    return m_Debug;
+  }
+
+  /**
+   * Sets the format of the input instances.
+   *
+   * @param instanceInfo an Instances object containing the input 
+   * instance structure (any instances contained in the object are 
+   * ignored - only the structure is required).
+   * @return true if the outputFormat may be collected immediately
+   * @exception Exception if the input format can't be set 
+   * successfully
+   */
+  public boolean setInputFormat(Instances instanceInfo) 
+       throws Exception {
+
+    // initialize attribute index 
+    m_Insert.setUpper(instanceInfo.numAttributes());
+
+    super.setInputFormat(instanceInfo);
+    Instances outputFormat = new Instances(instanceInfo, 0);
+
+    // set attribute index
+    if ((m_Insert.getIndex() < 0) || 
+	(m_Insert.getIndex() > getInputFormat().numAttributes())) {
+      throw new IllegalArgumentException("Index out of range");
+    }
+    m_attrIndex = m_Insert.getIndex();
+
+    // make new distance attribute
+    Attribute newAttribute;
+    newAttribute = new Attribute(m_attributeName);
+
+    outputFormat.insertAttributeAt(newAttribute, 
+				   instanceInfo.numAttributes());
+    setOutputFormat(outputFormat);
+    return false;
+  }
+
+  /**
+   * Input an instance for filtering. Filter requires all
+   * training instances be read before producing output.
+   *
+   * @param instance the input instance
+   * @return true if the filtered instance may now be
+   * collected with output().
+   * @exception IllegalStateException if no input format has been set.
+   */
+  public boolean input(Instance instance) {
+
+    if (getInputFormat() == null) {
+      throw new IllegalStateException("No input instance format defined");
+    }
+    if (m_NewBatch) {
+      resetQueue();
+      m_NewBatch = false;
+    }
+    if (m_sortedData == null) {
+      bufferInput(instance);
+      return false;
+    } else {
+      convertInstance(instance);
+      return true;
+    }
+  }
+
+  /**
+   * Signify that this batch of input to the filter is finished. 
+   * If the filter requires all instances prior to filtering,
+   * output() may now be called to retrieve the filtered instances.
+   *
+   * @return true if there are instances pending output
+   * @exception IllegalStateException if no input structure has been defined
+   */
+  public boolean batchFinished() {
+
+    if (getInputFormat() == null) {
+      throw new IllegalStateException("No input instance format defined");
+    }
+
+    if (m_sortedData == null) {
+      // sort instances
+      m_sortedData = new Instances(getInputFormat());
+      m_sortedData.sort(m_attrIndex);
+    }
+
+    // Convert pending input instances
+    for(int i = 0; i < getInputFormat().numInstances(); i++) {
+      convertInstance(m_sortedData.instance(i));
+      }
+  
+    // Free memory
+    flushInput();
+
+    m_NewBatch = true;
+    return (numPendingOutput() != 0);
+  }
+
+  /**
+   * Convert a single instance over. The converted instance is 
+   * added to the leftEnd of the output queue.
+   *
+   * @param instance the instance to convert
+   */
+  private void convertInstance(Instance instance) {
+  
+    // make new value list
+    double[] vals = new double[instance.numAttributes()+1];
+    int i = 0;
+    for(; i < instance.numAttributes(); i++) {
+      if (instance.isMissing(i)) {
+	vals[i] = Instance.missingValue();
+      } else {
+	vals[i] = instance.value(i);
+      }
+    }
+    // fill the last one with the distance
+    if (!instance.isMissing(m_attrIndex)){
+      if (Double.isNaN(m_prevValue)) {
+	m_prevValue = instance.value(m_attrIndex);
+      }
+      vals[i] = instance.value(m_attrIndex) - m_prevValue;
+      m_prevValue = instance.value(m_attrIndex);
+    } else {
+      m_prevValue = Instance.missingValue();
+    }
+
+    // make new instance
+    Instance inst = null;
+    if (instance instanceof SparseInstance) {
+      inst = new SparseInstance(instance.weight(), vals);
+    } else {
+      inst = new Instance(instance.weight(), vals);
+    }
+    copyStringValues(inst, false, instance.dataset(), getOutputFormat());
+    inst.setDataset(getOutputFormat());
+    push(inst);
+  }
+
+  /**
+   * Returns an enumeration describing the available options.
+   *
+   * @return an enumeration of all the available options.
+   */
+  public Enumeration listOptions() {
+
+    Vector newVector = new Vector(2); 
+
+
+      newVector.addElement(new Option(
+              "\tSpecify which attribute should be considere.(default last)",
+              "C", 1, "-C <index>"));
+      newVector.addElement(new Option(
+	     "\tSpecify the name for the new attribute. (default is the "
+	     +"expression provided with -E)",
+	     "N",1,"-N <name>"));
+
+    newVector.addElement(new Option(
+	     "\tDebug. Names attribute with the postfix parse of the "
+	     +"expression.","D",0,"-D"));
+
+    return newVector.elements();
+  }
+
+  /**
+   * Parses a list of options for this object.<p>
+   *
+   * @param options the list of options as an array of strings
+   * @exception Exception if an option is not supported
+   */
+  public void setOptions(String[] options) throws Exception {
+
+    setAttrIndex(Utils.getOption('C', options));
+    String name = Utils.getOption('N',options);
+    if (name.length() != 0) {
+      setName(name);
+    }
+
+    setDebug(Utils.getFlag('D', options));
+  }
+  
+  /**
+   * Gets the current settings of the filter.
+   *
+   * @return an array of strings suitable for passing to setOptions
+   */
+  public String [] getOptions() {
+
+    String [] options = new String [5];
+    int current = 0;
+    
+    options[current++] = "-N"; options[current++] = getName();
+
+    options[current++] = "-C";
+    options[current++] = "" + getAttrIndex();
+
+    if (getDebug()) {
+      options[current++] = "-D";
+    }
+    
+    while (current < options.length) {
+      options[current++] = "";
+    }
+    return options;
+  }
+
+  /**
+   * Main method for testing this class.
+   *
+   * @param argv should contain arguments to the filter: 
+   * use -h for help
+   */
+  public static void main(String [] argv) {
+
+    try {
+      if (Utils.getFlag('b', argv)) {
+ 	Filter.batchFilterFile(new AddDistance(), argv);
+      } else {
+	Filter.filterFile(new AddDistance(), argv);
+      }
+    } catch (Exception ex) {
+      System.out.println(ex.getMessage());
+    }
+  }
+}
+
+
+
+
+
+
+
+

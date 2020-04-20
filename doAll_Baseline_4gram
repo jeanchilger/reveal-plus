@@ -144,7 +144,7 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-   
+
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Done.${END}"
             echo "Creating topic directory topic (${TOPIC})..."
@@ -155,7 +155,8 @@ for CORP in "${CORPLIST[@]}"; do
         (
             rm -rf $TOPIC
             mkdir $TOPIC
-            cat judgement/qrels.$CORP.list | grep "$TOPIC " | cut -d' ' -f3 | sort   > $TOPIC/goldendb
+            #echo "cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb"
+            cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 | sort > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -256,11 +257,11 @@ for CORP in "${CORPLIST[@]}"; do
 
         popd
         if [[ $PRINT == "y" ]]; then
-            echo -e "${BLUE}Executing ./dofeaturesseed...${END}"
+            echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
         fi
         ./dofeaturesseed $TOPIC.seed.doc $TOPIC $CORP $PRINT 
         if [[ $PRINT == "y" ]]; then
-            echo -e "${GREEN}Finished ./dofeaturesseed${END}"
+            echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
             
         fi
         pushd $TOPIC
@@ -324,7 +325,7 @@ for CORP in "${CORPLIST[@]}"; do
          
 #             fi
 #         fi
-        pushd $TOPIC
+        #pushd $TOPIC
         
         if [[ $PRINT == "y" ]]; then
             echo -e "${GREEN}Done.${END}"
@@ -364,8 +365,8 @@ for CORP in "${CORPLIST[@]}"; do
                     ######
                     try 
                     (
-                        cat sub_new[0-9][0-9].$TOPIC > seed
-                        #cat ssarp* > seed
+                        #cat sub_new[0-9][0-9].$TOPIC > seed
+                        cat ssarp* > seed
                         #cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' > x
                         #cat seed | sort | join -v1 - rel.$TOPIC.fil | sort -R | head -50000 | sed -e 's/^/-1 /' >> x
                         
@@ -562,21 +563,105 @@ for CORP in "${CORPLIST[@]}"; do
                     
                  
                  
-                
+                    if [[ $PRINT == "y" ]]; then
+                        echo -e "${GREEN}Starting active learning${END}"
                         
+                    fi        
+                 ############active learning
+                      
+        
+                    if [ "$NotRel" -lt 3 ] || [ "$Rel" -lt 1000 ]
+                    then            
                         
+                        echo "store seed in ssarp file"
+                        
+                        cp sub_new$N.$TOPIC ssarp$N.$TOPIC
                         cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
                     
                         cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
 
                         
-    
+                        
+                        
+                        cat  x_negat.*   |  sort -k2  | join - ../$CORP.svm.fil.svd   -2 1 -1 2 > seed_ssarp.$TOPIC            
+                        
+                        
+                        cat  x_posit.* | shuf -n 1 | sort -k2  | join - ../$CORP.svm.fil.svd  -2 1 -1 2 >> seed_ssarp.$TOPIC
+
+                    
+                        cut -d ' ' -f2- seed_ssarp.$TOPIC  > seed_ssarpB.$TOPIC
+            #        
+
+                        cp x_posit.$N sub_new_positivo.$N
+                        cp x_negat.$N sub_new_negativo.$N
+                        ssarp_relevants=`wc -l < x_posit.$N`
+                    else
+
+                        echo "creating files"
+                        
+                        cat sub_new$N.$TOPIC | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > temp_posit.$N.$TOPIC
+                        cat sub_new$N.$TOPIC | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > temp_negat.$N.$TOPIC
+
+                    
+                        cat temp_posit.$N.$TOPIC temp_negat.$N.$TOPIC |  sort -k2  | join - ../$CORP.svm.fil.svd  -2 1 -1 2 > trainset.$N.$TOPIC
+                        cut -d ' ' -f2- trainset.$N.$TOPIC  > trainsetB.$N.$TOPIC
+
+
+
+                        if [ "$flag_discretize" -eq '0' ]
+                        then
+                            echo "gerando os bins\n"
+                            echo "python3 ../svd/convert_txt.py ../$CORP.svm.fil.svd /tmp/total.$TOPIC.arff rel.$TOPIC.fil   "
+                            python3 ../svd/convert_txt.py ../$CORP.svm.fil.svd /tmp/total.$TOPIC.arff rel.$TOPIC.fil        
+            
+                            cd ../SSARP/run/
+                            rm train*
+                            .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff  50 10 10
+                            cd -
+                            echo "saindo da geração dos bins"
+                            flag_discretize=1
+                        fi
+
+                        echo "convertendo arquivo para txt"
+                            python3 ../svd/convert_txt.py trainsetB.$N.$TOPIC out.$N.$TOPIC.arff rel.$TOPIC.fil
+                            python3 ../svd/convert_txt.py seed_ssarpB.$TOPIC seed_out.$N.$TOPIC.arff rel.$TOPIC.fil
+
+                    
+                            cp trainset.$N.$TOPIC ../SSARP/run/
+                            cp seed_out.$N.$TOPIC.arff ../SSARP/run/
+                            cp out.$N.$TOPIC.arff ../SSARP/run/
+                       
+                       
+                        echo "executando alac $rules"
+                            cd ../SSARP/run/
+                            ./SSARPX.sh out.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out.$N.$TOPIC.arff $TOPIC $flag_allac_first_time $rules
+                            flag_allac_first_time=$(($flag_allac_first_time+1))
+                            cat label.$N.$TOPIC > /tmp/ssarp$N.$TOPIC
+                            cd -
+                            mv /tmp/ssarp$N.$TOPIC .    
+                
+                            cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > sub_new_positivo.$N
+                            cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > sub_new_negativo.$N
+
+                            cat ssarp$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
+                            cat ssarp$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
+
+                            cat x_posit.$N x_negat.$N | cut -d' ' -f2 | sort | uniq > ssarp$N.$TOPIC
+                            ssarp_relevants=`wc -l < x_posit.$N`
+                        
+                            echo "docs positivos coletados `wc -l < x_posit.$N`   docs negativos ----  `wc -l < x_negat.$N` --- total docs positivos `wc -l < sub_new_positivo.$N`"
+                            
+                        fi
                         
                         
                         
                     aux=`wc -l < x_negat.$N`
                     NotRel=$(($NotRel+$aux))               
     #                     
+                    if [[ $PRINT == "y" ]]; then
+                        echo "End of active learning step" 
+                    fi    
+                    ###########################################
                     
                    
 
@@ -584,7 +669,7 @@ for CORP in "${CORPLIST[@]}"; do
                     RELRATE=`echo "scale=4; $RELFINDDOC / $L" | bc`
                     CURRENTREL=`cat  x_posit.[0-9][0-9] | wc -l`
 
-                    alreadyLabeledDocs=`cat sub_new[0-9][0-9].$TOPIC   | wc -l`
+                    alreadyLabeledDocs=`cat ssarp*  | wc -l`
                     allDocs=`cat new[0-9][0-9].$TOPIC  | wc -l`
                     
                     if [[ $PRINT == "y" ]]; then
@@ -622,7 +707,7 @@ for CORP in "${CORPLIST[@]}"; do
         echo " 20: Estimate ρ̂ = 1.05 "
         export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDOCS  " | bc`
         echo "prevalence $prevalence"        
-        export m=`echo "scale=5; ($prevalence * $NDOCS ) * 0.95 " | bc`           
+        export m=`echo "scale=5; ($prevalence * $NDOCS ) * 0.90 " | bc`           
         prevalence_int=${m%.*}
         
         python3 ../selectRound.py store_estimation $prevalence_int
@@ -631,50 +716,50 @@ for CORP in "${CORPLIST[@]}"; do
         export j=`cat flagOut`
         
         export t=`wc -l < U$j`
-        temp=$(($NDOCS-$t))
+         
+         
+         
+         
         NumberDocument=$(($NDOCS-$t))
         sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
         tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result_ranking.$TOPIC
         
         n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
-        cat result_ranking.$TOPIC > result 
-        cat sub_new[0-9][0-9]* >> result
-        cat result | sort | uniq > temp
-        mv temp result
+
+
+        cat ssarp* result_ranking.$TOPIC >> result.$TOPIC 
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
-        
 
 
-        RelevantDocs=`cat result |  join - goldendb |  wc -l`
-        NumberDocsResult=`wc -l < result`
+        export relNumber=`cat result.$TOPIC | sort | uniq | join - goldendb | uniq | wc -l`
+        NumberDocument=`cat result.$TOPIC | sort | uniq | wc -l`
+
+       
         
         
-        totalRelevants=`wc -l < goldendb`
-        recall=`echo "scale=5; ($RelevantDocs / $totalRelevants)" | bc`
-        precisao=`echo "scale=5; ($RelevantDocs / $NumberDocsResult)" | bc`
-        echo "Precisão: $precisao" >> n_docs_ranking
-        echo "Recall: $recall" >> n_docs_ranking
-        echo "Tamanho ranking: $NumberDocument" >> n_docs_ranking
-        echo "Numero de positivos encontrados: $RelevantDocs" >>n_docs_ranking
-        echo "----------------------------------------------------------" 
-        echo "RESULTADO FINAL:"
-        echo "    Documentos Rotulados: $NumberDocsResult"
-        echo "    Total de positivos existentes: $totalRelevants"
-        echo "    Positivos encontrados: $RelevantDocs"
-        echo "    Recall: $recall"
-        echo "    Precisao: $precisao"
-        echo "    Tamanho do Ranking Final: $NumberDocument" 
-        echo "----------------------------------------------------------"    
+        total=`wc -l < goldendb`
+        recall=`echo "scale=5; ($relNumber / $total)" | bc`
+        precisao=`echo "scale=5; ($relNumber / $NumberDocument)" | bc`
+        echo "resultado final SCAL $TOPIC - $relNumber ------$NumberDocument  recall $recall  precisao $precisao"     
         
-         #rm -rf svm.test.*
-         popd
+        
+        
+        
+        echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${END}"
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
+        
+        
+#         rm -rf svm.test.*
+
 
          popd
 
-# 
+=======
+
+ 
          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-         #rm $TOPIC.seed.doc
+         rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 
