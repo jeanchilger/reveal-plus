@@ -22,3 +22,29 @@ YELLOW="\e[33;1m"
 
 END="\e[0m"
 '
+
+declare -A COLORS=( ["red"]="\e[31;1m" ["green"]="\e[32;1m" ["blue"]="\e[34;1m" ["white"]="\e[37;1m" ["magenta"]="\e[35;1m" ["yellow"]="\e[33;1m");
+
+e_error () {
+    echo "${COLORS[red]}${1}${END}";
+}
+
+e_primary () {
+    echo "${COLORS[blue]}${1}${END}";
+}
+
+e_success () {
+    echo "${COLORS[green]}${1}${END}";
+}
+
+e_secondary () {
+    echo "${COLORS[white]}${1}${END}";
+}
+
+e_warning () {
+    echo "${COLORS[magenta]}${1}${END}";
+}
+
+e_info () {
+    echo "${COLORS[yellow]}${1}${END}";
+}
