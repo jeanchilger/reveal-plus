@@ -1,0 +1,183 @@
+#!/bin/bash
+#===============================================================================
+#       USAGE:  ./main [options] (see usage function below)
+#
+# DESCRIPTION:  Performs the management of the other resources, providing
+#               argument parsing.
+#===============================================================================
+
+export ABS_PATH=`pwd`
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+#=== FUNCTION =============================================
+# Display usage information for this script.
+#
+# Parameters:
+#    None
+#==========================================================
+function show_usage() {
+    echo "Usage: ./main [-s <samples>|--samples=<samples>]
+                        [-c <corpus>|--corpus=<corpus>] [-d|--debug]
+                        [-o|--off-colors] [-t <topic-list>|--topics <topic-list>]
+                        [-h|--help]"
+}
+
+#=== FUNCTION =============================================
+# Display detailed information about command options and
+# its parameters
+#
+# Parameters:
+#    None
+#==========================================================
+function show_help() {
+    show_usage
+
+    echo "-s <samples>, --samples=<samples>"
+    echo "      Set <samples> as the quantity of executions that will occurs."
+    echo "      After, the mean and standard deviation over the samples are taken."
+    echo "      The standard value is 1."
+
+    echo ""
+    echo "-c <corpus>, --corpus=<corpus>"
+    echo "      Specifies the name of the corpus to be used."
+
+    echo ""
+    echo "-t <topic-list>, --topics=<topic-list>"
+    echo "      Specifies which topics will be computed by the method."
+    echo "      <topic-list> must be a space separated string, containing"
+    echo "      one or more topics."
+
+    echo ""
+    echo "-d, --debug"
+    echo "      If specified, turns on the debug mode, showing verbose messages."
+
+    echo ""
+    echo "-o, --off-colors"
+    echo "      Turns off colors of terminal outputs."
+
+    echo ""
+    echo "-h, --help"
+    echo "      Show this message."
+}
+
+
+#----------------------------------------------------------------------
+# set standard values
+#----------------------------------------------------------------------
+POSITIONAL=()
+SAMPLES=1
+CORPUS="toyDataset"
+DEBUG_MODE="n"
+TOPICS_CONSIDERED="empty"
+
+#----------------------------------------------------------------------
+# space separated argument parsing
+#----------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    key=$1; shift
+
+    case $key in
+        -s )
+            SAMPLES=$1
+            shift
+            ;;
+
+        -c )
+            CORPUS=$1
+            shift
+            ;;
+
+        -t )
+            declare -a TOPICS_CONSIDERED=($1)
+            shift
+            ;;
+
+        -d | --debug )
+            DEBUG_MODE="y"
+            ;;
+
+        -o | --off-colors )
+            COLORS=false
+            ;;
+
+        -h | --help )
+            show_help
+            exit
+            ;;
+
+        * )
+            POSITIONAL+=("$key")
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL[@]}"
+
+#----------------------------------------------------------------------
+# equals separated argument parsing
+#----------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    key=$1; shift
+
+    case $key in
+        --samples=* )
+            SAMPLES="${key#*=}"
+            shift
+            ;;
+
+        --corpus=* )
+            CORPUS="${key#*=}"
+            shift
+            ;;
+
+        --topics=* )
+            topics="${key#*=}"
+            declare -a TOPICS_CONSIDERED=($topics)
+            ;;
+
+        * )
+            echo "Unknown option '$key'."
+            show_usage
+            exit
+            ;;
+    esac
+done
+
+#----------------------------------------------------------------------
+# prepare directories, runs main code
+#----------------------------------------------------------------------
+RESULT_DIR="result/baseline"
+ALL_RESULTS_HELPER="all_results/runs.describe.txt"
+
+rm -rf all_results
+mkdir all_results
+
+rm -rf results
+mkdir results
+
+for i in $(seq -f "%02g" ${SAMPLES}); do
+
+    echo -e "${MAGENTA}Running sample ${i}.${END}"
+
+    rm -rf all_results/result-${i}
+    mkdir all_results/result-${i}
+
+    if [ -f "$CORPUS.svm.fil" ]; then
+        bash doAll_Baseline_4gram true $CORPUS $DEBUG_MODE "${TOPICS_CONSIDERED[@]}"
+
+    else
+        bash doAll_Baseline_4gram false $CORPUS $DEBUG_MODE "${TOPICS_CONSIDERED[@]}"
+    fi
+
+    for topic in `ls ${RESULT_DIR}/${CORPUS}/`; do
+        cp "${RESULT_DIR}/${CORPUS}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate
+
+        echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
+    done
+done
+
+echo -e "${MAGENTA}Finished taking results...\nComputing mean and standard deviation of samples.${END}"
+
+python3 buildResults.py

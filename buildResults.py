@@ -3,12 +3,12 @@ import sys
 import csv
 import statistics
 
-ALL_RESULT_HELPER = sys.argv[1]
+ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 if not os.path.exists("results"):
     os.mkdir("results")
 
-with open(ALL_RESULT_HELPER, "r") as runs_describer:
+with open(ALL_RESULTS_HELPER, "r") as runs_describer:
     for _line in runs_describer:
 
         # topic execution_number result_file
