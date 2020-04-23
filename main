@@ -9,7 +9,6 @@
 export ABS_PATH=`pwd`
 
 source "${ABS_PATH}/handle_errors"
-source "${ABS_PATH}/colors"
 
 #=== FUNCTION =============================================
 # Display usage information for this script.
@@ -19,9 +18,9 @@ source "${ABS_PATH}/colors"
 #==========================================================
 function show_usage() {
     echo "Usage: ./main [-s <samples>|--samples=<samples>]
-                        [-c <corpus>|--corpus=<corpus>] [-d|--debug]
-                        [-o|--off-colors] [-t <topic-list>|--topics <topic-list>]
-                        [-h|--help]"
+              [-c <corpus>|--corpus=<corpus>] [-d|--debug]
+              [-o|--off-colors] -t <topic-list>|--topics <topic-list>
+              [-h|--help]"
 }
 
 #=== FUNCTION =============================================
@@ -34,31 +33,31 @@ function show_usage() {
 function show_help() {
     show_usage
 
-    echo "-s <samples>, --samples=<samples>"
+    e_secondary "-s <samples>, --samples=<samples>"
     echo "      Set <samples> as the quantity of executions that will occurs."
     echo "      After, the mean and standard deviation over the samples are taken."
     echo "      The standard value is 1."
 
     echo ""
-    echo "-c <corpus>, --corpus=<corpus>"
+    e_secondary "-c <corpus>, --corpus=<corpus>"
     echo "      Specifies the name of the corpus to be used."
 
     echo ""
-    echo "-t <topic-list>, --topics=<topic-list>"
+    e_secondary "-t <topic-list>, --topics=<topic-list>"
     echo "      Specifies which topics will be computed by the method."
     echo "      <topic-list> must be a space separated string, containing"
     echo "      one or more topics."
 
     echo ""
-    echo "-d, --debug"
+    e_secondary "-d, --debug"
     echo "      If specified, turns on the debug mode, showing verbose messages."
 
     echo ""
-    echo "-o, --off-colors"
+    e_secondary "-o, --off-colors"
     echo "      Turns off colors of terminal outputs."
 
     echo ""
-    echo "-h, --help"
+    e_secondary "-h, --help"
     echo "      Show this message."
 }
 
@@ -66,11 +65,13 @@ function show_help() {
 #----------------------------------------------------------------------
 # set standard values
 #----------------------------------------------------------------------
-POSITIONAL=()
+POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
 CORPUS="toyDataset"
 DEBUG_MODE="n"
-TOPICS_CONSIDERED="empty"
+TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
+
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/"
 
 #----------------------------------------------------------------------
 # space separated argument parsing
@@ -99,7 +100,8 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         -o | --off-colors )
-            COLORS=false
+            sed -r -i "s/COLORS_ON=true/COLORS_ON=false/" colors
+            source "${ABS_PATH}/colors"
             ;;
 
         -h | --help )
@@ -138,12 +140,18 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         * )
-            echo "Unknown option '$key'."
+            e_error "Unknown option '$key'."
             show_usage
             exit
             ;;
     esac
 done
+
+if [[ $TOPICS_CONSIDERED == "empty" ]]; then
+    e_error "Topics must be explicitly specified, but none where given."
+    show_usage
+    exit
+fi
 
 #----------------------------------------------------------------------
 # prepare directories, runs main code
@@ -159,7 +167,7 @@ mkdir results
 
 for i in $(seq -f "%02g" ${SAMPLES}); do
 
-    echo -e "${MAGENTA}Running sample ${i}.${END}"
+    e_info "Running sample ${i}."
 
     rm -rf all_results/result-${i}
     mkdir all_results/result-${i}
@@ -178,6 +186,8 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
     done
 done
 
-echo -e "${MAGENTA}Finished taking results...\nComputing mean and standard deviation of samples.${END}"
+e_info "Finished taking results...\nComputing mean and standard deviation of samples."
 
-python3 buildResults.py
+python3 buildResults.py                         # takes mean and standard deviations
+
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/"   # resets color option
