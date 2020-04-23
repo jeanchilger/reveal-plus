@@ -7,8 +7,41 @@
 #===============================================================================
 
 export ABS_PATH=`pwd`
-
 source "${ABS_PATH}/handle_errors"
+
+#=== FUNCTION =============================================
+# Utility function that returns true if a given
+# value is within the given array and false otherwise.
+#
+# Parameters:
+#    $1 -> target value
+#    $2 -> array to be searched
+# Returns:
+#    boolean -> whether or not the value is within array.
+#==========================================================
+contains() {
+    : '
+        Utility function that returns true if a given
+        value is within the given array and false otherwise.
+
+        $1 -> value to check
+        $2... -> array
+    '
+
+
+    value=$1; shift
+    array=("$@")
+
+    for v in "${array[@]}"; do
+        if [[ $v == $value ]]; then
+            true
+            return
+        fi
+    done
+
+    false
+    return
+}
 
 #=== FUNCTION =============================================
 # Display usage information for this script.
@@ -68,10 +101,10 @@ function show_help() {
 POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
 CORPUS="toyDataset"
-DEBUG_MODE="n"
+DEBUG_MODE=false
 TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
 
-sed -r -i "s/COLORS_ON=false/COLORS_ON=true/"
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
 
 #----------------------------------------------------------------------
 # space separated argument parsing
@@ -96,7 +129,7 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         -d | --debug )
-            DEBUG_MODE="y"
+            DEBUG_MODE=true
             ;;
 
         -o | --off-colors )
@@ -153,9 +186,6 @@ if [[ $TOPICS_CONSIDERED == "empty" ]]; then
     exit
 fi
 
-#----------------------------------------------------------------------
-# prepare directories, runs main code
-#----------------------------------------------------------------------
 RESULT_DIR="result/baseline"
 ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
@@ -165,6 +195,30 @@ mkdir all_results
 rm -rf results
 mkdir results
 
+#----------------------------------------------------------------------
+# if data is already prepared, skips data extraction
+#----------------------------------------------------------------------
+if [ ! -f "${CORPUS}.svm.fil" ]; then
+    pushd Corpus
+
+    e_primary "Preparing dataset (executing dofast)..."
+    ./dofast "$CORPUS" $DEBUG_MODE
+    e_success "Done."
+
+    cp "$CORPUS".df ../"$CORPUS".df > /dev/null
+
+    cp "$CORPUS".svm.fil ../"$CORPUS".svm.fil
+
+    e_primary "Running feature compression SVD..."
+    ../svd/./script_create_svd.sh  ../$CORPUS.svm.fil 10
+    e_success "Done."
+
+    popd
+fi
+
+#-------------------------------------------------------------------------
+# runs the main code <SAMPLES> times
+#--------------------------------------------------------------------------
 for i in $(seq -f "%02g" ${SAMPLES}); do
 
     e_info "Running sample ${i}."
@@ -172,12 +226,38 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
     rm -rf all_results/result-${i}
     mkdir all_results/result-${i}
 
-    if [ -f "$CORPUS.svm.fil" ]; then
-        bash doAll_Baseline_4gram true $CORPUS $DEBUG_MODE "${TOPICS_CONSIDERED[@]}"
+    # bash doAll_Baseline_4gram $CORPUS `echo "$DEBUG_MODE"` "${TOPICS_CONSIDERED[@]}"
 
-    else
-        bash doAll_Baseline_4gram false $CORPUS $DEBUG_MODE "${TOPICS_CONSIDERED[@]}"
-    fi
+    #---------------------------------------------------------------------
+    # iterates over every topic:query pair, and executes the method for
+    # them.
+    #---------------------------------------------------------------------
+    while IFS="" read -r line || [[ -n $line ]]; do
+        IFS=':' read -ra TEXT <<< "$line"
+
+        TOPIC="${TEXT[0]}"
+
+        if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
+            e_info "Skipping topic '$TOPIC'."
+            continue
+        fi
+
+        QUERY="${TEXT[1]}"
+
+        if [[ -z $TOPIC ]]; then
+            throw $EMPTY_VARIABLE_EXCEPTION "Variable TOPIC is empty"
+
+        elif [[ -z $QUERY ]]; then
+            throw $EMPTY_VARIABLE_EXCEPTION "Variable QUERY is empty"
+
+        fi
+
+        echo -e "${WHITE}Topic${END}:$TOPIC"
+        echo -e "${WHITE}Query${END}:$QUERY"
+
+        bash doAll_Baseline_4gram $CORPUS `echo "$DEBUG_MODE"` $TOPIC $QUERY
+
+    done < "judgement/$CORPUS.topic.stemming.txt"
 
     for topic in `ls ${RESULT_DIR}/${CORPUS}/`; do
         cp "${RESULT_DIR}/${CORPUS}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate

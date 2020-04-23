@@ -1,26 +1,13 @@
 #!/bin/bash
 
-LINE_ARGUMENTS=$#
-
-if [[ $LINE_ARGUMENTS -eq 0 ]]; then
-    export ABS_PATH=`pwd`
-
-    JUDGECLASS="toyDataset"
-
-else
-    SKIP_DATA_EXTRACTION=$1; shift
-    JUDGECLASS=$1; shift
-    DEBUG_MODE=false; [[ $1 == "y" ]] && DEBUG_MODE=true; shift
-    TOPICS_CONSIDERED=("$@");
-    rules=5
-
-fi
-
-
+JUDGECLASS=$1; shift
+DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
+TOPIC=$1; shift
+QUERY=$1; shift
+rules=5
 
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
-
 
 
 PURPOSE=baseline
@@ -30,97 +17,12 @@ SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
 
 $DEBUG_MODE && echo $JUDGECLASS
 
-contains() {
-    : '
-        Utility function that returns true if a given
-        value is within the given array and false otherwise.
-
-        $1 -> value to check
-        $2... -> array
-    '
-
-
-    value=$1; shift
-    array=("$@")
-
-    for v in "${array[@]}"; do
-        if [[ $v == $value ]]; then
-            true
-            return
-        fi
-    done
-
-    false
-    return
-}
 
 : '
     Iterate over items in CORPLIST
 '
 for CORP in "${CORPLIST[@]}"; do
 
-
-    echo -e "${BLUE}Working on topic $CORP...${END}"
-    pushd Corpus # pushd <dir> é semelhante à cd <dir>
-
-
-    echo -e "${BLUE}Preparando dataset...${END}"
-
-    if [[ $LINE_ARGUMENTS -gt 0 ]]; then
-        if [[ $SKIP_DATA_EXTRACTION == "false" ]]; then
-            ./dofast "$CORP" $DEBUG_MODE
-            cp "$CORP".df ../"$CORP".df > /dev/null
-
-            cp "$CORP".svm.fil ../"$CORP".svm.fil
-            echo -e "${GREEN}  runing feature compression SVD"
-
-            ../svd/./script_create_svd.sh  ../$CORP.svm.fil 10
-
-        fi
-
-    fi
-
-
-
-
-
-
-    popd # popd é semelhante ao cd ..
-
-
-    : '
-        Iterates over all `topic:query` pairs within
-        judgement/$CORP.topic.stemming.txt
-    '
-    while IFS='' read -r line || [[ -n $line ]]; do
-
-        IFS=':' read -ra TEXT <<< "$line"
-
-        TOPIC="${TEXT[0]}"
-
-        # Skips topics not considered
-        if [[ $LINE_ARGUMENTS -gt 0 ]]; then
-            if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
-                echo -e "${YELLOW}Skipping topic '$TOPIC'.${END}"
-                continue
-            fi
-        fi
-
-        QUERY="${TEXT[1]}"
-
-        : '
-            Checks if the TOPIC or QUERY are empty
-        '
-        if [[ -z $TOPIC ]]; then
-            throw $EMPTY_VARIABLE_EXCEPTION "Variable TOPIC is empty"
-
-        elif [[ -z $QUERY ]]; then
-            throw $EMPTY_VARIABLE_EXCEPTION "Variable QUERY is empty"
-
-        fi
-
-        echo -e "${WHITE}Topic${END}:$TOPIC"
-        echo -e "${WHITE}Query${END}:$QUERY"
 
         ######
         $DEBUG_MODE && echo "Creating directories to store results..."
@@ -714,13 +616,12 @@ for CORP in "${CORPLIST[@]}"; do
 
          popd
 
-=======
 
 
          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
          rm $TOPIC.seed.doc
 
-    done < "judgement/$CORP.topic.stemming.txt"
+    # done < "judgement/$CORP.topic.stemming.txt"
 
    # echo -e "${WHITE}Apos finalizar o método o numero de docs recuperados do método  será o top total documentos acessados até a ultima executação que encontrou documentos relevantes. Por exemplo, se a execução N =20 foi a ultima a achar documentos releventas na amostragem deve-se pegar os top ~300 como relevantes. Essa será saida do método. Ou seja, o arquivo rel.rate armazena os relevantes recuperados, é só usar ele para implementar isso.${END}"
 
