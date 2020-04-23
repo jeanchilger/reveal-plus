@@ -17,7 +17,6 @@ else
 fi
 
 
-exit
 
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
