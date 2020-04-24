@@ -71,7 +71,7 @@ CORPUS="toyDataset"
 DEBUG_MODE="n"
 TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
 
-sed -r -i "s/COLORS_ON=false/COLORS_ON=true/"
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
 
 #----------------------------------------------------------------------
 # space separated argument parsing
@@ -188,6 +188,6 @@ done
 
 e_info "Finished taking results...\nComputing mean and standard deviation of samples."
 
-python3 buildResults.py                         # takes mean and standard deviations
+python3 buildResults.py                               # takes mean and standard deviations
 
-sed -r -i "s/COLORS_ON=false/COLORS_ON=true/"   # resets color option
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option
