@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#===============================================================================
+#       USAGE:  ./training [options]
+#
+# DESCRIPTION:  Contains the training loop that judges files as relevant or not.
+#===============================================================================
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
+
+
+TOTAL_DOCUMENTS=`cat docfils | wc -l`   # Total quantity of documents
+LABELED_DOCUMENTS=0                     # Total quantity of labeled documents
+DOCS_TO_LABEL=1                         # Number of documents to be labeled in the current round
+
+#-------------------------------------------------------------------------
+#
+#-------------------------------------------------------------------------
+for ROUND in $(seq -f "%02g" 0 99); do
+
+    if [ $LABELED_DOCUMENTS -lt $TOTAL_DOCUMENTS ]; then
+
+        $DEBUG_MODE && e_primary "Preparing trainset..."
+
+        try
+        (
+            cp $TOPIC.synthetic.seed trainset
+
+            cut -f2 docfils | shuf -n $R | sort | .././indexer "$CORP".db $KEYSIZE $VALSIZE | sed -e's/[^ ]*/-1/' >> trainset
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        $DEBUG_MODE && e_success "Done."
+
+    fi
+
+done

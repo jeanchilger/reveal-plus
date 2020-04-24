@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #===============================================================================
 #       USAGE:  ./main [options] (see usage function below)
 #
@@ -186,7 +187,7 @@ if [[ $TOPICS_CONSIDERED == "empty" ]]; then
     exit
 fi
 
-RESULT_DIR="result/baseline"
+RESULT_DIR="result/${CORPUS}"
 ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 rm -rf all_results
@@ -218,7 +219,7 @@ fi
 
 #-------------------------------------------------------------------------
 # runs the main code <SAMPLES> times
-#--------------------------------------------------------------------------
+#-------------------------------------------------------------------------
 for i in $(seq -f "%02g" ${SAMPLES}); do
 
     e_info "Running sample ${i}."
@@ -259,8 +260,8 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
     done < "judgement/$CORPUS.topic.stemming.txt"
 
-    for topic in `ls ${RESULT_DIR}/${CORPUS}/`; do
-        cp "${RESULT_DIR}/${CORPUS}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate
+    for topic in `ls ${RESULT_DIR}/`; do
+        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate
 
         echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
     done
@@ -268,6 +269,6 @@ done
 
 e_info "Finished taking results...\nComputing mean and standard deviation of samples."
 
-python3 buildResults.py                         # takes mean and standard deviations
+python3 buildResults.py                               # takes mean and standard deviations
 
-sed -r -i "s/COLORS_ON=false/COLORS_ON=true/"   # resets color option
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option
