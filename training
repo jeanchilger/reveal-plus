@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #===============================================================================
-#       USAGE:  ./training [options]
+#       USAGE:  ./training <topic> <query> <debug>
 #
 # DESCRIPTION:  Contains the training loop that judges files as relevant or not.
 #===============================================================================
@@ -9,15 +9,30 @@
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
+SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
+
+TOPIC=$1; shift
+QUERY=$1; shift
 DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
+MAXTHREADS=5;
 
 
+R=100                                   # Document sample size going to trainset
+LAMBDA=0.0001                           # Lambda parameter for SVM
 TOTAL_DOCUMENTS=`cat docfils | wc -l`   # Total quantity of documents
 LABELED_DOCUMENTS=0                     # Total quantity of labeled documents
 DOCS_TO_LABEL=1                         # Number of documents to be labeled in the current round
 
 #-------------------------------------------------------------------------
-#
+# parameters for kissdb, later this will be calculated somewhere else
+#-------------------------------------------------------------------------
+KEYSIZE=$(awk 'BEGIN{a=0}{len = length($1); a=a<len?len:a}END{print a}' $JUDGECLASS.svm.fil)
+VALSIZE=$(awk 'BEGIN{a=0}{len = length($0); a=a<len?len:a}END{print a}' $JUDGECLASS.svm.fil)
+KEYSIZE=$((KEYSIZE+2))
+VALSIZE=$((VALSIZE+2))
+
+#-------------------------------------------------------------------------
+# performs the 100 looping rounds
 #-------------------------------------------------------------------------
 for ROUND in $(seq -f "%02g" 0 99); do
 
@@ -29,7 +44,11 @@ for ROUND in $(seq -f "%02g" 0 99); do
         (
             cp $TOPIC.synthetic.seed trainset
 
-            cut -f2 docfils | shuf -n $R | sort | .././indexer "$CORP".db $KEYSIZE $VALSIZE | sed -e's/[^ ]*/-1/' >> trainset
+            cut -f2 docfils \
+                | shuf -n $R \
+                | sort \
+                | .././indexer "$CORP".db $KEYSIZE $VALSIZE \
+                | sed -e's/[^ ]*/-1/' >> trainset
 
         ) 2> $STD_ERROR_OUT
 
@@ -38,6 +57,127 @@ for ROUND in $(seq -f "%02g" 0 99); do
         }
 
         $DEBUG_MODE && e_success "Done."
+
+        $DEBUG_MODE && e_primary "Preparing seed..."
+
+        try
+        (
+            cat ssarp* > seed
+
+            cat seed \
+                | sort \
+                | join - rel.$TOPIC.fil \
+                | sed -e 's/^/1 /' \
+                | sort \
+                | uniq > intermediate_seed
+
+            cat seed \
+                | sort \
+                | join -v1 - rel.$TOPIC.fil \
+                | shuf -n 50000 \
+                | sed -e 's/^/-1 /' \
+                | sort \
+                | uniq  >> intermediate_seed
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        $DEBUG_MODE && e_success "Done."
+
+        $DEBUG_MODE && e_primary "Adding content from seed to trainset..."
+
+        try
+        (
+            cut -d' ' -f2 intermediate_seed \
+                | .././indexer $JUDGECLASS.db $KEYSIZE $VALSIZE \
+                | cut -d' ' -f2- \
+                | paste -d' ' <(cut -d' ' -f1 intermediate_seed) - \
+                | sort -n >> trainset
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        $DEBUG_MODE && e_success "Done."
+
+        #-----------------------------------------------------------------
+        # calculate the prevalence of relevant documents on training set
+        #-----------------------------------------------------------------
+        REL_ON_TRAINSET=`grep -E "^1\b" trainset | wc -l`
+        NOT_REL_ON_TRAINSET=`grep -E "^-1\b" trainset | wc -l`
+        PREVALENCE_RATE=`echo "scale=4;
+            $REL_ON_TRAINSET / ($REL_ON_TRAINSET + $NOT_REL_ON_TRAINSET)" | bc`
+
+        echo $REL_ON_TRAINSET $NOT_REL_ON_TRAINSET $PREVALENCE_RATE >> prevalence.rate
+
+        $DEBUG_MODE && e_primary "Executing training algorithm (sofia-ml)..."
+
+        try
+        (
+            $SOFIA --learner_type logreg-pegasos --loop_type roc \
+                --lambda $LAMBDA --iterations 2000000 \
+                --training_file trainset --dimensionality 3300000 \
+                --model_out svm_model &> classifier_output
+
+            sofia_status=$?
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        $DEBUG_MODE && e_success "Done."
+
+        if [[ $sofia_status -eq "0" ]]; then
+
+            for test_file in svm.test.*; do
+                while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
+                    sleep 1
+                done
+
+                $DEBUG_MODE && e_primary "Testing previously trained model..."
+
+                try
+                (
+                    $SOFIA --test_file $test_file --dimensionality 3300000 \
+                        --model_in svm_model --results_file pout.$z \
+                        &> classifier_output &
+
+                ) 2> $STD_ERROR_OUT
+
+                catch || {
+                    exit_on_error
+                }
+
+                $DEBUG_MODE && e_success "Done."
+
+            done
+
+            wait
+
+        else
+
+            try
+            (
+                rm -f pout.svm.test.*
+                cut -f2      | sort -R \
+                    | cat -n \
+                    | sort -k2 \
+                    | sed -e 's/ */-/' > pout.svm.test.1
+
+            ) 2> $STD_ERROR_OUT
+
+            catch || {
+                exit_on_error
+            }
+
+        fi
 
     fi
 
