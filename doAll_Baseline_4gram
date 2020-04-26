@@ -345,42 +345,7 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
 
             fi
 
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
+
 
             ######
             $DEBUG_MODE && echo "Starting SCAL process $N\nPreparing ranking.$N.$TOPIC..."
@@ -395,6 +360,7 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
 
                 sort -n seed.$TOPIC > temp
                 cat temp | join  -v2 - inlr.out.$N.$TOPIC -2 1 | shuf |  sort -k 2 -r -g -s  > ranking.$N.$TOPIC
+
             ) 2> $STD_ERROR_OUT
 
             catch || {
@@ -402,8 +368,8 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
             }
 
             $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
-            $DEBUG_MODE && echo "Preparing new$N.$TOPIC..."
 
+            $DEBUG_MODE && echo "Preparing new$N.$TOPIC..."
 
             ######
             try
@@ -426,6 +392,8 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
                 exit_on_error
             }
             $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
+
+
 
             : '
                 x armazena new($N - 1).$TOPIC
@@ -450,16 +418,50 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
 
 
             # judgefile tells which are the positive docs
-            python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.Judged.doc.list --record=$TOPIC.record.list
+            python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.$N.Judged.doc.list --record=$TOPIC.record.list
 
             # rel.$TOPIC.Judged.doc.list contains the current relevant docs
 
-            cat rel.$TOPIC.Judged.doc.list >> rel.$TOPIC.fil
-            cat rel.$TOPIC.Judged.doc.list > rel.$TOPIC.$N.Judged.doc.list
+            cat rel.$TOPIC.$N.Judged.doc.list >> rel.$TOPIC.fil
             sort rel.$TOPIC.fil | uniq > temp
             mv temp rel.$TOPIC.fil
 
-
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
+            ###############
 
 
             $DEBUG_MODE && echo -e "${GREEN}Starting active learning${END}"
@@ -476,6 +478,44 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
                 cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
 
                 cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
+
+
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
+                ###############
 
 
 
@@ -548,7 +588,7 @@ for x in 0 1 2 3 4 5 6 7 8 9 ; do
 
                     echo "docs positivos coletados `wc -l < x_posit.$N`   docs negativos ----  `wc -l < x_negat.$N` --- total docs positivos `wc -l < sub_new_positivo.$N`"
 
-                fi
+            fi
 
 
 

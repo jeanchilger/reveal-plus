@@ -9,19 +9,21 @@
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
-SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
+SOFIA="'${ABS_PATH}'/sofia-ml-read-only/sofia-ml"
 
 TOPIC=$1; shift
 QUERY=$1; shift
 DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
 MAXTHREADS=5;
 
-
 R=100                                   # Document sample size going to trainset
 LAMBDA=0.0001                           # Lambda parameter for SVM
 TOTAL_DOCUMENTS=`cat docfils | wc -l`   # Total quantity of documents
 LABELED_DOCUMENTS=0                     # Total quantity of labeled documents
 DOCS_TO_LABEL=1                         # Number of documents to be labeled in the current round
+
+not_relevant=0                          # Documents not relevant so far
+relevant=0                              # Documents relevant so far
 
 #-------------------------------------------------------------------------
 # parameters for kissdb, later this will be calculated somewhere else
@@ -34,7 +36,7 @@ VALSIZE=$((VALSIZE+2))
 #-------------------------------------------------------------------------
 # performs the 100 looping rounds
 #-------------------------------------------------------------------------
-for ROUND in $(seq -f "%02g" 0 99); do
+for round in $(seq -f "%02g" 0 99); do
 
     if [ $LABELED_DOCUMENTS -lt $TOTAL_DOCUMENTS ]; then
 
@@ -134,8 +136,11 @@ for ROUND in $(seq -f "%02g" 0 99); do
 
         $DEBUG_MODE && e_success "Done."
 
+        #-----------------------------------------------------------------
+        # tests the trained model if tests already exists, or create tests
+        # if they don't exists
+        #-----------------------------------------------------------------
         if [[ $sofia_status -eq "0" ]]; then
-
             for test_file in svm.test.*; do
                 while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
                     sleep 1
@@ -162,11 +167,11 @@ for ROUND in $(seq -f "%02g" 0 99); do
             wait
 
         else
-
             try
             (
                 rm -f pout.svm.test.*
-                cut -f2      | sort -R \
+                cut -f2 docfils \
+                    | sort -R \
                     | cat -n \
                     | sort -k2 \
                     | sed -e 's/ */-/' > pout.svm.test.1
@@ -176,8 +181,114 @@ for ROUND in $(seq -f "%02g" 0 99); do
             catch || {
                 exit_on_error
             }
+        fi
+
+        $DEBUG_MODE && e_primary "Preparing ranking.$round.$TOPIC..."
+
+        try
+        (
+            cat new[0-9][0-9].$TOPIC > seed.$TOPIC
+
+            cut -f1 pout.svm.test.* \
+                | ../fixnum \
+                | cat -n \
+                | join -o2.2,1.2 -t$'\t' - docfils \
+                | sort -k1 -n  > inlr.out.$round.$TOPIC
+
+# CHANGE 1: sort -n seed.topic > temp; cat temp |...
+            sort -n seed.$TOPIC \
+                | join  -v2 - inlr.out.$round.$TOPIC -2 1 \
+                | shuf \
+                | sort -k 2 -r -g -s  > ranking.$round.$TOPIC
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        $DEBUG_MODE && e_success "Done."
+
+        $DEBUG_MODE && e_primary "Preparing new$round.$TOPIC."
+
+        try
+        (
+            cat ranking.$round.$TOPIC \
+                | cut -d' ' -f1 > new$round.$TOPIC
+
+            cat new[0-9][0-9] > intermediate_seed
+
+            if [ "$round" != "99" ] ; then
+                head -$DOCS_TO_LABEL new$round.$TOPIC > new_temp
+                mv new_temp new$round.$TOPIC
+            fi
+
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            exit_on_error
+        }
+
+        $DEBUG_MODE && e_success "Done."
+
+        $DEBUG_MODE && e_primary "Starting SCAL subsampling..."
+
+        if [ $DOCS_TO_LABEL -le 30 ]; then
+            sub_sample=$DOCS_TO_LABEL
+        else
+            sub_sample=30
+        fi
+
+        shuf -n $b new$round.$TOPIC > sub_new$round.$TOPIC
+
+        python2.7 ../doJudgementMain.py --topic=$TOPIC \
+            --judgefile=../judgement/qrels.$JUDGECLASS.list \
+            --input=sub_new$round.$TOPIC \
+            --output=rel.$TOPIC.$round.Judged.doc.list \
+            --record=$TOPIC.record.list
+
+        cat rel.$TOPIC.$round.Judged.doc.list >> rel.$TOPIC.fil
+        sort rel.$TOPIC.fil | uniq > temp
+        mv temp rel.$TOPIC.fil
+
+        $DEBUG_MODE && e_success "Done."
+
+        $DEBUG_MODE && e_primary "Starting SSARP stage..."
+
+        if [ $not_relevant -lt 1 ] || [ $relevant -lt 1 ]; then
+            $DEBUG_MODE && e_secondary "\tStore seed in ssarp file..."
+
+            cp sub_new$round.$TOPIC ssarp$round.$TOPIC
+
+            cat sub_new$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/1 /' > x_posit.$round
+
+            cat sub_new$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil -v1 \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/-1 /' > x_negat.$round
+
+            cat  x_negat.* \
+                | sort -k2 \
+                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > seed_ssarp.$TOPIC
+
+            cat  x_posit.* \
+                | shuf -n 1 \
+                | sort -k2 \
+                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp.$TOPIC
+
+
+        else
 
         fi
+
+        $DEBUG_MODE && e_success "Done."
 
     fi
 
