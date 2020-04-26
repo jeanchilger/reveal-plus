@@ -9,21 +9,29 @@
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
-SOFIA="'${ABS_PATH}'/sofia-ml-read-only/sofia-ml"
+SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
 
 TOPIC=$1; shift
 QUERY=$1; shift
+JUDGECLASS=$1; shift
 DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
-MAXTHREADS=5;
+MAXTHREADS=5
+rules=5
 
 R=100                                   # Document sample size going to trainset
 LAMBDA=0.0001                           # Lambda parameter for SVM
 TOTAL_DOCUMENTS=`cat docfils | wc -l`   # Total quantity of documents
 LABELED_DOCUMENTS=0                     # Total quantity of labeled documents
-DOCS_TO_LABEL=1                         # Number of documents to be labeled in the current round
+SAMPLE_SIZE=1                           # Number of documents to be labeled in the current round
+TEMP_FILE=$(mktemp)                     # Temporary file for file redirections
+sub_sample=0                            # Sub sample, limited to 30
 
-not_relevant=0                          # Documents not relevant so far
-relevant=0                              # Documents relevant so far
+discretize=0
+flag_allac_first_time=0
+estimate=0                               #
+
+not_relevants=0                          # Documents not relevant so far
+relevants=0                              # Documents relevant so far
 
 #-------------------------------------------------------------------------
 # parameters for kissdb, later this will be calculated somewhere else
@@ -49,7 +57,7 @@ for round in $(seq -f "%02g" 0 99); do
             cut -f2 docfils \
                 | shuf -n $R \
                 | sort \
-                | .././indexer "$CORP".db $KEYSIZE $VALSIZE \
+                | .././indexer "$JUDGECLASS".db $KEYSIZE $VALSIZE \
                 | sed -e's/[^ ]*/-1/' >> trainset
 
         ) 2> $STD_ERROR_OUT
@@ -113,7 +121,8 @@ for round in $(seq -f "%02g" 0 99); do
         REL_ON_TRAINSET=`grep -E "^1\b" trainset | wc -l`
         NOT_REL_ON_TRAINSET=`grep -E "^-1\b" trainset | wc -l`
         PREVALENCE_RATE=`echo "scale=4;
-            $REL_ON_TRAINSET / ($REL_ON_TRAINSET + $NOT_REL_ON_TRAINSET)" | bc`
+            $REL_ON_TRAINSET / ($REL_ON_TRAINSET + $NOT_REL_ON_TRAINSET)" \
+            | bc`
 
         echo $REL_ON_TRAINSET $NOT_REL_ON_TRAINSET $PREVALENCE_RATE >> prevalence.rate
 
@@ -137,8 +146,7 @@ for round in $(seq -f "%02g" 0 99); do
         $DEBUG_MODE && e_success "Done."
 
         #-----------------------------------------------------------------
-        # tests the trained model if tests already exists, or create tests
-        # if they don't exists
+        # tests the previously trained model
         #-----------------------------------------------------------------
         if [[ $sofia_status -eq "0" ]]; then
             for test_file in svm.test.*; do
@@ -151,7 +159,7 @@ for round in $(seq -f "%02g" 0 99); do
                 try
                 (
                     $SOFIA --test_file $test_file --dimensionality 3300000 \
-                        --model_in svm_model --results_file pout.$z \
+                        --model_in svm_model --results_file pout.$test_file \
                         &> classifier_output &
 
                 ) 2> $STD_ERROR_OUT
@@ -166,6 +174,9 @@ for round in $(seq -f "%02g" 0 99); do
 
             wait
 
+        #-----------------------------------------------------------------
+        # create test files
+        #-----------------------------------------------------------------
         else
             try
             (
@@ -219,8 +230,8 @@ for round in $(seq -f "%02g" 0 99); do
             cat new[0-9][0-9] > intermediate_seed
 
             if [ "$round" != "99" ] ; then
-                head -$DOCS_TO_LABEL new$round.$TOPIC > new_temp
-                mv new_temp new$round.$TOPIC
+                head -$SAMPLE_SIZE new$round.$TOPIC > $TEMP_FILE
+                mv $TEMP_FILE new$round.$TOPIC
             fi
 
         ) 2> $STD_ERROR_OUT
@@ -233,13 +244,16 @@ for round in $(seq -f "%02g" 0 99); do
 
         $DEBUG_MODE && e_primary "Starting SCAL subsampling..."
 
-        if [ $DOCS_TO_LABEL -le 30 ]; then
-            sub_sample=$DOCS_TO_LABEL
+        if [ $SAMPLE_SIZE -le 30 ]; then
+            sub_sample=$SAMPLE_SIZE
         else
             sub_sample=30
         fi
 
-        shuf -n $b new$round.$TOPIC > sub_new$round.$TOPIC
+        shuf -n $sub_sample new$round.$TOPIC > sub_new$round.$TOPIC
+
+        # TODO: Check the viability of adding the output
+        # of this script to a variable instead in a file
 
         python2.7 ../doJudgementMain.py --topic=$TOPIC \
             --judgefile=../judgement/qrels.$JUDGECLASS.list \
@@ -248,15 +262,18 @@ for round in $(seq -f "%02g" 0 99); do
             --record=$TOPIC.record.list
 
         cat rel.$TOPIC.$round.Judged.doc.list >> rel.$TOPIC.fil
-        sort rel.$TOPIC.fil | uniq > temp
-        mv temp rel.$TOPIC.fil
+        sort rel.$TOPIC.fil | uniq > $TEMP_FILE
+        mv $TEMP_FILE rel.$TOPIC.fil
 
         $DEBUG_MODE && e_success "Done."
 
         $DEBUG_MODE && e_primary "Starting SSARP stage..."
 
-        if [ $not_relevant -lt 1 ] || [ $relevant -lt 1 ]; then
-            $DEBUG_MODE && e_secondary "\tStore seed in ssarp file..."
+        #-----------------------------------------------------------------
+        #
+        #-----------------------------------------------------------------
+        if [ $not_relevants -lt 1 ] || [ $relevants -lt 1 ]; then
+            $DEBUG_MODE && e_secondary "\tStoring seed in ssarp file..."
 
             cp sub_new$round.$TOPIC ssarp$round.$TOPIC
 
@@ -276,20 +293,197 @@ for round in $(seq -f "%02g" 0 99); do
 
             cat  x_negat.* \
                 | sort -k2 \
-                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > seed_ssarp.$TOPIC
+                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > seed_ssarp_docs.$TOPIC
 
             cat  x_posit.* \
                 | shuf -n 1 \
                 | sort -k2 \
-                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp.$TOPIC
+                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp_docs.$TOPIC
 
+            cut -d ' ' -f2- seed_ssarp_docs.$TOPIC  > seed_ssarp_labels.$TOPIC
 
+            cp x_posit.$round sub_new_positives.$round
+            cp x_negat.$round sub_new_negatives.$round
+
+            ssarp_relevants=`wc -l < x_posit.$round`
+
+        #-----------------------------------------------------------------
+        #
+        #-----------------------------------------------------------------
         else
+
+            $DEBUG_MODE && e_secondary "\Creating files..."
+
+            # TODO: Check if the files temp_posit and temp_negat
+            # could be united into a single file.
+
+            cat sub_new$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/1 /' > temp_posit.$round.$TOPIC
+
+            cat sub_new$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil -v1 \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/-1 /' > temp_negat.$round.$TOPIC
+
+            cat temp_posit.$round.$TOPIC temp_negat.$round.$TOPIC \
+                | sort -k2 \
+                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > trainset.$round.$TOPIC
+
+            cut -d ' ' -f2- trainset.$round.$TOPIC  > trainset_labels.$round.$TOPIC
+
+            #-------------------------------------------------------------
+            #
+            #-------------------------------------------------------------
+            if [ $discretize -eq 0 ]; then
+                $DEBUG_MODE && e_secondary "\t Generating bins"
+
+                python3 ../svd/convert_txt.py \
+                    ../$JUDGECLASS.svm.fil.svd \
+                    /tmp/total.$TOPIC.arff rel.$TOPIC.fil
+
+                pushd ../SSARP/run/
+                rm train*
+                .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
+                popd
+
+                discretize=1
+            fi
+
+            $DEBUG_MODE && e_secondary "\tConverting files to txt..."
+
+            python3 ../svd/convert_txt.py \
+                trainset_labels.$round.$TOPIC \
+                out.$round.$TOPIC.arff \
+                rel.$TOPIC.fil
+
+            python3 ../svd/convert_txt.py \
+                seed_ssarp_labels.$TOPIC \
+                seed_out.$round.$TOPIC.arff \
+                rel.$TOPIC.fil
+
+            cp trainset.$round.$TOPIC ../SSARP/run/
+            cp seed_out.$round.$TOPIC.arff ../SSARP/run/
+            cp out.$round.$TOPIC.arff ../SSARP/run/
+
+            $DEBUG_MODE && e_primary "\tExecuting alac rules..."
+
+            pushd ../SSARP/run/
+            ./SSARPX.sh out.$round.$TOPIC \
+                trainset.$round.$TOPIC \
+                50 \
+                $round \
+                seed_out.$round.$TOPIC.arff \
+                $TOPIC \
+                $flag_allac_first_time \
+                $rules
+
+            flag_allac_first_time=$(($flag_allac_first_time+1))
+            cat label.$round.$TOPIC > /tmp/ssarp$round.$TOPIC
+
+            popd
+
+            $DEBUG_MODE && e_seccess "\tDone."
+
+            mv /tmp/ssarp$round.$TOPIC .
+
+            cat sub_new$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/1 /' > sub_new_positives.$round
+
+            cat sub_new$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil -v1 \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/-1 /' > sub_new_negatives.$round
+
+            # TODO: Check if the files x_posit and x_negat
+            # could be united into a single file.
+
+            cat ssarp$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/1 /' > x_posit.$round
+
+            cat ssarp$round.$TOPIC \
+                | sort \
+                | uniq \
+                | join - rel.$TOPIC.fil -v1 \
+                | cut -d' ' -f1 \
+                | sed -e 's/^/-1 /' > x_negat.$round
+
+            cat x_posit.$round x_negat.$round \
+                | cut -d' ' -f2 \
+                | sort \
+                | uniq > ssarp$round.$TOPIC
+
+            ssarp_relevants=`wc -l < x_posit.$round`
+
+            $DEBUG_MODE && e_info \
+                "Positives documents collected ... `wc -l < x_posit.$round`"
+            $DEBUG_MODE && e_info \
+                "Negative documents .............. `wc -l < x_negat.$round`"
+            $DEBUG_MODE && e_info \
+                "Total positives in sub sample ... `wc -l < sub_new_positivo.$round`"
 
         fi
 
-        $DEBUG_MODE && e_success "Done."
+        $DEBUG_MODE && e_success "Active learning step finished."
 
+        #-----------------------------------------------------------------
+        # statics calculation
+        #-----------------------------------------------------------------
+        not_relevants=$(($not_relevants + `wc -l < x_negat.$round`))
+
+        rel_found_sample=`wc -l < x_posit.$round`  # relevants on previous sample
+        rel_rate=`echo "scale=4; $rel_found_sample / $SAMPLE_SIZE" | bc`
+        current_rel=`cat x_posit.[0-9][0-9] | wc -l`
+
+        # TODO: Check if all_docs may be replaced with TOTAL_DOCUMENTS.
+        already_labeled_docs=`cat ssarp* | wc -l`
+        all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
+
+        $DEBUG_MODE && e_info "\tRelevants ......... $rel_found_sample"
+        $DEBUG_MODE && e_info "\tSample size ....... $SAMPLE_SIZE"
+        $DEBUG_MODE && e_info "\tSub sample size ... $sub_sample"
+        $DEBUG_MODE && e_info "\tAlready labeled ... $already_labeled_docs"
+        $DEBUG_MODE && e_info "\tAll docs .......... $all_docs"
+        $DEBUG_MODE && e_info "\tRelevants rate .... $rel_rate"
+        $DEBUG_MODE && e_info "\tCurrent relevants . $current_rel"
+        $DEBUG_MODE && e_info "\tTotal relevants ... `wc -l < rel.$TOPIC.fil`"
+
+        relevants=$(($relevants + \
+            ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
+
+        echo $rel_found_sample $SAMPLE_SIZE $sub_sample $rel_rate $current_rel >> rel.rate
+
+        sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
+        cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
+
+        estimate=$(($estimate + \
+            ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
+
+        echo "${round%.*} $estimate" >> store_estimation
+
+
+        $DEBUG_MODE && e_secondary "Estimate rate is: $estimate"
+
+
+        LABELED_DOCUMENTS=$(($LABELED_DOCUMENTS + $SAMPLE_SIZE))
+        SAMPLE_SIZE=$(($SAMPLE_SIZE + ($SAMPLE_SIZE + 9) / 10))
     fi
-
 done
+
+export Estimate=estimate
+export NDOCS=TOTAL_DOCUMENTS

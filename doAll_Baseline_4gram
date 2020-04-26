@@ -5,6 +5,7 @@ DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
 TOPIC=$1; shift
 QUERY=$1; shift
 rules=5
+TEMP=$(mktemp)
 
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
@@ -205,436 +206,368 @@ catch || {
 $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
 
 
-for x in 0 1 2 3 4 5 6 7 8 9 ; do
-    for y in 0 1 2 3 4 5 6 7 8 9 ; do
-
-        if [ $NDUN -lt $NDOCS ] ; then
-            export N=$x$y
-
-            echo "Runing round number  $N with $((NDOCS-NDUN)) documents"
-            ######
-            $DEBUG_MODE && echo "Preparing trainset..."
-
-
-            try
-            (
-                cp $TOPIC.synthetic.seed trainset
-
-                cut -f2 docfils | shuf -n $R | sort | .././indexer "$JUDGECLASS".db $KEYSIZE $VALSIZE | sed -e's/[^ ]*/-1/' >> trainset
-
-            ) 2> $STD_ERROR_OUT
-
-            catch || {
-                exit_on_error
-            }
-
-            $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
-            $DEBUG_MODE && echo "Preparing seed (and x)... `wc -l < trainset`"
-
-            ######
-            try
-            (
-                #cat sub_new[0-9][0-9].$TOPIC > seed
-                cat ssarp* > seed
-                #cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' > x
-                #cat seed | sort | join -v1 - rel.$TOPIC.fil | sort -R | head -50000 | sed -e 's/^/-1 /' >> x
-
-                cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' | sort | uniq > x
-                cat seed | sort | join -v1 - rel.$TOPIC.fil | shuf -n 50000 | sed -e 's/^/-1 /' | sort | uniq  >> x
-
-            ) 2> $STD_ERROR_OUT
-
-            catch || {
-                exit_on_error
-            }
-
-            $DEBUG_MODE && echo -e "${GREEN}Done. ${END} "
-            $DEBUG_MODE &&  echo "Preparing trainset (pt 2)... `wc -l < trainset`"
-
-            ######
-            try
-            (
-                #sort -k2 x | join -12 - ../$JUDGECLASS.svm.fil | cut -d' ' -f2- | sort -n >> trainset
-                cut -d' ' -f2 x | .././indexer $JUDGECLASS.db $KEYSIZE $VALSIZE | cut -d' ' -f2- | paste -d' ' <(cut -d' ' -f1 x) - | sort -n >> trainset
-
-            ) 2> $STD_ERROR_OUT
-
-            catch || {
-                exit_on_error
-            }
-
-
-            $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
-
-            # Calculate relevant documents prevalence rate in the traning set
-            RELTRAINDOC=`grep -E "^1\b" trainset | wc -l`
-
-            NOTRELTRAINDOC=`grep -E "^-1\b" trainset | wc -l`
-
-            PREVALENCERATE=`echo "scale=4; $RELTRAINDOC / ($RELTRAINDOC + $NOTRELTRAINDOC)" | bc`
-
-            echo $RELTRAINDOC $NOTRELTRAINDOC $PREVALENCERATE >> prevalence.rate
-
-            ######
-            $DEBUG_MODE && echo "Training (Running SOFIA-ML)... `wc -l < trainset`"
-
-
-
-            try
-            (
-
-
-                $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 2000000 --training_file trainset --dimensionality 3300000  --model_out svm_model &> saida_classificador
-
-
-                RES=$?
-
-            ) 2> $STD_ERROR_OUT
-
-            catch || {
-                exit_on_error
-            }
-
-
-            $DEBUG_MODE && echo -e "${GREEN}Finished SOFIA-ML.${END}"
-            $DEBUG_MODE &&  echo $RES
-
-            MAXTHREADS=5
-            if [[ "$RES" -eq "0" ]] ; then
-                for z in svm.test.* ; do
-
-                    ######
-
-
-                    while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
-                        sleep 1
-                    done
-
-
-
-                    try
-                    (
-
-                        $SOFIA --test_file $z --dimensionality 3300000 --model_in svm_model --results_file pout.$z &> saida_classificador &
-
-
-                    ) 2> $STD_ERROR_OUT
-
-                    catch || {
-                        echo $ERROR_CODE
-                        exit_on_error
-                    }
-
-                done
-
-                wait
-                #waiting all threads complete their work
-
-            else
-                ######
-
-                try
-                (
-                    rm -f pout.svm.test.*
-                    cut -f2      | sort -R | cat -n | sort -k2 | sed -e 's/ */-/' > pout.svm.test.1
-
-                ) 2> $STD_ERROR_OUT
-
-
-                $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
-
-            fi
-
-
-
-            ######
-            $DEBUG_MODE && echo "Starting SCAL process $N\nPreparing ranking.$N.$TOPIC..."
-
-
-            try
-            (
-                cat new[0-9][0-9].$TOPIC > seed.$TOPIC
-                cut -f1 pout.svm.test.* | ../fixnum | cat -n | join -o2.2,1.2 -t$'\t' - docfils | sort -k1 -n  > inlr.out.$N.$TOPIC
-
-                $DEBUG_MODE && echo -e "${BLUE}\tinlr.out size =`wc -l < inlr.out.$N.$TOPIC` docfils  `wc -l <docfils `${END}"
-
-                sort -n seed.$TOPIC > temp
-                cat temp | join  -v2 - inlr.out.$N.$TOPIC -2 1 | shuf |  sort -k 2 -r -g -s  > ranking.$N.$TOPIC
-
-            ) 2> $STD_ERROR_OUT
-
-            catch || {
-                exit_on_error
-            }
-
-            $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
-
-            $DEBUG_MODE && echo "Preparing new$N.$TOPIC..."
-
-            ######
-            try
-            (
-                $DEBUG_MODE && echo -e "${BLUE}\tranking size `wc -l < ranking.$N.$TOPIC`${END}"
-
-                cat ranking.$N.$TOPIC | cut -d' ' -f1 > new$N.$TOPIC
-                cp new$N.$TOPIC U$N
-
-                cat new[0-9][0-9].$TOPIC > x
-
-                if [ "$N" != "99" ] ; then
-                    head -$L new$N.$TOPIC > y
-                    mv y new$N.$TOPIC
-                fi
-
-            ) 2> $STD_ERROR_OUT
-
-            catch || {
-                exit_on_error
-            }
-            $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
-
-
-
-            : '
-                x armazena new($N - 1).$TOPIC
-            '
-
-            # Limits the number of documents by 30
-            if [ $L -le 30 ]; then
-                b=$L
-            else
-                b=30
-            fi
-
-            : '
-                The files sub_new$N represents a sample of at most 30
-                    documents from the documents to be used in the iteration.
-            '
-            shuf -n $b new$N.$TOPIC > sub_new$N.$TOPIC
-
-            $DEBUG_MODE && echo -e "${BLUE}Number of labeled pairs: `wc -l < sub_new$N.$TOPIC`${END}"
-
-
-
-
-            # judgefile tells which are the positive docs
-            python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.$N.Judged.doc.list --record=$TOPIC.record.list
-
-            # rel.$TOPIC.Judged.doc.list contains the current relevant docs
-
-            cat rel.$TOPIC.$N.Judged.doc.list >> rel.$TOPIC.fil
-            sort rel.$TOPIC.fil | uniq > temp
-            mv temp rel.$TOPIC.fil
-
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-            ###############
-
-
-            $DEBUG_MODE && echo -e "${GREEN}Starting active learning${END}"
-
-         ############active learning
-
-
-            if [ "$NotRel" -lt 3 ] || [ "$Rel" -lt 1000 ]
-            then
-
-                echo "store seed in ssarp file"
-
-                cp sub_new$N.$TOPIC ssarp$N.$TOPIC
-                cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
-
-                cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
-
-
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-                ###############
-
-
-
-
-                cat  x_negat.*   |  sort -k2  | join - ../$JUDGECLASS.svm.fil.svd   -2 1 -1 2 > seed_ssarp.$TOPIC
-
-
-                cat  x_posit.* | shuf -n 1 | sort -k2  | join - ../$JUDGECLASS.svm.fil.svd  -2 1 -1 2 >> seed_ssarp.$TOPIC
-
-
-                cut -d ' ' -f2- seed_ssarp.$TOPIC  > seed_ssarpB.$TOPIC
-    #
-
-                cp x_posit.$N sub_new_positivo.$N
-                cp x_negat.$N sub_new_negativo.$N
-                ssarp_relevants=`wc -l < x_posit.$N`
-            else
-
-                echo "creating files"
-
-                cat sub_new$N.$TOPIC | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > temp_posit.$N.$TOPIC
-                cat sub_new$N.$TOPIC | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > temp_negat.$N.$TOPIC
-
-
-                cat temp_posit.$N.$TOPIC temp_negat.$N.$TOPIC |  sort -k2  | join - ../$JUDGECLASS.svm.fil.svd  -2 1 -1 2 > trainset.$N.$TOPIC
-                cut -d ' ' -f2- trainset.$N.$TOPIC  > trainsetB.$N.$TOPIC
-
-
-
-                if [ "$flag_discretize" -eq '0' ]
-                then
-                    echo "gerando os bins\n"
-                    echo "python3 ../svd/convert_txt.py ../$JUDGECLASS.svm.fil.svd /tmp/total.$TOPIC.arff rel.$TOPIC.fil   "
-                    python3 ../svd/convert_txt.py ../$JUDGECLASS.svm.fil.svd /tmp/total.$TOPIC.arff rel.$TOPIC.fil
-
-                    cd ../SSARP/run/
-                    rm train*
-                    .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff  50 10 10
-                    cd -
-                    echo "saindo da geração dos bins"
-                    flag_discretize=1
-                fi
-
-                echo "convertendo arquivo para txt"
-                    python3 ../svd/convert_txt.py trainsetB.$N.$TOPIC out.$N.$TOPIC.arff rel.$TOPIC.fil
-                    python3 ../svd/convert_txt.py seed_ssarpB.$TOPIC seed_out.$N.$TOPIC.arff rel.$TOPIC.fil
-
-
-                    cp trainset.$N.$TOPIC ../SSARP/run/
-                    cp seed_out.$N.$TOPIC.arff ../SSARP/run/
-                    cp out.$N.$TOPIC.arff ../SSARP/run/
-
-
-                echo "executando alac $rules"
-                    cd ../SSARP/run/
-                    ./SSARPX.sh out.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out.$N.$TOPIC.arff $TOPIC $flag_allac_first_time $rules
-                    flag_allac_first_time=$(($flag_allac_first_time+1))
-                    cat label.$N.$TOPIC > /tmp/ssarp$N.$TOPIC
-                    cd -
-                    mv /tmp/ssarp$N.$TOPIC .
-
-                    cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > sub_new_positivo.$N
-                    cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > sub_new_negativo.$N
-
-                    cat ssarp$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
-                    cat ssarp$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
-
-                    cat x_posit.$N x_negat.$N | cut -d' ' -f2 | sort | uniq > ssarp$N.$TOPIC
-                    ssarp_relevants=`wc -l < x_posit.$N`
-
-                    echo "docs positivos coletados `wc -l < x_posit.$N`   docs negativos ----  `wc -l < x_negat.$N` --- total docs positivos `wc -l < sub_new_positivo.$N`"
-
-            fi
-
-
-
-            aux=`wc -l < x_negat.$N`
-            NotRel=$(($NotRel+$aux))
+# for x in 0 1 2 3 4 5 6 7 8 9 ; do
+#     for y in 0 1 2 3 4 5 6 7 8 9 ; do
 #
-            $DEBUG_MODE && echo "End of active learning step"
-            ###########################################
+#         if [ $NDUN -lt $NDOCS ] ; then
+#             export N=$x$y
+#
+#             echo "Runing round number  $N with $((NDOCS-NDUN)) documents"
+#             ######
+#             $DEBUG_MODE && echo "Preparing trainset..."
+#
+#
+#             try
+#             (
+#                 cp $TOPIC.synthetic.seed trainset
+#
+#                 cut -f2 docfils | shuf -n $R | sort | .././indexer "$JUDGECLASS".db $KEYSIZE $VALSIZE | sed -e's/[^ ]*/-1/' >> trainset
+#
+#             ) 2> $STD_ERROR_OUT
+#
+#             catch || {
+#                 exit_on_error
+#             }
+#
+#             $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
+#             $DEBUG_MODE && echo "Preparing seed (and x)... `wc -l < trainset`"
+#
+#             ######
+#             try
+#             (
+#                 #cat sub_new[0-9][0-9].$TOPIC > seed
+#                 cat ssarp* > seed
+#                 #cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' > x
+#                 #cat seed | sort | join -v1 - rel.$TOPIC.fil | sort -R | head -50000 | sed -e 's/^/-1 /' >> x
+#
+#                 cat seed | sort | join - rel.$TOPIC.fil | sed -e 's/^/1 /' | sort | uniq > x
+#                 cat seed | sort | join -v1 - rel.$TOPIC.fil | shuf -n 50000 | sed -e 's/^/-1 /' | sort | uniq  >> x
+#
+#             ) 2> $STD_ERROR_OUT
+#
+#             catch || {
+#                 exit_on_error
+#             }
+#
+#             $DEBUG_MODE && echo -e "${GREEN}Done. ${END} "
+#             $DEBUG_MODE &&  echo "Preparing trainset (pt 2)... `wc -l < trainset`"
+#
+#             ######
+#             try
+#             (
+#                 #sort -k2 x | join -12 - ../$JUDGECLASS.svm.fil | cut -d' ' -f2- | sort -n >> trainset
+#                 cut -d' ' -f2 x | .././indexer $JUDGECLASS.db $KEYSIZE $VALSIZE | cut -d' ' -f2- | paste -d' ' <(cut -d' ' -f1 x) - | sort -n >> trainset
+#
+#             ) 2> $STD_ERROR_OUT
+#
+#             catch || {
+#                 exit_on_error
+#             }
+#
+#
+#             $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
+#
+#             # Calculate relevant documents prevalence rate in the traning set
+#             RELTRAINDOC=`grep -E "^1\b" trainset | wc -l`
+#
+#             NOTRELTRAINDOC=`grep -E "^-1\b" trainset | wc -l`
+#
+#             PREVALENCERATE=`echo "scale=4; $RELTRAINDOC / ($RELTRAINDOC + $NOTRELTRAINDOC)" | bc`
+#
+#             echo $RELTRAINDOC $NOTRELTRAINDOC $PREVALENCERATE >> prevalence.rate
+#
+#             ######
+#             $DEBUG_MODE && echo "Training (Running SOFIA-ML)... `wc -l < trainset`"
+#
+#
+#
+#             try
+#             (
+#
+#
+#                 $SOFIA --learner_type logreg-pegasos --loop_type roc --lambda $LAMBDA --iterations 2000000 --training_file trainset --dimensionality 3300000  --model_out svm_model &> saida_classificador
+#
+#
+#                 RES=$?
+#
+#             ) 2> $STD_ERROR_OUT
+#
+#             catch || {
+#                 exit_on_error
+#             }
+#
+#
+#             $DEBUG_MODE && echo -e "${GREEN}Finished SOFIA-ML.${END}"
+#             $DEBUG_MODE &&  echo $RES
+#
+#             MAXTHREADS=5
+#             if [[ "$RES" -eq "0" ]] ; then
+#                 for z in svm.test.* ; do
+#
+#                     ######
+#
+#
+#                     while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
+#                         sleep 1
+#                     done
+#
+#
+#
+#                     try
+#                     (
+#
+#                         $SOFIA --test_file $z --dimensionality 3300000 --model_in svm_model --results_file pout.$z &> saida_classificador &
+#
+#
+#                     ) 2> $STD_ERROR_OUT
+#
+#                     catch || {
+#                         echo $ERROR_CODE
+#                         exit_on_error
+#                     }
+#
+#                 done
+#
+#                 wait
+#                 #waiting all threads complete their work
+#
+#             else
+#                 ######
+#
+#                 try
+#                 (
+#                     rm -f pout.svm.test.*
+#                     cut -f2      | sort -R | cat -n | sort -k2 | sed -e 's/ */-/' > pout.svm.test.1
+#
+#                 ) 2> $STD_ERROR_OUT
+#
+#
+#                 $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
+#
+#             fi
+#
+#
+#
+#             ######
+#             $DEBUG_MODE && echo "Starting SCAL process $N\nPreparing ranking.$N.$TOPIC..."
+#
+#
+#             try
+#             (
+#                 cat new[0-9][0-9].$TOPIC > seed.$TOPIC
+#                 cut -f1 pout.svm.test.* | ../fixnum | cat -n | join -o2.2,1.2 -t$'\t' - docfils | sort -k1 -n  > inlr.out.$N.$TOPIC
+#
+#                 $DEBUG_MODE && echo -e "${BLUE}\tinlr.out size =`wc -l < inlr.out.$N.$TOPIC` docfils  `wc -l <docfils `${END}"
+#
+#                 sort -n seed.$TOPIC > $TEMP
+#                 cat $TEMP | join  -v2 - inlr.out.$N.$TOPIC -2 1 | shuf |  sort -k 2 -r -g -s  > ranking.$N.$TOPIC
+#
+#             ) 2> $STD_ERROR_OUT
+#
+#             catch || {
+#                 exit_on_error
+#             }
+#
+#             $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
+#
+#             $DEBUG_MODE && echo "Preparing new$N.$TOPIC..."
+#
+#             ######
+#             try
+#             (
+#                 $DEBUG_MODE && echo -e "${BLUE}\tranking size `wc -l < ranking.$N.$TOPIC`${END}"
+#
+#                 cat ranking.$N.$TOPIC | cut -d' ' -f1 > new$N.$TOPIC
+#                 cp new$N.$TOPIC U$N
+#
+#                 cat new[0-9][0-9].$TOPIC > x
+#
+#                 if [ "$N" != "99" ] ; then
+#                     head -$L new$N.$TOPIC > $TEMP
+#                     mv $TEMP new$N.$TOPIC
+#                 fi
+#
+#             ) 2> $STD_ERROR_OUT
+#
+#             catch || {
+#                 exit_on_error
+#             }
+#             $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
+#
+#
+#
+#             : '
+#                 x armazena new($N - 1).$TOPIC
+#             '
+#
+#             # Limits the number of documents by 30
+#             if [ $L -le 30 ]; then
+#                 b=$L
+#             else
+#                 b=30
+#             fi
+#
+#             : '
+#                 The files sub_new$N represents a sample of at most 30
+#                     documents from the documents to be used in the iteration.
+#             '
+#             shuf -n $b new$N.$TOPIC > sub_new$N.$TOPIC
+#
+#             $DEBUG_MODE && echo -e "${BLUE}Number of labeled pairs: `wc -l < sub_new$N.$TOPIC`${END}"
+#
+#
+#
+#
+#             # judgefile tells which are the positive docs
+#             python2.7 ../doJudgementMain.py --topic=$TOPIC --judgefile=../judgement/qrels.$JUDGECLASS.list --input=sub_new$N.$TOPIC --output=rel.$TOPIC.$N.Judged.doc.list --record=$TOPIC.record.list
+#
+#             # rel.$TOPIC.Judged.doc.list contains the current relevant docs
+#
+#             cat rel.$TOPIC.$N.Judged.doc.list >> rel.$TOPIC.fil
+#             sort rel.$TOPIC.fil | uniq > $TEMP
+#             mv $TEMP rel.$TOPIC.fil
+#
+#
+#             $DEBUG_MODE && echo -e "${GREEN}Starting active learning${END}"
+#
+#          ############active learning
+#
+#
+#             if [ "$NotRel" -lt 3 ] || [ "$Rel" -lt 1000 ]
+#             then
+#
+#                 echo "store seed in ssarp file"
+#
+#                 cp sub_new$N.$TOPIC ssarp$N.$TOPIC
+#                 cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
+#
+#                 cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
+#
+#
+#
+#
+#
+#
+#
+#                 cat  x_negat.*   |  sort -k2  | join - ../$JUDGECLASS.svm.fil.svd   -2 1 -1 2 > seed_ssarp.$TOPIC
+#
+#
+#                 cat  x_posit.* | shuf -n 1 | sort -k2  | join - ../$JUDGECLASS.svm.fil.svd  -2 1 -1 2 >> seed_ssarp.$TOPIC
+#
+#
+#                 cut -d ' ' -f2- seed_ssarp.$TOPIC  > seed_ssarpB.$TOPIC
+#     #
+#
+#                 cp x_posit.$N sub_new_positivo.$N
+#                 cp x_negat.$N sub_new_negativo.$N
+#                 ssarp_relevants=`wc -l < x_posit.$N`
+#             else
+#
+#                 echo "creating files"
+#
+#                 cat sub_new$N.$TOPIC | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > temp_posit.$N.$TOPIC
+#                 cat sub_new$N.$TOPIC | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > temp_negat.$N.$TOPIC
+#
+#
+#                 cat temp_posit.$N.$TOPIC temp_negat.$N.$TOPIC |  sort -k2  | join - ../$JUDGECLASS.svm.fil.svd  -2 1 -1 2 > trainset.$N.$TOPIC
+#                 cut -d ' ' -f2- trainset.$N.$TOPIC  > trainsetB.$N.$TOPIC
+#
+#
+#
+#                 if [ "$flag_discretize" -eq '0' ]
+#                 then
+#                     echo "gerando os bins\n"
+#                     echo "python3 ../svd/convert_txt.py ../$JUDGECLASS.svm.fil.svd /tmp/total.$TOPIC.arff rel.$TOPIC.fil   "
+#                     python3 ../svd/convert_txt.py ../$JUDGECLASS.svm.fil.svd /tmp/total.$TOPIC.arff rel.$TOPIC.fil
+#
+#                     cd ../SSARP/run/
+#                     rm train*
+#                     .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff  50 10 10
+#                     cd -
+#                     echo "saindo da geração dos bins"
+#                     flag_discretize=1
+#                 fi
+#
+#                 echo "convertendo arquivo para txt"
+#                     python3 ../svd/convert_txt.py trainsetB.$N.$TOPIC out.$N.$TOPIC.arff rel.$TOPIC.fil
+#                     python3 ../svd/convert_txt.py seed_ssarpB.$TOPIC seed_out.$N.$TOPIC.arff rel.$TOPIC.fil
+#
+#
+#                     cp trainset.$N.$TOPIC ../SSARP/run/
+#                     cp seed_out.$N.$TOPIC.arff ../SSARP/run/
+#                     cp out.$N.$TOPIC.arff ../SSARP/run/
+#
+#
+#                 echo "executando alac $rules"
+#                     cd ../SSARP/run/
+#                     ./SSARPX.sh out.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out.$N.$TOPIC.arff $TOPIC $flag_allac_first_time $rules
+#                     flag_allac_first_time=$(($flag_allac_first_time+1))
+#                     cat label.$N.$TOPIC > /tmp/ssarp$N.$TOPIC
+#                     cd -
+#                     mv /tmp/ssarp$N.$TOPIC .
+#
+#                     cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > sub_new_positivo.$N
+#                     cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > sub_new_negativo.$N
+#
+#                     cat ssarp$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
+#                     cat ssarp$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
+#
+#                     cat x_posit.$N x_negat.$N | cut -d' ' -f2 | sort | uniq > ssarp$N.$TOPIC
+#                     ssarp_relevants=`wc -l < x_posit.$N`
+#
+#                     echo -e "${GREEN}Positives documents collected ... `wc -l < x_posit.$N`"
+#                     echo "Negative documents .............. `wc -l < x_negat.$N`"
+#                     echo -e "Total positives in sub sample ... `wc -l < sub_new_positivo.$N`${END}"
+#
+#             fi
+#
+#
+#
+#             aux=`wc -l < x_negat.$N`
+#             NotRel=$(($NotRel+`wc -l < x_negat.$N`))
+# #
+#             $DEBUG_MODE && echo "End of active learning step"
+#             ###########################################
+#
+#
+#
+#             RELFINDDOC=`wc -l < x_posit.$N`
+#             RELRATE=`echo "scale=4; $RELFINDDOC / $L" | bc`
+#             CURRENTREL=`cat  x_posit.[0-9][0-9] | wc -l`
+#
+#             alreadyLabeledDocs=`cat ssarp*  | wc -l`
+#             allDocs=`cat new[0-9][0-9].$TOPIC  | wc -l`
+#
+#             $DEBUG_MODE && echo "rel $RELFINDDOC L $L b $b  alreadyLabeledDocs $alreadyLabeledDocs  allDocs $allDocs REL $RELRATE CURRENTREL $CURRENTREL relevant docs `wc -l < rel.$TOPIC.fil` "
+#
+#
+#             aux=$((($RELFINDDOC*$L)/$b))
+#             Rel=$(($Rel+$aux*1000))
+#
+#             echo $RELFINDDOC $L $b $RELRATE $CURRENTREL >> rel.rate
+#             sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
+#
+#             cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
+#
+#             $DEBUG_MODE && echo "compute the Estimate ρ̂  of each round"
+#
+#             Temp_A=$(($RELFINDDOC*$L))
+#             Temp_B=$(($Temp_A/$b))
+#
+#             export Estimate=$(($Estimate+$Temp_B))
+#             echo "${N%.*} $Estimate" >> store_estimation
+#
+#             echo -e "${GREEN} $Temp_A $Temp_B $b $L Estimate rate is $Estimate"
+#
+#             NDUN=$((NDUN+L))
+#             L=$((L+(L+9)/10))
+#         fi
+#     done
+# done
+# exit
 
-
-
-            RELFINDDOC=`wc -l < x_posit.$N`
-            RELRATE=`echo "scale=4; $RELFINDDOC / $L" | bc`
-            CURRENTREL=`cat  x_posit.[0-9][0-9] | wc -l`
-
-            alreadyLabeledDocs=`cat ssarp*  | wc -l`
-            allDocs=`cat new[0-9][0-9].$TOPIC  | wc -l`
-
-            $DEBUG_MODE && echo "rel $RELFINDDOC L $L b $b  alreadyLabeledDocs $alreadyLabeledDocs  allDocs $allDocs REL $RELRATE CURRENTREL $CURRENTREL relevant docs `wc -l < rel.$TOPIC.fil` "
-
-            aux=$((($RELFINDDOC*$L)/$b))
-            Rel=$(($Rel+$aux*1000))
-
-            echo $RELFINDDOC $L $b $RELRATE $CURRENTREL >> rel.rate
-            sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
-
-            cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
-
-            $DEBUG_MODE && echo "compute the Estimate ρ̂  of each round"
-
-            Temp_A=$(($RELFINDDOC*$L))
-            Temp_B=$(($Temp_A/$b))
-
-            export Estimate=$(($Estimate+$Temp_B))
-            echo "${N%.*} $Estimate" >> store_estimation
-
-            echo -e "${GREEN} $Temp_A $Temp_B $b $L Estimate rate is $Estimate"
-
-            NDUN=$((NDUN+L))
-            L=$((L+(L+9)/10))
-        fi
-
-    done
-done
-
-
+bash ../training $TOPIC $QUERY $JUDGECLASS `echo $DEBUG_MODE`
+# exit
 echo "select the top 95% relevant documents  from the last ranking"
 echo " 20: Estimate ρ̂ = 1.05 "
 export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDOCS  " | bc`
