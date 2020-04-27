@@ -388,7 +388,7 @@ for round in $(seq -f "%02g" 0 99); do
 
             popd
 
-            $DEBUG_MODE && e_seccess "\tDone."
+            $DEBUG_MODE && e_success "\tDone."
 
             mv /tmp/ssarp$round.$TOPIC .
 
@@ -435,7 +435,7 @@ for round in $(seq -f "%02g" 0 99); do
             $DEBUG_MODE && e_info \
                 "Negative documents .............. `wc -l < x_negat.$round`"
             $DEBUG_MODE && e_info \
-                "Total positives in sub sample ... `wc -l < sub_new_positivo.$round`"
+                "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
 
         fi
 
