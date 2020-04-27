@@ -312,7 +312,7 @@ for round in $(seq -f "%02g" 0 99); do
         #-----------------------------------------------------------------
         else
 
-            $DEBUG_MODE && e_secondary "\Creating files..."
+            $DEBUG_MODE && e_secondary "\tCreating files..."
 
             # TODO: Check if the files temp_posit and temp_negat
             # could be united into a single file.

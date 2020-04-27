@@ -564,10 +564,9 @@ $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
 #         fi
 #     done
 # done
-# exit
 
 bash ../training $TOPIC $QUERY $JUDGECLASS `echo $DEBUG_MODE`
-# exit
+
 echo "select the top 95% relevant documents  from the last ranking"
 echo " 20: Estimate ρ̂ = 1.05 "
 export prevalence=`echo "scale=5; ($Estimate * 1.05) / $NDOCS  " | bc`
