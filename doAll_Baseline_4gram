@@ -17,7 +17,7 @@ else
 fi
 
 
-exit
+
 
 source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
@@ -147,7 +147,7 @@ for CORP in "${CORPLIST[@]}"; do
             rm -rf $TOPIC
             mkdir $TOPIC
             #echo "cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 > $TOPIC/goldendb"
-            cat judgement/qrels.$CORP.list | grep $TOPIC  | cut -d' ' -f3 | sort > $TOPIC/goldendb
+            cat judgement/qrels.$CORP.list | grep "$TOPIC "  | cut -d' ' -f3 | sort > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
 
@@ -242,16 +242,7 @@ for CORP in "${CORPLIST[@]}"; do
         cp $TOPIC.seed.doc ../$TOPIC.seed.doc
 
         popd
-<<<<<<<
-        if [[ $PRINT == "y" ]]; then
-            echo -e "${BLUE}Executing ./dofeaturesseed...${END}"
-        fi
-        ./dofeaturesseed $TOPIC.seed.doc $TOPIC $CORP $PRINT 
-        if [[ $PRINT == "y" ]]; then
-            echo -e "${GREEN}Finished ./dofeaturesseed${END}"
-            
-        fi
-=======
+
 
         $DEBUG_MODE && echo -e "${BLUE}Executing ./dofeaturesseed4...${END}"
 
@@ -259,7 +250,7 @@ for CORP in "${CORPLIST[@]}"; do
 
         $DEBUG_MODE && echo -e "${GREEN}Finished ./dofeaturesseed4${END}"
 
->>>>>>>
+
         pushd $TOPIC
 
         ######
@@ -324,7 +315,7 @@ for CORP in "${CORPLIST[@]}"; do
         $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
 
 
-        for x in 0 1 2 3 4 5 6 7 8 9 ; do
+        for x in 0 1 2 3 4 5 6 7 8 9; do
 
             for y in 0 1 2 3 4 5 6 7 8 9 ; do
 
@@ -334,7 +325,8 @@ for CORP in "${CORPLIST[@]}"; do
                     echo "Runing round number  $N with $((NDOCS-NDUN)) documents"
                     ######
                     $DEBUG_MODE && echo "Preparing trainset..."
-
+                    
+                    
 
                     try
                     (
@@ -537,7 +529,7 @@ for CORP in "${CORPLIST[@]}"; do
                     cat rel.$TOPIC.Judged.doc.list >> rel.$TOPIC.fil
                     cat rel.$TOPIC.Judged.doc.list > rel.$TOPIC.$N.Judged.doc.list
                     sort rel.$TOPIC.fil | uniq > temp
-<<<<<<<
+
                     mv temp rel.$TOPIC.fil 
                  
                     
@@ -546,8 +538,6 @@ for CORP in "${CORPLIST[@]}"; do
                 
                         
                         
-=======
-                    mv temp rel.$TOPIC.fil
 
 
 
@@ -563,18 +553,11 @@ for CORP in "${CORPLIST[@]}"; do
                         echo "store seed in ssarp file"
 
                         cp sub_new$N.$TOPIC ssarp$N.$TOPIC
->>>>>>>
+
                         cat sub_new$N.$TOPIC  | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit.$N
 
                         cat sub_new$N.$TOPIC   | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat.$N
 
-<<<<<<<
-                        
-    
-                        
-                        
-                        
-=======
 
 
 
@@ -650,19 +633,14 @@ for CORP in "${CORPLIST[@]}"; do
 
 
 
->>>>>>>
+
                     aux=`wc -l < x_negat.$N`
-<<<<<<<
+
                     NotRel=$(($NotRel+$aux))               
-    #                     
-                    
-                   
-=======
-                    NotRel=$(($NotRel+$aux))
+
     #
                     $DEBUG_MODE && echo "End of active learning step"
                     ###########################################
->>>>>>>
 
 
 
@@ -723,21 +701,21 @@ for CORP in "${CORPLIST[@]}"; do
 
         n=$(($NDOCS-$prevalence_int))
         tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
-<<<<<<<
+
         cat result_ranking.$TOPIC > result 
         cat sub_new[0-9][0-9]* >> result
         cat result | sort | uniq > temp
         mv temp result
-=======
+
 
 
         cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
->>>>>>>
+
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
         
 
-<<<<<<<
-        RevelantDocs=`cat result |  join - goldendb |  wc -l`
+
+        RelevantDocs=`cat result |  join - goldendb |  wc -l`
         NumberDocsResult=`wc -l < result`
         
         
@@ -759,8 +737,8 @@ for CORP in "${CORPLIST[@]}"; do
         echo "----------------------------------------------------------"    
         
          #rm -rf svm.test.*
-         popd
-=======
+        
+
 
         export relNumber=`cat result.$TOPIC | sort | uniq | join - goldendb | uniq | wc -l`
         NumberDocument=`cat result.$TOPIC | sort | uniq | wc -l`
@@ -779,29 +757,15 @@ for CORP in "${CORPLIST[@]}"; do
         echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${END}"
         ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
 
-
-#         rm -rf svm.test.*
->>>>>>>
-
-<<<<<<<
-         popd
-=======
-
->>>>>>>
-
-<<<<<<<
 # 
-         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-         #rm $TOPIC.seed.doc
-=======
-         popd
->>>>>>>
-
-=======
-
-
-         mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-         rm $TOPIC.seed.doc
+# popd
+#          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+#          #rm $TOPIC.seed.doc
+# popd
+# 
+# 
+#          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+#          rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 

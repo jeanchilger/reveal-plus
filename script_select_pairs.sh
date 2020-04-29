@@ -8,8 +8,8 @@
   echo "starting script stopping point with sliding windows of $5 ...."
   
   #spliting dataset into files of 30 docs
-  sort -k1 rel.$TOPIC.fil > temp
-  mv temp rel.$TOPIC.fil
+  sort -k1 goldendb > temp
+  mv temp goldendb
   rm -r data.$TOPIC
   mkdir data.$TOPIC
   pushd data.$TOPIC
@@ -58,7 +58,7 @@
         cat x_posit.* x_negat.*   | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
         cat out_after_ssarp.$TOPIC | sort | uniq > temp
         cp temp out_after_ssarp.$TOPIC    
-        echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda $perda_ac "
+        echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda $perda_ac "
         exit
     
     fi
@@ -73,7 +73,7 @@
     cat out_after_ssarp.$TOPIC | sort | uniq > temp
     cp temp out_after_ssarp.$TOPIC
    
-    r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l`
+    r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
     finalpares=`wc -l < out_after_ssarp.$TOPIC`
     total=$Rel
     recall=`echo "scale=6; ($r / $total)" | bc`
@@ -107,14 +107,14 @@
         
         pos=`grep "docs positivos coletados" /tmp/lixo.$TOPIC | cut -d' ' -f4`
         neg=`grep "docs negativos coletados" /tmp/lixo.$TOPIC | cut -d' ' -f11`      
-        real_posit=`cat clean_data | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l`
+        real_posit=`cat clean_data | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
         perda=$(($real_posit-$pos))
         perda_ac=$(($perda+$perda_ac))
         
         echo "$name pos  $pos neg  $neg  real posit $real_posit  perda $perda_ac"
         cat x_posit_ssarp_end.$j x_negat_ssarp_end.$j | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
         
-        r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l`
+        r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
         finalpares=`wc -l < out_after_ssarp.$TOPIC`
         total=$Rel
         recall=`echo "scale=6; ($r / $total)" | bc`
@@ -155,16 +155,16 @@
             cat /tmp/lixo.$TOPIC  
             pos=`grep "docs positivos coletados" /tmp/lixo.$TOPIC | cut -d' ' -f4`
             neg=`grep "docs positivos coletados" /tmp/lixo.$TOPIC | cut -d' ' -f11`      
-            real_posit=`cat new_data | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l`
+            real_posit=`cat new_data | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
             perda=$(($real_posit-$pos))
             perda_ac=$(($perda+$perda_ac))
             
             echo "$name pos  $pos neg  $neg  real posit $real_posit  perda $perda_ac"
             cat x_posit_ssarp_end.$j x_negat_ssarp_end.$j | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
             
-            r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - rel.$TOPIC.fil |  wc -l`
+            r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
             finalpares=`wc -l < out_after_ssarp.$TOPIC`
-            #total=`wc -l < rel.$TOPIC.fil`
+            #total=`wc -l < goldendb`
             total=$Rel
             recall=`echo "scale=6; ($r / $total)" | bc`
             precisao=`echo "scale=6; ($r / $finalpares)" | bc`

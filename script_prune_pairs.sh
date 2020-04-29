@@ -6,13 +6,13 @@ rules=$5
 
 echo "starting run ssarpx\n"
 #identify docs pos and neg
-cat $1 | sort | uniq | join - rel.$TOPIC.fil | cut -d' ' -f1 | sed -e 's/^/1 /' > temp_posit.$N.$TOPIC
-cat $1 | sort | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > temp_negat.$N.$TOPIC
+cat $1 | sort | uniq | join - goldendb | cut -d' ' -f1 | sed -e 's/^/1 /' > temp_posit.$N.$TOPIC
+cat $1 | sort | uniq | join - goldendb -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > temp_negat.$N.$TOPIC
 
 #produce the training set file used by SSARP
 cat temp_posit.$N.$TOPIC temp_negat.$N.$TOPIC |  sort -k2  | join - ../"$file".svm.fil.svd  -2 1 -1 2 > trainset.$N.$TOPIC
 cut -d ' ' -f2- trainset.$N.$TOPIC  > trainsetB.$N.$TOPIC
-python3 ../svd/convert_txt.py trainsetB.$N.$TOPIC trainset.$N.$TOPIC.arff rel.$TOPIC.fil
+python3 ../svd/convert_txt.py trainsetB.$N.$TOPIC trainset.$N.$TOPIC.arff goldendb
 
 cp seed_out.10.* seed_out
 #clean some files 
@@ -33,8 +33,8 @@ mv /tmp/ssarp$N.$TOPIC .
    
 
 #compute docs positivos and negativos          
-cat ssarp$N.$TOPIC   | sort -k 2 | uniq | join - rel.$TOPIC.fil  | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit_ssarp_end.$N
-cat ssarp$N.$TOPIC   | sort -k 2 | uniq | join - rel.$TOPIC.fil -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat_ssarp_end.$N
+cat ssarp$N.$TOPIC   | sort -k 2 | uniq | join - goldendb  | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit_ssarp_end.$N
+cat ssarp$N.$TOPIC   | sort -k 2 | uniq | join - goldendb -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > x_negat_ssarp_end.$N
 
 
 cat x_posit_ssarp_end.$N x_negat_ssarp_end.$N | sort | uniq > ssarpout$N.$TOPIC
