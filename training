@@ -270,7 +270,8 @@ for round in $(seq -f "%02g" 0 99); do
         $DEBUG_MODE && e_primary "Starting SSARP stage..."
 
         #-----------------------------------------------------------------
-        #
+        # the active learning method needs at least 1 negative and
+        # 1 positive document
         #-----------------------------------------------------------------
         if [ $not_relevants -lt 1 ] || [ $relevants -lt 1 ]; then
             $DEBUG_MODE && e_secondary "\tStoring seed in ssarp file..."

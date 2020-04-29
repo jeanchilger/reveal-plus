@@ -1,5 +1,8 @@
-# Scalable Continuous Active Learning (Refactor in progress)
-Scalable Continuous Active Learning (SCAL) applied to medical articles
+# (Refactor in Progress) Systematic Identification of Scientific Articles with Reduced user Effort
+
+## Overview
+Neste projeto, apresentamos uma nova técnica de revisão sistemática da literatura no contexto de artigos científicos, visando reduzir o esforço do usuário.
+In this project, we present a novel
 
 **Coordinating professor:** Guilherme Dal Bianco ([github](https://github.com/dbguilherme), [lattes]( http://lattes.cnpq.br/5152594034228273))
 
@@ -34,4 +37,3 @@ This option will run the code several times and take means and standard deviatio
 ## Credits
 
 This is a work intended to improve the CAL (Continuous Active Learning) protocol for TAR (Technology Assisted Review) processes by CORMACK, Gordon V. and GROSSMAN, Maura R. (2014). The code used is from [HTAustin](https://github.com/HTAustin)'s [CAL repository](https://github.com/HTAustin/CAL)
-
