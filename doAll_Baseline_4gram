@@ -118,17 +118,17 @@ catch || {
 $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
 
 # Total number of documents
-NDOCS=`cat docfils | wc -l`
+# NDOCS=`cat docfils | wc -l`
 # Number of documents already labeled
-NDUN=0
+# NDUN=0
 # Number of documents to be labeled in the current iteration
-L=1
-
-R=100
-LAMBDA=0.0001
-NotRel=0
-flag_discretize=0
-flag_allac_first_time=0
+# L=1
+#
+# R=100
+# LAMBDA=0.0001
+# NotRel=0
+# flag_discretize=0
+# flag_allac_first_time=0
 : '
     $TOPIC.seed.doc stores the $TOPIC query
 '
@@ -565,7 +565,7 @@ $DEBUG_MODE && echo -e "${GREEN}Done.${END}"
 #     done
 # done
 
-bash ../training $TOPIC $QUERY $JUDGECLASS `echo $DEBUG_MODE`
+source ../training $TOPIC $QUERY $JUDGECLASS `echo $DEBUG_MODE`
 
 echo "select the top 95% relevant documents  from the last ranking"
 echo " 20: Estimate ρ̂ = 1.05 "
@@ -576,17 +576,16 @@ prevalence_int=${m%.*}
 
 python3 ../selectRound.py store_estimation $prevalence_int
 
-
 export j=`cat flagOut`
 
-export t=`wc -l < U$j`
-
-
+export t=`wc -l < new$j.$TOPIC`
 
 
 NumberDocument=$(($NDOCS-$t))
 sort -k 2 -n inlr.out.$N.$TOPIC > sorted_ranking
 tail -$NumberDocument sorted_ranking | cut -d$'\t' -f1 > result_ranking.$TOPIC
+
+e_error "MIAAAAU: $NDOCS - $prevalence_int"
 
 n=$(($NDOCS-$prevalence_int))
 tail -$NDOCS sorted_ranking | cut -d' ' -f1 | head -$n > result_plus.$TOPIC
@@ -615,7 +614,7 @@ echo -e "${BLUE}calling second sampling strategy proposed by REVEAL ${END}"
 
 
 #         rm -rf svm.test.*
-
+wait
 
  popd
 
