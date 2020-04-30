@@ -1,29 +1,30 @@
 #!/bin/bash
 
-RED=""
-GREEN=""
-BLUE=""
-WHITE=""
-MAGENTA=""
-YELLOW=""
+COLORS_ON=true
+
+if ! $COLORS_ON; then
+    RED=""
+    GREEN=""
+    BLUE=""
+    WHITE=""
+    MAGENTA=""
+    YELLOW=""
+
+    END=""
+
+else
+    RED="\e[31;1m"
+    GREEN="\e[32;1m"
+    BLUE="\e[34;1m"
+    WHITE="\e[37;1m"
+    MAGENTA="\e[35;1m"
+    YELLOW="\e[33;1m"
+
+    END="\e[0m"
+fi
 
 
-END=""
-
-: '
-# Uncomment to show colors
-RED="\e[31;1m"
-GREEN="\e[32;1m"
-BLUE="\e[34;1m"
-WHITE="\e[37;1m"
-MAGENTA="\e[35;1m"
-YELLOW="\e[33;1m"
-
-
-END="\e[0m"
-'
-
-declare -A COLORS=( ["red"]="\e[31;1m" ["green"]="\e[32;1m" ["blue"]="\e[34;1m" ["white"]="\e[37;1m" ["magenta"]="\e[35;1m" ["yellow"]="\e[33;1m");
+declare -A COLORS=( ["red"]=$RED ["green"]=$GREEN ["blue"]=$BLUE ["white"]=$WHITE ["magenta"]=$MAGENTA ["yellow"]=$YELLOW);
 
 e_error () {
     echo -e "${COLORS[red]}${1}${END}";

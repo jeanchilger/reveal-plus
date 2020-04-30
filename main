@@ -1,0 +1,193 @@
+#!/bin/bash
+#===============================================================================
+#       USAGE:  ./main [options] (see usage function below)
+#
+# DESCRIPTION:  Performs the management of the other resources, providing
+#               argument parsing.
+#===============================================================================
+
+export ABS_PATH=`pwd`
+
+source "${ABS_PATH}/handle_errors"
+
+#=== FUNCTION =============================================
+# Display usage information for this script.
+#
+# Parameters:
+#    None
+#==========================================================
+function show_usage() {
+    echo "Usage: ./main [-s <samples>|--samples=<samples>]
+              [-c <corpus>|--corpus=<corpus>] [-d|--debug]
+              [-o|--off-colors] -t <topic-list>|--topics <topic-list>
+              [-h|--help]"
+}
+
+#=== FUNCTION =============================================
+# Display detailed information about command options and
+# its parameters
+#
+# Parameters:
+#    None
+#==========================================================
+function show_help() {
+    show_usage
+
+    e_secondary "-s <samples>, --samples=<samples>"
+    echo "      Set <samples> as the quantity of executions that will occurs."
+    echo "      After, the mean and standard deviation over the samples are taken."
+    echo "      The standard value is 1."
+
+    echo ""
+    e_secondary "-c <corpus>, --corpus=<corpus>"
+    echo "      Specifies the name of the corpus to be used."
+
+    echo ""
+    e_secondary "-t <topic-list>, --topics=<topic-list>"
+    echo "      Specifies which topics will be computed by the method."
+    echo "      <topic-list> must be a space separated string, containing"
+    echo "      one or more topics."
+
+    echo ""
+    e_secondary "-d, --debug"
+    echo "      If specified, turns on the debug mode, showing verbose messages."
+
+    echo ""
+    e_secondary "-o, --off-colors"
+    echo "      Turns off colors of terminal outputs."
+
+    echo ""
+    e_secondary "-h, --help"
+    echo "      Show this message."
+}
+
+
+#----------------------------------------------------------------------
+# set standard values
+#----------------------------------------------------------------------
+POSITIONAL=()                   # stores not recognized parameters
+SAMPLES=1
+CORPUS="toyDataset"
+DEBUG_MODE="n"
+TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
+
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
+
+#----------------------------------------------------------------------
+# space separated argument parsing
+#----------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    key=$1; shift
+
+    case $key in
+        -s )
+            SAMPLES=$1
+            shift
+            ;;
+
+        -c )
+            CORPUS=$1
+            shift
+            ;;
+
+        -t )
+            declare -a TOPICS_CONSIDERED=($1)
+            shift
+            ;;
+
+        -d | --debug )
+            DEBUG_MODE="y"
+            ;;
+
+        -o | --off-colors )
+            sed -r -i "s/COLORS_ON=true/COLORS_ON=false/" colors
+            source "${ABS_PATH}/colors"
+            ;;
+
+        -h | --help )
+            show_help
+            exit
+            ;;
+
+        * )
+            POSITIONAL+=("$key")
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL[@]}"
+
+#----------------------------------------------------------------------
+# equals separated argument parsing
+#----------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    key=$1; shift
+
+    case $key in
+        --samples=* )
+            SAMPLES="${key#*=}"
+            shift
+            ;;
+
+        --corpus=* )
+            CORPUS="${key#*=}"
+            shift
+            ;;
+
+        --topics=* )
+            topics="${key#*=}"
+            declare -a TOPICS_CONSIDERED=($topics)
+            ;;
+
+        * )
+            e_error "Unknown option '$key'."
+            show_usage
+            exit
+            ;;
+    esac
+done
+
+if [[ $TOPICS_CONSIDERED == "empty" ]]; then
+    e_error "Topics must be explicitly specified, but none where given."
+    show_usage
+    exit
+fi
+
+#----------------------------------------------------------------------
+# prepare directories, runs main code
+#----------------------------------------------------------------------
+RESULT_DIR="result/baseline"
+ALL_RESULTS_HELPER="all_results/runs.describe.txt"
+
+rm -rf all_results
+mkdir all_results
+
+rm -rf results
+mkdir results
+
+for i in $(seq -f "%02g" ${SAMPLES}); do
+
+    e_info "Running sample ${i}."
+
+    rm -rf all_results/result-${i}
+    mkdir all_results/result-${i}
+
+    if [ -f "$CORPUS.svm.fil" ]; then
+        bash doAll_Baseline_4gram true $CORPUS $DEBUG_MODE "${TOPICS_CONSIDERED[@]}"
+
+    else
+        bash doAll_Baseline_4gram false $CORPUS $DEBUG_MODE "${TOPICS_CONSIDERED[@]}"
+    fi
+
+    for topic in `ls ${RESULT_DIR}/${CORPUS}/`; do
+        cp "${RESULT_DIR}/${CORPUS}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate
+
+        echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
+    done
+done
+
+e_info "Finished taking results...\nComputing mean and standard deviation of samples."
+
+python3 buildResults.py                               # takes mean and standard deviations
+
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option
