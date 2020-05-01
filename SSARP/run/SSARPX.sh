@@ -67,6 +67,7 @@ echo ../discretize_TUBE.pl train-$suffix train_nohead.arff $numfeatures  lac_tra
 # echo  ./updateRows.pl lac_train_TUBE.txt lac_train_TUBEfinal.txt $numfeatures
 ./updateRows.pl lac_train_TUBE.txt.$topic lac_train_TUBEfinal.txt.$topic $vez
 
+tail -n 1 alac_lac_train_TUBEfinal.txt.$topic | grep "CLASS=0"  >> lac_train_TUBEfinal.txt.$topic
 
 
 if [ $time -eq 1 ]; 

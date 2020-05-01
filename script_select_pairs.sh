@@ -14,7 +14,7 @@
   mkdir data.$TOPIC
   pushd data.$TOPIC
         
-  split -l 30 -d  ../result_ranking.$TOPIC xxx --suffix-length=6
+  split -l 30 -d  ../ranking_final.$TOPIC xxx --suffix-length=6
   len=`ls | wc -l`
   len=$(($len))
   popd
@@ -96,9 +96,9 @@
 
         cat $name | sort > temp
         cat x_negat.* x_posit.* | cut -d' ' -f2 | sort | join - temp -v2 | sort > clean_data #data without already labeled docs 
-       echo "script prune pairs..."
+        echo "script prune pairs..."
          .././script_prune_pairs.sh clean_data  $j $TOPIC $inicialize_allac $rules $sliding_windows >  /tmp/lixo.$TOPIC
-	inicialize_allac=3
+        inicialize_allac=3
         cat /tmp/lixo.$TOPIC
         
         ####################################
