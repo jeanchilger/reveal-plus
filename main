@@ -196,27 +196,6 @@ mkdir all_results
 rm -rf results
 mkdir results
 
-#----------------------------------------------------------------------
-# if data is already prepared, skips data extraction
-#----------------------------------------------------------------------
-if [ ! -f "${CORPUS}.svm.fil" ]; then
-    pushd Corpus
-
-    e_primary "Preparing dataset (executing dofast)..."
-    ./dofast "$CORPUS" $DEBUG_MODE
-    e_success "Done."
-
-    cp "$CORPUS".df ../"$CORPUS".df > /dev/null
-
-    cp "$CORPUS".svm.fil ../"$CORPUS".svm.fil
-
-    e_primary "Running feature compression SVD..."
-    ../svd/./script_create_svd.sh  ../$CORPUS.svm.fil 10
-    e_success "Done."
-
-    popd
-fi
-
 #-------------------------------------------------------------------------
 # runs the main code <SAMPLES> times
 #-------------------------------------------------------------------------
@@ -226,8 +205,6 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
     rm -rf all_results/result-${i}
     mkdir all_results/result-${i}
-
-    # bash doAll_Baseline_4gram $CORPUS `echo "$DEBUG_MODE"` "${TOPICS_CONSIDERED[@]}"
 
     #---------------------------------------------------------------------
     # iterates over every topic:query pair, and executes the method for
@@ -239,7 +216,6 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         TOPIC="${TEXT[0]}"
 
         if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
-            e_info "Skipping topic '$TOPIC'."
             continue
         fi
 
@@ -256,7 +232,78 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "${WHITE}Topic${END}:$TOPIC"
         echo -e "${WHITE}Query${END}:$QUERY"
 
-        bash doAll_Baseline_4gram $CORPUS `echo "$DEBUG_MODE"` $TOPIC $QUERY
+        source ./preprocess $CORPUS `echo $DEBUG_MODE` $TOPIC $QUERY
+        source ./training $TOPIC $QUERY $CORPUS `echo $DEBUG_MODE` $KEYSIZE $VALSIZE
+
+        pushd $TOPIC
+
+        $DEBUG_MODE && echo "Select the top 95% relevant documents from the last ranking."
+        $DEBUG_MODE && echo "20: Estimate ρ̂ = 1.05."
+        export prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
+            | bc`
+
+        $DEBUG_MODE && echo "Prevalence: $prevalence"
+
+        export m=`echo "scale=5; ($prevalence * $TOTAL_DOCUMENTS ) * 0.90" \
+            | bc`
+        prevalence_int=${m%.*}
+
+        python3 ../selectRound.py store_estimation $prevalence_int
+
+        export j=`cat flagOut`
+
+        export t=`wc -l < new$j.$TOPIC`
+
+        documents_retrieved=$(($TOTAL_DOCUMENTS - $t))
+
+        sort -k 2 -n inlr.out.$round.$TOPIC > sorted_ranking
+
+        tail -$documents_retrieved sorted_ranking \
+            | cut -d$'\t' -f1 > result_ranking.$TOPIC
+
+        n=$(($TOTAL_DOCUMENTS - $prevalence_int))
+
+        tail -$TOTAL_DOCUMENTS sorted_ranking \
+            | cut -d' ' -f1 \
+            | head -$n > result_plus.$TOPIC
+
+        cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
+
+        $DEBUG_MODE && echo "t = $t; j = $j; documents_retrieved = $documents_retrieved; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
+
+        export relevants_found=`cat result.$TOPIC \
+            | sort \
+            | uniq \
+            | join - goldendb \
+            | uniq \
+            | wc -l`
+
+        documents_retrieved=`cat result.$TOPIC \
+            | sort \
+            | uniq \
+            | wc -l`
+
+        total=`wc -l < goldendb`
+
+        recall=`echo "scale=5; ($relevants_found / $total)" \
+            | bc`
+
+        precision=`echo "scale=5; ($relevants_found / $documents_retrieved)" \
+            | bc`
+
+        e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
+        echo -e "\tRelevants: $relevants_found"
+        echo -e "\tDocuments retrieved: $documents_retrieved"
+        echo -e "\tRecall: $recall"
+        echo -e "\tPrecision: $precision"
+
+        e_primary "Calling second sampling strategy proposed by REVEAL"
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
+
+        popd
+
+        mv $TOPIC "${RESULT_DIR}/"
+        rm $TOPIC.seed.doc
 
     done < "judgement/$CORPUS.topic.stemming.txt"
 

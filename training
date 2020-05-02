@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #===============================================================================
-#       USAGE:  ./training <topic> <query> <debug>
+#       USAGE:  ./training <topic> <query> <judgeclass> <verbose>
+#                          <keysize> <valsize>
 #
 # DESCRIPTION:  Contains the training loop that judges files as relevant or not.
 #===============================================================================
@@ -15,8 +16,14 @@ TOPIC=$1; shift
 QUERY=$1; shift
 JUDGECLASS=$1; shift
 DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
+KEYSIZE=$1; shift
+VALSIZE=$1; shift
+
 MAXTHREADS=5
 rules=5
+
+pushd $TOPIC
+
 
 R=100                                   # Document sample size going to trainset
 LAMBDA=0.0001                           # Lambda parameter for SVM
@@ -34,19 +41,12 @@ not_relevants=0                          # Documents not relevant so far
 relevants=0                              # Documents relevant so far
 
 #-------------------------------------------------------------------------
-# parameters for kissdb, later this will be calculated somewhere else
-#-------------------------------------------------------------------------
-KEYSIZE=$(awk 'BEGIN{a=0}{len = length($1); a=a<len?len:a}END{print a}' $JUDGECLASS.svm.fil)
-VALSIZE=$(awk 'BEGIN{a=0}{len = length($0); a=a<len?len:a}END{print a}' $JUDGECLASS.svm.fil)
-KEYSIZE=$((KEYSIZE+2))
-VALSIZE=$((VALSIZE+2))
-
-#-------------------------------------------------------------------------
 # performs the 100 looping rounds
 #-------------------------------------------------------------------------
-for round in $(seq -f "%02g" 0 99); do
+for _round in $(seq -f "%02g" 0 99); do
 
     if [ $LABELED_DOCUMENTS -lt $TOTAL_DOCUMENTS ]; then
+        export round=$_round
 
         $DEBUG_MODE && e_primary "Preparing trainset..."
 
@@ -341,7 +341,7 @@ for round in $(seq -f "%02g" 0 99); do
             #
             #-------------------------------------------------------------
             if [ $discretize -eq 0 ]; then
-                $DEBUG_MODE && e_secondary "\t Generating bins"
+                $DEBUG_MODE && e_secondary "\tGenerating bins"
 
                 python3 ../svd/convert_txt.py \
                     ../$JUDGECLASS.svm.fil.svd \
@@ -485,5 +485,10 @@ for round in $(seq -f "%02g" 0 99); do
     fi
 done
 
-export Estimate=estimate
-export NDOCS=TOTAL_DOCUMENTS
+# TODO: Change this approach
+export estimate=$estimate
+export TOTAL_DOCUMENTS=$TOTAL_DOCUMENTS
+export rules=$rules
+export N=$round
+
+popd
