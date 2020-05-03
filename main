@@ -52,7 +52,7 @@ contains() {
 #==========================================================
 function show_usage() {
     echo "Usage: ./main [-s <samples>|--samples=<samples>]
-              [-c <corpus>|--corpus=<corpus>] [-d|--debug]
+              [-c <corpus>|--corpus=<corpus>] [-v|--verbose]
               [-o|--off-colors] -t <topic-list>|--topics <topic-list>
               [-h|--help]"
 }
@@ -83,8 +83,8 @@ function show_help() {
     echo "      one or more topics."
 
     echo ""
-    e_secondary "-d, --debug"
-    echo "      If specified, turns on the debug mode, showing verbose messages."
+    e_secondary "-v, --verbose"
+    echo "      If specified, verbose messages will be shown during execution."
 
     echo ""
     e_secondary "-o, --off-colors"
@@ -102,7 +102,7 @@ function show_help() {
 POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
 CORPUS="toyDataset"
-DEBUG_MODE=false
+VERBOSE=false
 TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
@@ -129,8 +129,8 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
 
-        -d | --debug )
-            DEBUG_MODE=true
+        -v | --verbose )
+            VERBOSE=true
             ;;
 
         -o | --off-colors )
@@ -232,17 +232,17 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "${WHITE}Topic${END}:$TOPIC"
         echo -e "${WHITE}Query${END}:$QUERY"
 
-        source ./preprocess $CORPUS `echo $DEBUG_MODE` $TOPIC $QUERY
-        source ./training $TOPIC $QUERY $CORPUS `echo $DEBUG_MODE` $KEYSIZE $VALSIZE
+        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC $QUERY
+        source ./training $TOPIC $QUERY $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE
 
         pushd $TOPIC
 
-        $DEBUG_MODE && echo "Select the top 95% relevant documents from the last ranking."
-        $DEBUG_MODE && echo "20: Estimate ρ̂ = 1.05."
+        $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."
+        $VERBOSE && echo "20: Estimate ρ̂ = 1.05."
         export prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
             | bc`
 
-        $DEBUG_MODE && echo "Prevalence: $prevalence"
+        $VERBOSE && echo "Prevalence: $prevalence"
 
         export m=`echo "scale=5; ($prevalence * $TOTAL_DOCUMENTS ) * 0.90" \
             | bc`
@@ -269,7 +269,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
 
-        $DEBUG_MODE && echo "t = $t; j = $j; documents_retrieved = $documents_retrieved; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
+        $VERBOSE && echo "t = $t; j = $j; documents_retrieved = $documents_retrieved; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
 
         export relevants_found=`cat result.$TOPIC \
             | sort \

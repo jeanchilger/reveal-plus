@@ -15,7 +15,7 @@ SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
 TOPIC=$1; shift
 QUERY=$1; shift
 JUDGECLASS=$1; shift
-DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
+VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
 KEYSIZE=$1; shift
 VALSIZE=$1; shift
 
@@ -48,7 +48,7 @@ for _round in $(seq -f "%02g" 0 99); do
     if [ $LABELED_DOCUMENTS -lt $TOTAL_DOCUMENTS ]; then
         export round=$_round
 
-        $DEBUG_MODE && e_primary "Preparing trainset..."
+        $VERBOSE && e_primary "Preparing trainset..."
 
         try
         (
@@ -66,9 +66,9 @@ for _round in $(seq -f "%02g" 0 99); do
             exit_on_error
         }
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
-        $DEBUG_MODE && e_primary "Preparing seed..."
+        $VERBOSE && e_primary "Preparing seed..."
 
         try
         (
@@ -95,9 +95,9 @@ for _round in $(seq -f "%02g" 0 99); do
             exit_on_error
         }
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
-        $DEBUG_MODE && e_primary "Adding content from seed to trainset..."
+        $VERBOSE && e_primary "Adding content from seed to trainset..."
 
         try
         (
@@ -113,7 +113,7 @@ for _round in $(seq -f "%02g" 0 99); do
             exit_on_error
         }
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
         #-----------------------------------------------------------------
         # calculate the prevalence of relevant documents on training set
@@ -126,7 +126,7 @@ for _round in $(seq -f "%02g" 0 99); do
 
         echo $REL_ON_TRAINSET $NOT_REL_ON_TRAINSET $PREVALENCE_RATE >> prevalence.rate
 
-        $DEBUG_MODE && e_primary "Executing training algorithm (sofia-ml)..."
+        $VERBOSE && e_primary "Executing training algorithm (sofia-ml)..."
 
         try
         (
@@ -143,7 +143,7 @@ for _round in $(seq -f "%02g" 0 99); do
             exit_on_error
         }
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
         #-----------------------------------------------------------------
         # tests the previously trained model
@@ -154,7 +154,7 @@ for _round in $(seq -f "%02g" 0 99); do
                     sleep 1
                 done
 
-                $DEBUG_MODE && e_primary "Testing previously trained model..."
+                $VERBOSE && e_primary "Testing previously trained model..."
 
                 try
                 (
@@ -168,7 +168,7 @@ for _round in $(seq -f "%02g" 0 99); do
                     exit_on_error
                 }
 
-                $DEBUG_MODE && e_success "Done."
+                $VERBOSE && e_success "Done."
 
             done
 
@@ -194,7 +194,7 @@ for _round in $(seq -f "%02g" 0 99); do
             }
         fi
 
-        $DEBUG_MODE && e_primary "Preparing ranking.$round.$TOPIC..."
+        $VERBOSE && e_primary "Preparing ranking.$round.$TOPIC..."
 
         try
         (
@@ -218,9 +218,9 @@ for _round in $(seq -f "%02g" 0 99); do
             exit_on_error
         }
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
-        $DEBUG_MODE && e_primary "Preparing new$round.$TOPIC."
+        $VERBOSE && e_primary "Preparing new$round.$TOPIC."
 
         try
         (
@@ -240,9 +240,9 @@ for _round in $(seq -f "%02g" 0 99); do
             exit_on_error
         }
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
-        $DEBUG_MODE && e_primary "Starting SCAL subsampling..."
+        $VERBOSE && e_primary "Starting SCAL subsampling..."
 
         if [ $SAMPLE_SIZE -le 30 ]; then
             sub_sample=$SAMPLE_SIZE
@@ -265,15 +265,15 @@ for _round in $(seq -f "%02g" 0 99); do
         sort rel.$TOPIC.fil | uniq > $TEMP_FILE
         mv $TEMP_FILE rel.$TOPIC.fil
 
-        $DEBUG_MODE && e_success "Done."
+        $VERBOSE && e_success "Done."
 
-        $DEBUG_MODE && e_primary "Starting SSARP stage..."
+        $VERBOSE && e_primary "Starting SSARP stage..."
 
         #-----------------------------------------------------------------
         #
         #-----------------------------------------------------------------
         if [ $not_relevants -lt 1 ] || [ $relevants -lt 1 ]; then
-            $DEBUG_MODE && e_secondary "\tStoring seed in ssarp file..."
+            $VERBOSE && e_secondary "\tStoring seed in ssarp file..."
 
             cp sub_new$round.$TOPIC ssarp$round.$TOPIC
 
@@ -312,7 +312,7 @@ for _round in $(seq -f "%02g" 0 99); do
         #-----------------------------------------------------------------
         else
 
-            $DEBUG_MODE && e_secondary "\tCreating files..."
+            $VERBOSE && e_secondary "\tCreating files..."
 
             # TODO: Check if the files temp_posit and temp_negat
             # could be united into a single file.
@@ -341,7 +341,7 @@ for _round in $(seq -f "%02g" 0 99); do
             #
             #-------------------------------------------------------------
             if [ $discretize -eq 0 ]; then
-                $DEBUG_MODE && e_secondary "\tGenerating bins"
+                $VERBOSE && e_secondary "\tGenerating bins"
 
                 python3 ../svd/convert_txt.py \
                     ../$JUDGECLASS.svm.fil.svd \
@@ -355,7 +355,7 @@ for _round in $(seq -f "%02g" 0 99); do
                 discretize=1
             fi
 
-            $DEBUG_MODE && e_secondary "\tConverting files to txt..."
+            $VERBOSE && e_secondary "\tConverting files to txt..."
 
             python3 ../svd/convert_txt.py \
                 trainset_labels.$round.$TOPIC \
@@ -371,7 +371,7 @@ for _round in $(seq -f "%02g" 0 99); do
             cp seed_out.$round.$TOPIC.arff ../SSARP/run/
             cp out.$round.$TOPIC.arff ../SSARP/run/
 
-            $DEBUG_MODE && e_primary "\tExecuting alac rules..."
+            $VERBOSE && e_primary "\tExecuting alac rules..."
 
             pushd ../SSARP/run/
             ./SSARPX.sh out.$round.$TOPIC \
@@ -388,7 +388,7 @@ for _round in $(seq -f "%02g" 0 99); do
 
             popd
 
-            $DEBUG_MODE && e_success "\tDone."
+            $VERBOSE && e_success "\tDone."
 
             mv /tmp/ssarp$round.$TOPIC .
 
@@ -430,16 +430,16 @@ for _round in $(seq -f "%02g" 0 99); do
 
             ssarp_relevants=`wc -l < x_posit.$round`
 
-            $DEBUG_MODE && e_info \
+            $VERBOSE && e_info \
                 "Positives documents collected ... `wc -l < x_posit.$round`"
-            $DEBUG_MODE && e_info \
+            $VERBOSE && e_info \
                 "Negative documents .............. `wc -l < x_negat.$round`"
-            $DEBUG_MODE && e_info \
+            $VERBOSE && e_info \
                 "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
 
         fi
 
-        $DEBUG_MODE && e_success "Active learning step finished."
+        $VERBOSE && e_success "Active learning step finished."
 
         #-----------------------------------------------------------------
         # statics calculation
@@ -454,14 +454,14 @@ for _round in $(seq -f "%02g" 0 99); do
         already_labeled_docs=`cat ssarp* | wc -l`
         all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
 
-        $DEBUG_MODE && e_info "\tRelevants ......... $rel_found_sample"
-        $DEBUG_MODE && e_info "\tSample size ....... $SAMPLE_SIZE"
-        $DEBUG_MODE && e_info "\tSub sample size ... $sub_sample"
-        $DEBUG_MODE && e_info "\tAlready labeled ... $already_labeled_docs"
-        $DEBUG_MODE && e_info "\tAll docs .......... $all_docs"
-        $DEBUG_MODE && e_info "\tRelevants rate .... $rel_rate"
-        $DEBUG_MODE && e_info "\tCurrent relevants . $current_rel"
-        $DEBUG_MODE && e_info "\tTotal relevants ... `wc -l < rel.$TOPIC.fil`"
+        $VERBOSE && e_info "\tRelevants ......... $rel_found_sample"
+        $VERBOSE && e_info "\tSample size ....... $SAMPLE_SIZE"
+        $VERBOSE && e_info "\tSub sample size ... $sub_sample"
+        $VERBOSE && e_info "\tAlready labeled ... $already_labeled_docs"
+        $VERBOSE && e_info "\tAll docs .......... $all_docs"
+        $VERBOSE && e_info "\tRelevants rate .... $rel_rate"
+        $VERBOSE && e_info "\tCurrent relevants . $current_rel"
+        $VERBOSE && e_info "\tTotal relevants ... `wc -l < rel.$TOPIC.fil`"
 
         relevants=$(($relevants + \
             ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
@@ -477,7 +477,7 @@ for _round in $(seq -f "%02g" 0 99); do
         echo "${round%.*} $estimate" >> store_estimation
 
 
-        $DEBUG_MODE && e_secondary "Estimate rate is: $estimate"
+        $VERBOSE && e_secondary "Estimate rate is: $estimate"
 
 
         LABELED_DOCUMENTS=$(($LABELED_DOCUMENTS + $SAMPLE_SIZE))

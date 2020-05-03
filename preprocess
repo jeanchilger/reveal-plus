@@ -10,7 +10,7 @@ source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
 JUDGECLASS=$1; shift
-DEBUG_MODE=false; [[ $1 == "true" ]] && DEBUG_MODE=true; shift
+VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
 TOPIC=$1; shift
 QUERY=$1; shift
 
@@ -21,7 +21,7 @@ if [ ! -f "${JUDGECLASS}.svm.fil" ]; then
     pushd Corpus
 
     e_primary "Preparing dataset (executing dofast)..."
-    ./dofast "$JUDGECLASS" $DEBUG_MODE
+    ./dofast "$JUDGECLASS" $VERBOSE
     e_success "Done."
 
     cp "$JUDGECLASS".df ../"$JUDGECLASS".df > /dev/null
@@ -37,7 +37,7 @@ fi
 
 RESULT_DIR="result/${JUDGECLASS}"
 
-$DEBUG_MODE && e_primary "Creating directories to store results..."
+$VERBOSE && e_primary "Creating directories to store results..."
 
 try
 (
@@ -50,9 +50,9 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
-$DEBUG_MODE && e_primary "Creating topic directory..."
+$VERBOSE && e_primary "Creating topic directory..."
 
 try
 (
@@ -65,9 +65,9 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
-$DEBUG_MODE && e_primary "Creating goldendb..."
+$VERBOSE && e_primary "Creating goldendb..."
 
 try
 (
@@ -82,9 +82,9 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
-$DEBUG_MODE && e_primary "Creating file with total number of docs..."
+$VERBOSE && e_primary "Creating file with total number of docs..."
 
 try
 (
@@ -96,7 +96,7 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
 pushd $TOPIC
 
@@ -104,7 +104,7 @@ echo "$QUERY" > "$TOPIC".seed.doc
 
 ln -n ../$JUDGECLASS.svm.fil $JUDGECLASS.svm.fil
 
-$DEBUG_MODE && echo "Preparing 'docfils' file with all documents..."
+$VERBOSE && echo "Preparing 'docfils' file with all documents..."
 
 try
 (
@@ -120,9 +120,9 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
-$DEBUG_MODE && echo "Preparing auxiliary and result files..."
+$VERBOSE && echo "Preparing auxiliary and result files..."
 
 try
 (
@@ -144,27 +144,27 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
 cp $TOPIC.seed.doc ../$TOPIC.seed.doc
 
 popd
 
-$DEBUG_MODE && e_primary "Executing ./dofeaturesseed..."
-./dofeaturesseed $TOPIC.seed.doc $TOPIC $JUDGECLASS $DEBUG_MODE
-$DEBUG_MODE && e_success "Finished ./dofeaturesseed."
+$VERBOSE && e_primary "Executing ./dofeaturesseed..."
+./dofeaturesseed $TOPIC.seed.doc $TOPIC $JUDGECLASS $VERBOSE
+$VERBOSE && e_success "Finished ./dofeaturesseed."
 
 pushd $TOPIC
 
 # TODO: Adds error detection here.
-$DEBUG_MODE && e_primary "Preparing ../$JUDGECLASS.svm.fil (runs ../dosplit)..."
+$VERBOSE && e_primary "Preparing ../$JUDGECLASS.svm.fil (runs ../dosplit)..."
 
 sed -e 's/[^ ]*/0/' ../$JUDGECLASS.svm.fil \
     | ../dosplit
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
-$DEBUG_MODE && e_primary "Preparing $TOPIC.synthetic.seed..."
+$VERBOSE && e_primary "Preparing $TOPIC.synthetic.seed..."
 
 try
 (
@@ -176,7 +176,7 @@ catch || {
     exit_on_error
 }
 
-$DEBUG_MODE && e_success "Done."
+$VERBOSE && e_success "Done."
 
 #-------------------------------------------------------------------------
 # set kissdb parameters and execute it if database doesn't exists
@@ -189,7 +189,7 @@ export KEYSIZE=$((KEYSIZE+2))
 export VALSIZE=$((VALSIZE+2))
 
 if [ ! -f "../$JUDGECLASS.db" ]; then
-    $DEBUG_MODE && e_primary "Indexing $JUDGECLASS, keysize = $KEYSIZE, valsize = $VALSIZE"
+    $VERBOSE && e_primary "Indexing $JUDGECLASS, keysize = $KEYSIZE, valsize = $VALSIZE"
 
     try
     (
@@ -201,7 +201,7 @@ if [ ! -f "../$JUDGECLASS.db" ]; then
         exit_on_error
     }
 
-    $DEBUG_MODE && e_success "Done."
+    $VERBOSE && e_success "Done."
 fi
 
 popd
