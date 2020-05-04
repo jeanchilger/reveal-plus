@@ -103,7 +103,7 @@ POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
 CORPUS="toyDataset"
 VERBOSE=false
-TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
+TOPICS_CONSIDERED="tr0"      # dummy value for empty topic list verification
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
 
@@ -233,8 +233,9 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "${WHITE}Query${END}:$QUERY"
 
         source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC $QUERY
+        trap "echo EXIT ERROR.>&2;exit" SIGUSR1
         source ./training $TOPIC $QUERY $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE
-
+        trap "echo EXIT ERROR.>&2;exit" SIGUSR1
         pushd $TOPIC
 
         $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."

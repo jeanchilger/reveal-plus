@@ -47,7 +47,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -62,7 +62,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -79,7 +79,7 @@ cat judgement/qrels.$JUDGECLASS.list \
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -93,7 +93,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -117,7 +117,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -141,7 +141,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -173,7 +173,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    exit_on_error
+    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 
 $VERBOSE && e_success "Done."
@@ -198,7 +198,7 @@ if [ ! -f "../$JUDGECLASS.db" ]; then
     ) 2> $STD_ERROR_OUT
 
     catch || {
-        exit_on_error
+        kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
     }
 
     $VERBOSE && e_success "Done."
