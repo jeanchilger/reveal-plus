@@ -705,13 +705,18 @@ for CORP in "${CORPLIST[@]}"; do
         cat result_ranking.$TOPIC > result 
         cat sub_new[0-9][0-9]* >> result
         cat result | sort | uniq > temp
-        mv temp result
-
-
-
-        cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
+        mv temp result        
 
         echo "valor t =$t valor j =$j valor NumberDocument =$NumberDocument NDOCS=$NDOCS"
+
+        cat ssarp[0-9][0-9].$TOPIC | sort > alreadyLabeledDocs.$TOPIC
+        cat sorted_ranking | cut -d' ' -f1   > ranking.$TOPIC
+        awk 'BEGIN {FS=OFS=" "; Q=" "} {print Q (NR==0 ? ID : ++n) Q, $0}'  ranking.$TOPIC > ranking_with_order.$TOPIC
+    
+        sort  -k2 ranking_with_order.$TOPIC | join - alreadyLabeledDocs.$TOPIC  -12 -v1 | sort -n  -k2 | cut -d' ' -f1 > ranking_final.$TOPIC
+        
+        
+      
         
 
 
@@ -740,8 +745,7 @@ for CORP in "${CORPLIST[@]}"; do
         
 
 
-        export relNumber=`cat result.$TOPIC | sort | uniq | join - goldendb | uniq | wc -l`
-        NumberDocument=`cat result.$TOPIC | sort | uniq | wc -l`
+       
 
 
 
