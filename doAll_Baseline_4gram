@@ -627,7 +627,7 @@ for CORP in "${CORPLIST[@]}"; do
                             cat x_posit.$N x_negat.$N | cut -d' ' -f2 | sort | uniq > ssarp$N.$TOPIC
                             ssarp_relevants=`wc -l < x_posit.$N`
 
-                            echo "docs positivos coletados `wc -l < x_posit.$N`   docs negativos ----  `wc -l < x_negat.$N` --- total docs positivos `wc -l < sub_new_positivo.$N`"
+                            echo "docs positivos coletados `wc -l < x_posit.$N`   docs negativos ----  `wc -l < x_negat.$N` --- total docs positivos `wc -l < sub_new_positivo.$N`" >> log_run
 
                         fi
 
@@ -758,10 +758,10 @@ for CORP in "${CORPLIST[@]}"; do
         ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
 
 # 
-# popd
-#          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-#          #rm $TOPIC.seed.doc
-# popd
+ popd
+          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
+          #rm $TOPIC.seed.doc
+ popd
 # 
 # 
 #          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
