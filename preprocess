@@ -22,6 +22,7 @@ if [ ! -f "${JUDGECLASS}.svm.fil" ]; then
 
     e_primary "Preparing dataset (executing dofast)..."
     ./dofast "$JUDGECLASS" $VERBOSE
+    trap "echo EXIT ERROR.>&2;exit" SIGUSR2
     e_success "Done."
 
     cp "$JUDGECLASS".df ../"$JUDGECLASS".df > /dev/null
@@ -152,6 +153,7 @@ popd
 
 $VERBOSE && e_primary "Executing ./dofeaturesseed..."
 ./dofeaturesseed $TOPIC.seed.doc $TOPIC $JUDGECLASS $VERBOSE
+trap "echo EXIT ERROR.>&2;exit" SIGUSR2
 $VERBOSE && e_success "Finished ./dofeaturesseed."
 
 pushd $TOPIC

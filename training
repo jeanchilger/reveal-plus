@@ -273,215 +273,250 @@ for _round in $(seq -f "%02g" 0 99); do
         #
         #-----------------------------------------------------------------
         if [ $not_relevants -lt 1 ] || [ $relevants -lt 1 ]; then
-            $VERBOSE && e_secondary "\tStoring seed in ssarp file..."
+            try
+            (
+                $VERBOSE && e_secondary "\tStoring seed in ssarp file..."
 
-            cp sub_new$round.$TOPIC ssarp$round.$TOPIC
+                cp sub_new$round.$TOPIC ssarp$round.$TOPIC
 
-            cat sub_new$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/1 /' > x_posit.$round
+                cat sub_new$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/1 /' > x_posit.$round
 
-            cat sub_new$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil -v1 \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/-1 /' > x_negat.$round
+                cat sub_new$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil -v1 \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/-1 /' > x_negat.$round
 
-            cat  x_negat.* \
-                | sort -k2 \
-                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > seed_ssarp_docs.$TOPIC
+                cat  x_negat.* \
+                    | sort -k2 \
+                    | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > seed_ssarp_docs.$TOPIC
 
-            cat  x_posit.* \
-                | shuf -n 1 \
-                | sort -k2 \
-                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp_docs.$TOPIC
+                cat  x_posit.* \
+                    | shuf -n 1 \
+                    | sort -k2 \
+                    | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp_docs.$TOPIC
 
-            cut -d ' ' -f2- seed_ssarp_docs.$TOPIC  > seed_ssarp_labels.$TOPIC
+                cut -d ' ' -f2- seed_ssarp_docs.$TOPIC  > seed_ssarp_labels.$TOPIC
 
-            cp x_posit.$round sub_new_positives.$round
-            cp x_negat.$round sub_new_negatives.$round
+                cp x_posit.$round sub_new_positives.$round
+                cp x_negat.$round sub_new_negatives.$round
 
-            ssarp_relevants=`wc -l < x_posit.$round`
+                ssarp_relevants=`wc -l < x_posit.$round`
 
+            ) 2> $STD_ERROR_OUT
+
+            catch || {
+                kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
+            }
         #-----------------------------------------------------------------
         #
         #-----------------------------------------------------------------
         else
 
-            $VERBOSE && e_secondary "\tCreating files..."
+            try
+            (
+                && e_secondary "\tCreating files..."
 
-            # TODO: Check if the files temp_posit and temp_negat
-            # could be united into a single file.
+                # TODO: Check if the files temp_posit and temp_negat
+                # could be united into a single file.
 
-            cat sub_new$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/1 /' > temp_posit.$round.$TOPIC
+                cat sub_new$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/1 /' > temp_posit.$round.$TOPIC
 
-            cat sub_new$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil -v1 \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/-1 /' > temp_negat.$round.$TOPIC
+                cat sub_new$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil -v1 \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/-1 /' > temp_negat.$round.$TOPIC
 
-            cat temp_posit.$round.$TOPIC temp_negat.$round.$TOPIC \
-                | sort -k2 \
-                | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > trainset.$round.$TOPIC
+                cat temp_posit.$round.$TOPIC temp_negat.$round.$TOPIC \
+                    | sort -k2 \
+                    | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2 > trainset.$round.$TOPIC
 
-            cut -d ' ' -f2- trainset.$round.$TOPIC  > trainset_labels.$round.$TOPIC
+                cut -d ' ' -f2- trainset.$round.$TOPIC  > trainset_labels.$round.$TOPIC
 
+            ) 2> $STD_ERROR_OUT
+
+            catch || {
+                kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
+            }
             #-------------------------------------------------------------
             #
             #-------------------------------------------------------------
             if [ $discretize -eq 0 ]; then
-                $VERBOSE && e_secondary "\tGenerating bins"
+                try
+                (
+                    $VERBOSE && e_secondary "\tGenerating bins"
 
-                python3 ../svd/convert_txt.py \
-                    ../$JUDGECLASS.svm.fil.svd \
-                    /tmp/total.$TOPIC.arff rel.$TOPIC.fil
+                    python3 ../svd/convert_txt.py \
+                        ../$JUDGECLASS.svm.fil.svd \
+                        /tmp/total.$TOPIC.arff rel.$TOPIC.fil
 
-                pushd ../SSARP/run/
-                rm train*
-                .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
-                popd
+                    pushd ../SSARP/run/
+                    rm train*
+                    .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
+                    popd
 
-                discretize=1
+                    discretize=1
+                
+                ) 2> $STD_ERROR_OUT
+
+                catch || {
+                    kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
+                }
             fi
 
-            $VERBOSE && e_secondary "\tConverting files to txt..."
+            try
+            (
+                $VERBOSE && e_secondary "\tConverting files to txt..."
 
-            python3 ../svd/convert_txt.py \
-                trainset_labels.$round.$TOPIC \
-                out.$round.$TOPIC.arff \
-                rel.$TOPIC.fil
+                python3 ../svd/convert_txt.py \
+                    trainset_labels.$round.$TOPIC \
+                    out.$round.$TOPIC.arff \
+                    rel.$TOPIC.fil
 
-            python3 ../svd/convert_txt.py \
-                seed_ssarp_labels.$TOPIC \
-                seed_out.$round.$TOPIC.arff \
-                rel.$TOPIC.fil
+                python3 ../svd/convert_txt.py \
+                    seed_ssarp_labels.$TOPIC \
+                    seed_out.$round.$TOPIC.arff \
+                    rel.$TOPIC.fil
 
-            cp trainset.$round.$TOPIC ../SSARP/run/
-            cp seed_out.$round.$TOPIC.arff ../SSARP/run/
-            cp out.$round.$TOPIC.arff ../SSARP/run/
+                cp trainset.$round.$TOPIC ../SSARP/run/
+                cp seed_out.$round.$TOPIC.arff ../SSARP/run/
+                cp out.$round.$TOPIC.arff ../SSARP/run/
 
-            $VERBOSE && e_primary "\tExecuting alac rules..."
+                $VERBOSE && e_primary "\tExecuting alac rules..."
 
-            pushd ../SSARP/run/
-            ./SSARPX.sh out.$round.$TOPIC \
-                trainset.$round.$TOPIC \
-                50 \
-                $round \
-                seed_out.$round.$TOPIC.arff \
-                $TOPIC \
-                $flag_allac_first_time \
-                $rules
+                pushd ../SSARP/run/
+                ./SSARPX.sh out.$round.$TOPIC \
+                    trainset.$round.$TOPIC \
+                    50 \
+                    $round \
+                    seed_out.$round.$TOPIC.arff \
+                    $TOPIC \
+                    $flag_allac_first_time \
+                    $rules
 
-            flag_allac_first_time=$(($flag_allac_first_time+1))
-            cat label.$round.$TOPIC > /tmp/ssarp$round.$TOPIC
+                flag_allac_first_time=$(($flag_allac_first_time+1))
+                cat label.$round.$TOPIC > /tmp/ssarp$round.$TOPIC
 
-            popd
+                popd
 
-            $VERBOSE && e_success "\tDone."
+                $VERBOSE && e_success "\tDone."
 
-            mv /tmp/ssarp$round.$TOPIC .
+                mv /tmp/ssarp$round.$TOPIC .
 
-            cat sub_new$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/1 /' > sub_new_positives.$round
+                cat sub_new$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/1 /' > sub_new_positives.$round
 
-            cat sub_new$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil -v1 \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/-1 /' > sub_new_negatives.$round
+                cat sub_new$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil -v1 \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/-1 /' > sub_new_negatives.$round
 
-            # TODO: Check if the files x_posit and x_negat
-            # could be united into a single file.
+                # TODO: Check if the files x_posit and x_negat
+                # could be united into a single file.
 
-            cat ssarp$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/1 /' > x_posit.$round
+                cat ssarp$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/1 /' > x_posit.$round
 
-            cat ssarp$round.$TOPIC \
-                | sort \
-                | uniq \
-                | join - rel.$TOPIC.fil -v1 \
-                | cut -d' ' -f1 \
-                | sed -e 's/^/-1 /' > x_negat.$round
+                cat ssarp$round.$TOPIC \
+                    | sort \
+                    | uniq \
+                    | join - rel.$TOPIC.fil -v1 \
+                    | cut -d' ' -f1 \
+                    | sed -e 's/^/-1 /' > x_negat.$round
 
-            cat x_posit.$round x_negat.$round \
-                | cut -d' ' -f2 \
-                | sort \
-                | uniq > ssarp$round.$TOPIC
+                cat x_posit.$round x_negat.$round \
+                    | cut -d' ' -f2 \
+                    | sort \
+                    | uniq > ssarp$round.$TOPIC
 
-            ssarp_relevants=`wc -l < x_posit.$round`
+                ssarp_relevants=`wc -l < x_posit.$round`
 
-            $VERBOSE && e_info \
-                "Positives documents collected ... `wc -l < x_posit.$round`"
-            $VERBOSE && e_info \
-                "Negative documents .............. `wc -l < x_negat.$round`"
-            $VERBOSE && e_info \
-                "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
+                $VERBOSE && e_info \
+                    "Positives documents collected ... `wc -l < x_posit.$round`"
+                $VERBOSE && e_info \
+                    "Negative documents .............. `wc -l < x_negat.$round`"
+                $VERBOSE && e_info \
+                    "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
+            ) 2> $STD_ERROR_OUT
+
+            catch || {
+                kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
+            }
 
         fi
+        try
+        (
+            $VERBOSE && e_success "Active learning step finished."
 
-        $VERBOSE && e_success "Active learning step finished."
+            #-----------------------------------------------------------------
+            # statics calculation
+            #-----------------------------------------------------------------
+            not_relevants=$(($not_relevants + `wc -l < x_negat.$round`))
 
-        #-----------------------------------------------------------------
-        # statics calculation
-        #-----------------------------------------------------------------
-        not_relevants=$(($not_relevants + `wc -l < x_negat.$round`))
+            rel_found_sample=`wc -l < x_posit.$round`  # relevants on previous sample
+            rel_rate=`echo "scale=4; $rel_found_sample / $SAMPLE_SIZE" | bc`
+            current_rel=`cat x_posit.[0-9][0-9] | wc -l`
 
-        rel_found_sample=`wc -l < x_posit.$round`  # relevants on previous sample
-        rel_rate=`echo "scale=4; $rel_found_sample / $SAMPLE_SIZE" | bc`
-        current_rel=`cat x_posit.[0-9][0-9] | wc -l`
+            # TODO: Check if all_docs may be replaced with TOTAL_DOCUMENTS.
+            already_labeled_docs=`cat ssarp* | wc -l`
+            all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
 
-        # TODO: Check if all_docs may be replaced with TOTAL_DOCUMENTS.
-        already_labeled_docs=`cat ssarp* | wc -l`
-        all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
+            $VERBOSE && e_info "\tRelevants ......... $rel_found_sample"
+            $VERBOSE && e_info "\tSample size ....... $SAMPLE_SIZE"
+            $VERBOSE && e_info "\tSub sample size ... $sub_sample"
+            $VERBOSE && e_info "\tAlready labeled ... $already_labeled_docs"
+            $VERBOSE && e_info "\tAll docs .......... $all_docs"
+            $VERBOSE && e_info "\tRelevants rate .... $rel_rate"
+            $VERBOSE && e_info "\tCurrent relevants . $current_rel"
+            $VERBOSE && e_info "\tTotal relevants ... `wc -l < rel.$TOPIC.fil`"
 
-        $VERBOSE && e_info "\tRelevants ......... $rel_found_sample"
-        $VERBOSE && e_info "\tSample size ....... $SAMPLE_SIZE"
-        $VERBOSE && e_info "\tSub sample size ... $sub_sample"
-        $VERBOSE && e_info "\tAlready labeled ... $already_labeled_docs"
-        $VERBOSE && e_info "\tAll docs .......... $all_docs"
-        $VERBOSE && e_info "\tRelevants rate .... $rel_rate"
-        $VERBOSE && e_info "\tCurrent relevants . $current_rel"
-        $VERBOSE && e_info "\tTotal relevants ... `wc -l < rel.$TOPIC.fil`"
+            relevants=$(($relevants + \
+                ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
 
-        relevants=$(($relevants + \
-            ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
+            echo $rel_found_sample $SAMPLE_SIZE $sub_sample $rel_rate $current_rel >> rel.rate
 
-        echo $rel_found_sample $SAMPLE_SIZE $sub_sample $rel_rate $current_rel >> rel.rate
+            sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
+            cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
 
-        sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
-        cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil
+            estimate=$(($estimate + \
+                ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
 
-        estimate=$(($estimate + \
-            ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
-
-        echo "${round%.*} $estimate" >> store_estimation
-
-
-        $VERBOSE && e_secondary "Estimate rate is: $estimate"
+            echo "${round%.*} $estimate" >> store_estimation
 
 
-        LABELED_DOCUMENTS=$(($LABELED_DOCUMENTS + $SAMPLE_SIZE))
-        SAMPLE_SIZE=$(($SAMPLE_SIZE + ($SAMPLE_SIZE + 9) / 10))
+            $VERBOSE && e_secondary "Estimate rate is: $estimate"
+
+
+            LABELED_DOCUMENTS=$(($LABELED_DOCUMENTS + $SAMPLE_SIZE))
+            SAMPLE_SIZE=$(($SAMPLE_SIZE + ($SAMPLE_SIZE + 9) / 10))
+        ) 2> $STD_ERROR_OUT
+
+        catch || {
+            kill -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
+        }
     fi
 done
 
