@@ -81,7 +81,7 @@
   
     
     
-    echo "cleaning from $len until 0 stopping when $pos equal zero "
+    echo "cleaning from $len until 0 stopping when $pos equal zero " >> log_run
     flag=0
     temp=0
     mid=$len
@@ -92,7 +92,7 @@
         temp=$(($temp+1))
 
         name=`printf "data.$TOPIC/xxx%06d" $i` #create name of datafile
-        echo "cleaning 2 $name ---- $i"
+        echo "cleaning 2 $name ---- $i" >> log_run
 
         cat $name | sort > temp
         cat x_negat.* x_posit.* | cut -d' ' -f2 | sort | join - temp -v2 | sort > clean_data #data without already labeled docs 
@@ -211,8 +211,8 @@
     precisao=`echo "scale=6; ($r / $finalpares)" | bc`
     #echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda
     #$perda_ac "
-    echo "positivos $r total $finalpares recal  $recall precision $precision perda $perda_ac"
-		echo "Recall: $recall" >> final_result_REVEAL
+    echo "positivos $r total $finalpares recal  $recall precision $precision perda $perda_ac" >> log_run
+	echo "Recall: $recall" >> final_result_REVEAL
     echo "Precisão: $precisao" >> final_result_REVEAL
     echo "LabellingEffort: `wc -l < training_set.$TOPIC`" >> final_result_REVEAL
 echo "final REVEAL is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $r  labellingEffort `wc -l < training_set.$TOPIC`  onlyssarp  `wc -l < ssarp_labelling_full.$TOPIC` perda_ac $perda_ac sliding_windows $sliding_windows" >> log_run
