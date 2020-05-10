@@ -1,0 +1,51 @@
+#!/bin/bash
+
+#===============================================================================
+#       USAGE:  file-sum <input-file> <splits>
+#
+# DESCRIPTION:  Sums a large file (<input-file>), by summing <splits> portions 
+#               individually in parallel and combining it.
+#===============================================================================
+
+
+function parallel-sum() {
+    INPUT=$1; shift
+    START=$1; shift
+    END=$1; shift
+    OUTPUT=$1; shift
+    TEMP=$(mktemp)
+
+
+    sed -n $(echo "${START},${END}p;${END}q") $INPUT > $TEMP
+
+    res=0
+    for n in $(cat $TEMP); do
+        res=$(($res + $n))
+    done
+
+    echo $res >> $OUTPUT
+    
+}
+
+INPUT=$1; shift               # input file
+OUTPUT=$(mktemp)              # store intermediary sums
+SPLITS=$1; shift              # number of times to split the input file for summing
+LENGTH=$(cat $INPUT | wc -l)  # length of input file
+
+step=$(($LENGTH / $SPLITS))
+
+#----------------------------------------------------------------------
+# 
+#----------------------------------------------------------------------
+for i in $(seq 1 $step $LENGTH); do
+    parallel-sum $INPUT $i $(($i+$step-1)) $OUTPUT &
+done
+wait
+
+res=0
+for n in $(cat $OUTPUT); do
+    res=$(($res + $n))
+done
+
+echo $res
+
