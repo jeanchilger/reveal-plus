@@ -164,9 +164,20 @@ for i in $(seq $mid $step 0 ); do
     fi
 
 
-    for l in $(seq 0 4); do
-        run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-    done
+    # for l in $(seq 0 4); do
+    #     run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
+    # done
+
+    l=0
+    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
+    l=1
+    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
+    l=2
+    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
+    l=3
+    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
+    l=4
+    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
 
     j=$(($j+$step))
 
