@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source "${ABS_PATH}/handle_errors"
 export LANG=C
 TOPIC=$2
 CORP=$3
