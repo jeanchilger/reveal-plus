@@ -101,7 +101,7 @@ function show_help() {
 #----------------------------------------------------------------------
 POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
-CORPUS="toyDataset"
+CORPUS="MedicalDB"
 VERBOSE=false
 TOPICS_CONSIDERED="tr0"      # dummy value for empty topic list verification
 
