@@ -1,6 +1,6 @@
 # Scalable Continuous Active Learning (Refactor in progress)
-Scalable Continuous Active Learning (SCAL) applied to medical articles
-
+High recall Information REtrieval (HIRE) aims at identifying only and (almost) all relevant documents for a given query. HIRE is paramount in applications such as systematic literature review, medicine, legal jurisprudence, etc. Supervised (classification) approaches are traditionally used in HIRE to produce a rank of relevant documents. However, such strategies depend on informative (very) large training sets with a wide variety of patterns to identify the relevant documents. In this context, active learning methods have proven to be quite useful to determine informative and non-redundant documents to compose these training sets, while reducing user effort for manual labeling. Here, we propose
+REVEAL-HIRE – a new active framework for the HIRE task that selects a very reduced set of documents to be labeled, significantly mitigating the user’s effort. 
 **Coordinating professor:** Guilherme Dal Bianco ([github](https://github.com/dbguilherme), [lattes]( http://lattes.cnpq.br/5152594034228273))
 
 **Participants:** [Emili Willinghoefer](https://github.com/Emiliwillinghoefer), [Jean Carlo Hilger](https://github.com/jeanchilger) and [Matheus Vinícius Todescato](https://github.com/mvtodescato)
