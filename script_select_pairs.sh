@@ -12,23 +12,23 @@ source "${ABS_PATH}/colors"
 function run_parallel {
     echo -e "$RED>>FROM func$END" &> /dev/tty
     TOPIC=$1
-    j=$2
-    i=$3
-    cp -r ../../SSARP_short SSARP_short.$j
-    cp SSARP/run/alac_* SSARP_short.$j/run/
-    cp SSARP/run/lac_train_TUBEfinal* SSARP_short.$j/run/
+    step=$2
+    data=$3
+    cp -r ../SSARP_short SSARP_short.$step
+    cp ../SSARP/run/alac_* SSARP_short.$step/run/
+    cp ../SSARP/run/lac_train_TUBEfinal* SSARP_short.$step/run/
 
 
-    name=`printf "data.$TOPIC/xxx%06d" $i`
+    name=`printf "data.$TOPIC/xxx%06d" $data`
     echo "cleaning 1 $name ---- thread " &> /dev/tty
+    echo -e "$RED>> ../script_prune_pairs.sh $name $step $TOPIC 20 5$END" &> /dev/tty
+    ../script_prune_pairs.sh $name $step $TOPIC 20 5 \
+        &> /tmp/lixo.$step.$TOPIC
 
-    ../script_prune_pairs.sh $name $j $TOPIC 10 5 \
-        &> /tmp/lixo.$j.$TOPIC
+    cat /tmp/lixo.$step.$TOPIC
 
-    cat /tmp/lixo.$j.$TOPIC
-
-	pos=`grep "docs positivos coletados" /tmp/lixo.$j.$TOPIC | cut -d' ' -f4`
-    neg=`grep "docs positivos coletados" /tmp/lixo.$j.$TOPIC | cut -d' ' -f11`
+	pos=`grep "docs positivos coletados" /tmp/lixo.$step.$TOPIC | cut -d' ' -f4`
+    neg=`grep "docs negativos coletados" /tmp/lixo.$step.$TOPIC | cut -d' ' -f11`
 
     real_posit=`cat $name \
         | cut -d' ' -f1 \
@@ -50,7 +50,7 @@ function run_parallel {
 
     echo "$name pos  $pos neg  $neg  real posit $real_posit real neg $real_negat perda $perda_ac totalPos $totalPos"
 
-    cat x_posit_ssarp_end.$j x_negat_ssarp_end.$j \
+    cat x_posit_ssarp_end.$step x_negat_ssarp_end.$step \
         | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
 }
 
@@ -100,7 +100,7 @@ mem_i=0
 
 #cp seed_out.80.$TOPIC.arff seed_out
 exitstatus=0
-j=100
+
 rm out_after_ssarp.$TOPIC
 run=0
 run_memory=0
@@ -151,44 +151,46 @@ temp=0
 mid=$len
 new_mid=0
 mid=$(($mid-1)) #start from zero
-step=-1
+
 
 e_info "mid: $mid step: $step len: $len"
 
-for i in $(seq $mid $step 0 ); do
 
-    e_error "AAAAAAAAAAAAAA $i + $step + $step + A" &> /dev/tty
-
-    if [ $(($i+$step+$step)) -ge $len ]; then
-        step=$(($len-$i))
-    fi
+id=100
+step=-3 #number of threads
 
 
-    # for l in $(seq 0 4); do
-    #     run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-    # done
-
-    l=0
-    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-    l=1
-    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-    l=2
-    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-    l=3
-    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-    l=4
-    run_parallel $TOPIC $(($j+$l)) $(($l+$i)) &
-
-    j=$(($j+$step))
-
+#run from top ranking to bottom"
+for ele in $(seq $mid $step 0); do
+    
+    echo "element $ele"
+    arrayData=()    
+    
+    #select #step files to process
+    for w in $(seq $ele -1 $(($ele+$step))); do
+        arrayData+=($w)
+    done
+    
+    echo "array $arrayData[0]"
+    
+    
+    #call ssarp in parallel"
+    for data in "${arrayData[@]}"
+    do          
+        #id control the execution number starting from 100"
+        id_local=$(($id+$mid-$data))
+        echo -e "$RED  $data  $id_local $END"    
+        run_parallel $TOPIC $id_local $data&
+    done
     wait
-
-
-    for l in $(seq 0 $(($step-1))); do
-        temp=$(($l+$j-$step))
-        pos=`grep "docs positivos coletados" /tmp/lixo.$temp.$TOPIC | cut -d' ' -f4`
-        neg=`grep "docs positivos coletados" /tmp/lixo.$temp.$TOPIC | cut -d' ' -f11`
-        printf " \n \n 00000000   $pos $neg  $flag---- $temp  $(($l+$i))"
+    
+    #check in the loop if we have to continue the process or stop it"
+    for data in "${arrayData[@]}"; do 
+    
+        id_local=$(($id+$mid-$data))
+        pos=`grep "docs positivos coletados" /tmp/lixo.$id_local.$TOPIC | cut -d' ' -f4`
+        neg=`grep "docs positivos coletados" /tmp/lixo.$id_local.$TOPIC | cut -d' ' -f11`
+        printf " \n \n 00000000   $pos $neg  $flag---- $id_local  $(($l+$data))"
 
 
         r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
@@ -198,11 +200,13 @@ for i in $(seq $mid $step 0 ); do
         precisao=`echo "scale=6; ($r / $finalpares)" | bc`
 
 
+#rever esses arquivos 
+        cat SSARP_short.$id_local/run/alac_lac_train_TUBEfinal.txt.$TOPIC >> ../SSARP/run/alac_lac_train_TUBEfinal.txt.$TOPIC
+        cat SSARP_short.$id_local/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC >> ../SSARP/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC
+        printf "\n\n tamanho do treino `wc -l < ../SSARP/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC`"
 
-        cat SSARP_short.$temp/run/alac_round_lac_train_TUBEfinal.txt.$TOPIC >> SSARP/run/alac_lac_train_TUBEfinal.txt.$TOPIC
-        cat SSARP_short.$temp/run/alac_round_lac_train_TUBEfinal.txt.$TOPIC >> SSARP/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC
-        printf "\n\n tamanho do treino `wc -l < SSARP/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC`"
-
+        
+        #stop if 5 files is composed by only negatives from ssarp"
         if [ $neg -le 1 ]; then
             flag=$(($flag+1))
 
@@ -214,8 +218,81 @@ for i in $(seq $mid $step 0 ); do
             echo "------------------------------ breaking ..."
             exit
         fi
-    done
+    
+    done 
 done
+
+echo "${arrayData[@]}"
+
+
+
+
+
+exit
+
+
+# for data in $(seq $mid -2 0 ); do
+# 
+#     e_error "AAAAAAAAAAAAAA $data + $step + $step + A" &> /dev/tty
+# 
+#     if [ $(($data+$step)) -le 0 ]; then
+#         step=$(($len-$data))
+#     fi
+# 
+# 
+#     # for l in $(seq 0 4); do
+#     #     run_parallel $TOPIC $(($step+$l)) $(($l+$data)) &
+#     # done
+# 
+#     l=0
+#     e_error "AAAAAAAAAAAAAA run_parallel $TOPIC $(($step+$l)) $(($data-$l))+ A" &> /dev/tty
+#     run_parallel $TOPIC $(($step+$l)) $(($data-$l)) &
+#     l=1
+#     run_parallel $TOPIC $(($step+$l)) $(($data-$l)) &
+# #     l=2
+# #     run_parallel $TOPIC $(($step+$l)) $(($l+$data)) &
+# #     l=3
+# #     run_parallel $TOPIC $(($step+$l)) $(($l+$data)) &
+# #     l=4
+# #     run_parallel $TOPIC $(($step+$l)) $(($l+$data)) &
+# 
+#    
+# 
+#     wait
+#     sleep 10
+# 
+#     for l in $(seq 0 $(($step-1))); do
+#         temp=$(($l+$step-$step))
+#         pos=`grep "docs positivos coletados" /tmp/lixo.$id_local.$TOPIC | cut -d' ' -f4`
+#         neg=`grep "docs positivos coletados" /tmp/lixo.$id_local.$TOPIC | cut -d' ' -f11`
+#         printf " \n \n 00000000   $pos $neg  $flag---- $id_local  $(($l+$data))"
+# 
+# 
+#         r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
+#         finalpares=`wc -l < out_after_ssarp.$TOPIC`
+#         total=$Rel
+#         recall=`echo "scale=6; ($r / $total)" | bc`
+#         precisao=`echo "scale=6; ($r / $finalpares)" | bc`
+# 
+# 
+# 
+#         cat SSARP_short.$id_local/run/alac_round_lac_train_TUBEfinal.txt.$TOPIC >> SSARP/run/alac_lac_train_TUBEfinal.txt.$TOPIC
+#         cat SSARP_short.$id_local/run/alac_round_lac_train_TUBEfinal.txt.$TOPIC >> SSARP/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC
+#         printf "\n\n tamanho do treino `wc -l < SSARP/run/alac_full_lac_train_TUBEfinal.txt.$TOPIC`"
+# 
+#         if [ $neg -le 1 ]; then
+#             flag=$(($flag+1))
+# 
+#         else
+#             flag=0
+#         fi
+# 
+#         if [ $flag -eq 5 ]; then
+#             echo "------------------------------ breaking ..."
+#             exit
+#         fi
+#     done
+# done
 
 cat x_posit_ssarp_end.* x_negat_ssarp_end.* | cut -d' ' -f2  > training_set.$TOPIC
 
