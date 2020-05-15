@@ -1,0 +1,508 @@
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  6 --- total docs positivos 0
+docs positivos coletados 1   docs negativos ----  4 --- total docs positivos 1
+docs positivos coletados 2   docs negativos ----  2 --- total docs positivos 2
+docs positivos coletados 5   docs negativos ----  2 --- total docs positivos 6
+docs positivos coletados 6   docs negativos ----  5 --- total docs positivos 6
+docs positivos coletados 5   docs negativos ----  5 --- total docs positivos 5
+docs positivos coletados 4   docs negativos ----  6 --- total docs positivos 6
+docs positivos coletados 5   docs negativos ----  8 --- total docs positivos 10
+docs positivos coletados 7   docs negativos ----  3 --- total docs positivos 7
+docs positivos coletados 1   docs negativos ----  4 --- total docs positivos 2
+docs positivos coletados 5   docs negativos ----  4 --- total docs positivos 6
+docs positivos coletados 4   docs negativos ----  3 --- total docs positivos 4
+docs positivos coletados 3   docs negativos ----  3 --- total docs positivos 3
+docs positivos coletados 4   docs negativos ----  2 --- total docs positivos 5
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 1
+docs positivos coletados 1   docs negativos ----  3 --- total docs positivos 1
+docs positivos coletados 1   docs negativos ----  3 --- total docs positivos 1
+docs positivos coletados 0   docs negativos ----  9 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  4 --- total docs positivos 1
+docs positivos coletados 1   docs negativos ----  0 --- total docs positivos 2
+docs positivos coletados 1   docs negativos ----  4 --- total docs positivos 1
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 1   docs negativos ----  1 --- total docs positivos 1
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  5 --- total docs positivos 2
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  5 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  7 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  4 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  8 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  0 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  3 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  1 --- total docs positivos 0
+docs positivos coletados 0   docs negativos ----  2 --- total docs positivos 0
+cleaning from 4171 until 0 stopping when  equal zero 
+cleaning 2 data.tr16/xxx004170 ---- 4170
+data.tr16/xxx004170 pos  4 neg    real posit 1  perda -3
+****final result AM is tr16 61 ------256  Recall .859154  Precisao .238281  posit  4  labellingEffort 256 perda_ac -3 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004169 ---- 4169
+data.tr16/xxx004169 pos  15 neg    real posit 16  perda -2
+****final result AM is tr16 74 ------271  Recall 1.042253  Precisao .273062  posit  15  labellingEffort 271 perda_ac -2 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004168 ---- 4168
+data.tr16/xxx004168 pos  3 neg    real posit 3  perda -2
+****final result AM is tr16 77 ------274  Recall 1.084507  Precisao .281021  posit  3  labellingEffort 274 perda_ac -2 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004167 ---- 4167
+data.tr16/xxx004167 pos  2 neg    real posit 3  perda -1
+****final result AM is tr16 79 ------276  Recall 1.112676  Precisao .286231  posit  2  labellingEffort 276 perda_ac -1 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004166 ---- 4166
+data.tr16/xxx004166 pos  1 neg    real posit 1  perda -1
+****final result AM is tr16 80 ------277  Recall 1.126760  Precisao .288808  posit  1  labellingEffort 277 perda_ac -1 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004165 ---- 4165
+data.tr16/xxx004165 pos  1 neg    real posit 2  perda 0
+****final result AM is tr16 81 ------278  Recall 1.140845  Precisao .291366  posit  1  labellingEffort 278 perda_ac 0 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004164 ---- 4164
+data.tr16/xxx004164 pos  0 neg    real posit 1  perda 1
+****final result AM is tr16 81 ------278  Recall 1.140845  Precisao .291366  posit  0  labellingEffort 278 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004163 ---- 4163
+data.tr16/xxx004163 pos  1 neg    real posit 1  perda 1
+****final result AM is tr16 82 ------280  Recall 1.154929  Precisao .292857  posit  1  labellingEffort 280 perda_ac 1 
+flag 1
+new flag equal zero
+cleaning 2 data.tr16/xxx004162 ---- 4162
+data.tr16/xxx004162 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 82 ------280  Recall 1.154929  Precisao .292857  posit  0  labellingEffort 280 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004161 ---- 4161
+data.tr16/xxx004161 pos  1 neg    real posit 1  perda 1
+****final result AM is tr16 83 ------281  Recall 1.169014  Precisao .295373  posit  1  labellingEffort 281 perda_ac 1 
+flag 1
+new flag equal zero
+cleaning 2 data.tr16/xxx004160 ---- 4160
+data.tr16/xxx004160 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 83 ------282  Recall 1.169014  Precisao .294326  posit  0  labellingEffort 282 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004159 ---- 4159
+data.tr16/xxx004159 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 83 ------283  Recall 1.169014  Precisao .293286  posit  0  labellingEffort 283 perda_ac 1 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004158 ---- 4158
+data.tr16/xxx004158 pos  1 neg    real posit 1  perda 1
+****final result AM is tr16 84 ------284  Recall 1.183098  Precisao .295774  posit  1  labellingEffort 284 perda_ac 1 
+flag 2
+new flag equal zero
+cleaning 2 data.tr16/xxx004157 ---- 4157
+data.tr16/xxx004157 pos  1 neg    real posit 1  perda 1
+****final result AM is tr16 85 ------285  Recall 1.197183  Precisao .298245  posit  1  labellingEffort 285 perda_ac 1 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004156 ---- 4156
+data.tr16/xxx004156 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 85 ------286  Recall 1.197183  Precisao .297202  posit  0  labellingEffort 286 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004155 ---- 4155
+data.tr16/xxx004155 pos  2 neg    real posit 2  perda 1
+****final result AM is tr16 87 ------288  Recall 1.225352  Precisao .302083  posit  2  labellingEffort 288 perda_ac 1 
+flag 1
+new flag equal zero
+cleaning 2 data.tr16/xxx004154 ---- 4154
+data.tr16/xxx004154 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 87 ------290  Recall 1.225352  Precisao .300000  posit  0  labellingEffort 290 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004153 ---- 4153
+data.tr16/xxx004153 pos  1 neg    real posit 1  perda 1
+****final result AM is tr16 88 ------291  Recall 1.239436  Precisao .302405  posit  1  labellingEffort 291 perda_ac 1 
+flag 1
+new flag equal zero
+cleaning 2 data.tr16/xxx004152 ---- 4152
+data.tr16/xxx004152 pos  2 neg    real posit 2  perda 1
+****final result AM is tr16 90 ------293  Recall 1.267605  Precisao .307167  posit  2  labellingEffort 293 perda_ac 1 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004151 ---- 4151
+data.tr16/xxx004151 pos  2 neg    real posit 2  perda 1
+****final result AM is tr16 92 ------295  Recall 1.295774  Precisao .311864  posit  2  labellingEffort 295 perda_ac 1 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004150 ---- 4150
+data.tr16/xxx004150 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------296  Recall 1.295774  Precisao .310810  posit  0  labellingEffort 296 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004149 ---- 4149
+data.tr16/xxx004149 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------297  Recall 1.295774  Precisao .309764  posit  0  labellingEffort 297 perda_ac 1 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004148 ---- 4148
+data.tr16/xxx004148 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------298  Recall 1.295774  Precisao .308724  posit  0  labellingEffort 298 perda_ac 1 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004147 ---- 4147
+data.tr16/xxx004147 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------298  Recall 1.295774  Precisao .308724  posit  0  labellingEffort 298 perda_ac 1 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004146 ---- 4146
+data.tr16/xxx004146 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------298  Recall 1.295774  Precisao .308724  posit  0  labellingEffort 298 perda_ac 1 
+flag 4
+increase flag value
+cleaning 2 data.tr16/xxx004145 ---- 4145
+data.tr16/xxx004145 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------299  Recall 1.295774  Precisao .307692  posit  0  labellingEffort 299 perda_ac 1 
+flag 5
+increase flag value
+cleaning 2 data.tr16/xxx004144 ---- 4144
+data.tr16/xxx004144 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------299  Recall 1.295774  Precisao .307692  posit  0  labellingEffort 299 perda_ac 1 
+flag 6
+increase flag value
+cleaning 2 data.tr16/xxx004143 ---- 4143
+data.tr16/xxx004143 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------300  Recall 1.295774  Precisao .306666  posit  0  labellingEffort 300 perda_ac 1 
+flag 7
+increase flag value
+cleaning 2 data.tr16/xxx004142 ---- 4142
+data.tr16/xxx004142 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------300  Recall 1.295774  Precisao .306666  posit  0  labellingEffort 300 perda_ac 1 
+flag 8
+increase flag value
+cleaning 2 data.tr16/xxx004141 ---- 4141
+data.tr16/xxx004141 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 92 ------300  Recall 1.295774  Precisao .306666  posit  0  labellingEffort 300 perda_ac 1 
+flag 9
+increase flag value
+cleaning 2 data.tr16/xxx004140 ---- 4140
+data.tr16/xxx004140 pos  1 neg    real posit 1  perda 1
+****final result AM is tr16 93 ------301  Recall 1.309859  Precisao .308970  posit  1  labellingEffort 301 perda_ac 1 
+flag 10
+new flag equal zero
+cleaning 2 data.tr16/xxx004139 ---- 4139
+data.tr16/xxx004139 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 93 ------302  Recall 1.309859  Precisao .307947  posit  0  labellingEffort 302 perda_ac 1 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004138 ---- 4138
+data.tr16/xxx004138 pos  0 neg    real posit 0  perda 1
+****final result AM is tr16 93 ------302  Recall 1.309859  Precisao .307947  posit  0  labellingEffort 302 perda_ac 1 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004137 ---- 4137
+data.tr16/xxx004137 pos  0 neg    real posit 1  perda 2
+****final result AM is tr16 93 ------302  Recall 1.309859  Precisao .307947  posit  0  labellingEffort 302 perda_ac 2 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004136 ---- 4136
+data.tr16/xxx004136 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 93 ------303  Recall 1.309859  Precisao .306930  posit  0  labellingEffort 303 perda_ac 2 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004135 ---- 4135
+data.tr16/xxx004135 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 93 ------303  Recall 1.309859  Precisao .306930  posit  0  labellingEffort 303 perda_ac 2 
+flag 4
+increase flag value
+cleaning 2 data.tr16/xxx004134 ---- 4134
+data.tr16/xxx004134 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 93 ------303  Recall 1.309859  Precisao .306930  posit  0  labellingEffort 303 perda_ac 2 
+flag 5
+increase flag value
+cleaning 2 data.tr16/xxx004133 ---- 4133
+data.tr16/xxx004133 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 93 ------304  Recall 1.309859  Precisao .305921  posit  0  labellingEffort 304 perda_ac 2 
+flag 6
+increase flag value
+cleaning 2 data.tr16/xxx004132 ---- 4132
+data.tr16/xxx004132 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 94 ------305  Recall 1.323943  Precisao .308196  posit  1  labellingEffort 305 perda_ac 2 
+flag 7
+new flag equal zero
+cleaning 2 data.tr16/xxx004131 ---- 4131
+data.tr16/xxx004131 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 94 ------306  Recall 1.323943  Precisao .307189  posit  0  labellingEffort 306 perda_ac 2 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004130 ---- 4130
+data.tr16/xxx004130 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 94 ------306  Recall 1.323943  Precisao .307189  posit  0  labellingEffort 306 perda_ac 2 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004129 ---- 4129
+data.tr16/xxx004129 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 94 ------306  Recall 1.323943  Precisao .307189  posit  0  labellingEffort 306 perda_ac 2 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004128 ---- 4128
+data.tr16/xxx004128 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 94 ------306  Recall 1.323943  Precisao .307189  posit  0  labellingEffort 306 perda_ac 2 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004127 ---- 4127
+data.tr16/xxx004127 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 94 ------306  Recall 1.323943  Precisao .307189  posit  0  labellingEffort 306 perda_ac 2 
+flag 4
+increase flag value
+cleaning 2 data.tr16/xxx004126 ---- 4126
+data.tr16/xxx004126 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 95 ------307  Recall 1.338028  Precisao .309446  posit  1  labellingEffort 307 perda_ac 2 
+flag 5
+new flag equal zero
+cleaning 2 data.tr16/xxx004125 ---- 4125
+data.tr16/xxx004125 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 95 ------307  Recall 1.338028  Precisao .309446  posit  0  labellingEffort 307 perda_ac 2 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004124 ---- 4124
+data.tr16/xxx004124 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 95 ------308  Recall 1.338028  Precisao .308441  posit  0  labellingEffort 308 perda_ac 2 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004123 ---- 4123
+data.tr16/xxx004123 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 96 ------310  Recall 1.352112  Precisao .309677  posit  1  labellingEffort 310 perda_ac 2 
+flag 2
+new flag equal zero
+cleaning 2 data.tr16/xxx004122 ---- 4122
+data.tr16/xxx004122 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 96 ------311  Recall 1.352112  Precisao .308681  posit  0  labellingEffort 311 perda_ac 2 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004121 ---- 4121
+data.tr16/xxx004121 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 96 ------311  Recall 1.352112  Precisao .308681  posit  0  labellingEffort 311 perda_ac 2 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004120 ---- 4120
+data.tr16/xxx004120 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 96 ------311  Recall 1.352112  Precisao .308681  posit  0  labellingEffort 311 perda_ac 2 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004119 ---- 4119
+data.tr16/xxx004119 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 96 ------311  Recall 1.352112  Precisao .308681  posit  0  labellingEffort 311 perda_ac 2 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004118 ---- 4118
+data.tr16/xxx004118 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 97 ------312  Recall 1.366197  Precisao .310897  posit  1  labellingEffort 312 perda_ac 2 
+flag 4
+new flag equal zero
+cleaning 2 data.tr16/xxx004117 ---- 4117
+data.tr16/xxx004117 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 97 ------314  Recall 1.366197  Precisao .308917  posit  0  labellingEffort 314 perda_ac 2 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004116 ---- 4116
+data.tr16/xxx004116 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 97 ------315  Recall 1.366197  Precisao .307936  posit  0  labellingEffort 315 perda_ac 2 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004115 ---- 4115
+data.tr16/xxx004115 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 97 ------316  Recall 1.366197  Precisao .306962  posit  0  labellingEffort 316 perda_ac 2 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004114 ---- 4114
+data.tr16/xxx004114 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 97 ------317  Recall 1.366197  Precisao .305993  posit  0  labellingEffort 317 perda_ac 2 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004113 ---- 4113
+data.tr16/xxx004113 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 97 ------317  Recall 1.366197  Precisao .305993  posit  0  labellingEffort 317 perda_ac 2 
+flag 4
+increase flag value
+cleaning 2 data.tr16/xxx004112 ---- 4112
+data.tr16/xxx004112 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 97 ------317  Recall 1.366197  Precisao .305993  posit  0  labellingEffort 317 perda_ac 2 
+flag 5
+increase flag value
+cleaning 2 data.tr16/xxx004111 ---- 4111
+data.tr16/xxx004111 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 98 ------318  Recall 1.380281  Precisao .308176  posit  1  labellingEffort 318 perda_ac 2 
+flag 6
+new flag equal zero
+cleaning 2 data.tr16/xxx004110 ---- 4110
+data.tr16/xxx004110 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 98 ------318  Recall 1.380281  Precisao .308176  posit  0  labellingEffort 318 perda_ac 2 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004109 ---- 4109
+data.tr16/xxx004109 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 98 ------318  Recall 1.380281  Precisao .308176  posit  0  labellingEffort 318 perda_ac 2 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004108 ---- 4108
+data.tr16/xxx004108 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 98 ------318  Recall 1.380281  Precisao .308176  posit  0  labellingEffort 318 perda_ac 2 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004107 ---- 4107
+data.tr16/xxx004107 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 98 ------319  Recall 1.380281  Precisao .307210  posit  0  labellingEffort 319 perda_ac 2 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004106 ---- 4106
+data.tr16/xxx004106 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 99 ------321  Recall 1.394366  Precisao .308411  posit  1  labellingEffort 321 perda_ac 2 
+flag 4
+new flag equal zero
+cleaning 2 data.tr16/xxx004105 ---- 4105
+data.tr16/xxx004105 pos  1 neg    real posit 1  perda 2
+****final result AM is tr16 100 ------323  Recall 1.408450  Precisao .309597  posit  1  labellingEffort 323 perda_ac 2 
+flag 0
+new flag equal zero
+cleaning 2 data.tr16/xxx004104 ---- 4104
+data.tr16/xxx004104 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------323  Recall 1.408450  Precisao .309597  posit  0  labellingEffort 323 perda_ac 2 
+flag 0
+increase flag value
+cleaning 2 data.tr16/xxx004103 ---- 4103
+data.tr16/xxx004103 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------323  Recall 1.408450  Precisao .309597  posit  0  labellingEffort 323 perda_ac 2 
+flag 1
+increase flag value
+cleaning 2 data.tr16/xxx004102 ---- 4102
+data.tr16/xxx004102 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------323  Recall 1.408450  Precisao .309597  posit  0  labellingEffort 323 perda_ac 2 
+flag 2
+increase flag value
+cleaning 2 data.tr16/xxx004101 ---- 4101
+data.tr16/xxx004101 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------326  Recall 1.408450  Precisao .306748  posit  0  labellingEffort 326 perda_ac 2 
+flag 3
+increase flag value
+cleaning 2 data.tr16/xxx004100 ---- 4100
+data.tr16/xxx004100 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------327  Recall 1.408450  Precisao .305810  posit  0  labellingEffort 327 perda_ac 2 
+flag 4
+increase flag value
+cleaning 2 data.tr16/xxx004099 ---- 4099
+data.tr16/xxx004099 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------327  Recall 1.408450  Precisao .305810  posit  0  labellingEffort 327 perda_ac 2 
+flag 5
+increase flag value
+cleaning 2 data.tr16/xxx004098 ---- 4098
+data.tr16/xxx004098 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------328  Recall 1.408450  Precisao .304878  posit  0  labellingEffort 328 perda_ac 2 
+flag 6
+increase flag value
+cleaning 2 data.tr16/xxx004097 ---- 4097
+data.tr16/xxx004097 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------329  Recall 1.408450  Precisao .303951  posit  0  labellingEffort 329 perda_ac 2 
+flag 7
+increase flag value
+cleaning 2 data.tr16/xxx004096 ---- 4096
+data.tr16/xxx004096 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------329  Recall 1.408450  Precisao .303951  posit  0  labellingEffort 329 perda_ac 2 
+flag 8
+increase flag value
+cleaning 2 data.tr16/xxx004095 ---- 4095
+data.tr16/xxx004095 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------330  Recall 1.408450  Precisao .303030  posit  0  labellingEffort 330 perda_ac 2 
+flag 9
+increase flag value
+cleaning 2 data.tr16/xxx004094 ---- 4094
+data.tr16/xxx004094 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------331  Recall 1.408450  Precisao .302114  posit  0  labellingEffort 331 perda_ac 2 
+flag 10
+increase flag value
+cleaning 2 data.tr16/xxx004093 ---- 4093
+data.tr16/xxx004093 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------331  Recall 1.408450  Precisao .302114  posit  0  labellingEffort 331 perda_ac 2 
+flag 11
+increase flag value
+cleaning 2 data.tr16/xxx004092 ---- 4092
+data.tr16/xxx004092 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------331  Recall 1.408450  Precisao .302114  posit  0  labellingEffort 331 perda_ac 2 
+flag 12
+increase flag value
+cleaning 2 data.tr16/xxx004091 ---- 4091
+data.tr16/xxx004091 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------332  Recall 1.408450  Precisao .301204  posit  0  labellingEffort 332 perda_ac 2 
+flag 13
+increase flag value
+cleaning 2 data.tr16/xxx004090 ---- 4090
+data.tr16/xxx004090 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------335  Recall 1.408450  Precisao .298507  posit  0  labellingEffort 335 perda_ac 2 
+flag 14
+increase flag value
+cleaning 2 data.tr16/xxx004089 ---- 4089
+data.tr16/xxx004089 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------335  Recall 1.408450  Precisao .298507  posit  0  labellingEffort 335 perda_ac 2 
+flag 15
+increase flag value
+cleaning 2 data.tr16/xxx004088 ---- 4088
+data.tr16/xxx004088 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------335  Recall 1.408450  Precisao .298507  posit  0  labellingEffort 335 perda_ac 2 
+flag 16
+increase flag value
+cleaning 2 data.tr16/xxx004087 ---- 4087
+data.tr16/xxx004087 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------335  Recall 1.408450  Precisao .298507  posit  0  labellingEffort 335 perda_ac 2 
+flag 17
+increase flag value
+cleaning 2 data.tr16/xxx004086 ---- 4086
+data.tr16/xxx004086 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------336  Recall 1.408450  Precisao .297619  posit  0  labellingEffort 336 perda_ac 2 
+flag 18
+increase flag value
+cleaning 2 data.tr16/xxx004085 ---- 4085
+data.tr16/xxx004085 pos  0 neg    real posit 0  perda 2
+****final result AM is tr16 100 ------336  Recall 1.408450  Precisao .297619  posit  0  labellingEffort 336 perda_ac 2 
+flag 19
+increase flag value
+break because flag sliding windows
+positivos 100 total 333 recal  .884955 precision  perda 2
+final REVEAL is tr16 100 ------333  Recall .884955  Precisao .300300  posit  100  labellingEffort 333  onlyssarp  82 perda_ac 2 sliding_windows 20
