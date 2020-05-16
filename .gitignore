@@ -4,6 +4,7 @@ result/
 results/
 all_results/
 .stderr
+std.error.log
 
 # Logs
 logs/
@@ -33,9 +34,13 @@ SSARP/run/[1]=**
 SSARP/run/alac**
 SSARP/run/result**
 SSARP/run/temp**
+SSARP/run/composite**
 SSARP/run/final_treina**
 SSARP/run/bkppairs**
 SSARP/run/bkpseed**
+SSARP/run/LLK10.txt
+SSARP/run/pairsStore
+SSARP/run/seed_out
 SSARP/run/instanceFile
 *.arff
 *.hist
