@@ -1,28 +1,38 @@
-*.doc
-*.svm.fil
-*.df
-N
+### General ###
+# Result folders
 result/
+results/
 all_results/
-tr0*
-athome*
+
+# Logs
+logs/
+
+### SCAL ###
+# Dataset files
+*.df
 *.tfdf
 *.concordance
-*.stderr
-seed
-*.tr*
-std.error.log
-results/
-tr[0-20]/
-*.arff
-*.db
+*.fil
 *.svd
-bfg-1.13.0.jar
-final_treina*
-label.*
-log_ssarp_stoping*
-trainset.*
-
-tr18/
-
+*.db
 indexer
+
+# Topic files
+*.doc
+tr**/
+
+N
+
+### SSARP ###
+SSARP/run/train**
+SSARP/run/log_ssarp**
+SSARP/run/label**
+SSARP/run/lac**
+SSARP/run/[1]=**
+SSARP/run/alac**
+SSARP/run/final_treina**
+SSARP/run/bkppairs**
+SSARP/run/bkpseed**
+SSARP/run/instanceFile
+*.arff
+*.hist
