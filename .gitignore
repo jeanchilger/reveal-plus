@@ -3,6 +3,7 @@
 result/
 results/
 all_results/
+.stderr
 
 # Logs
 logs/
@@ -30,6 +31,8 @@ SSARP/run/label**
 SSARP/run/lac**
 SSARP/run/[1]=**
 SSARP/run/alac**
+SSARP/run/result**
+SSARP/run/temp**
 SSARP/run/final_treina**
 SSARP/run/bkppairs**
 SSARP/run/bkpseed**

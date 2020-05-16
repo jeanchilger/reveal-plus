@@ -1,0 +1,56 @@
+Reading training data [done]
+Reading test set 1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%[done]
+
+100003 total_occurs 730 n_rules 7360 diff 7360 
+100018 total_occurs 742 n_rules 7360 diff 7360 
+TRAIN_EMPTY=0 
+OCCURS_CMP=1 
+
+ 0--------------------------- 100003 size 16 total_occurs 730 n_rules 7360 diff 7360 
+
+ 1--------------------------- 100018 size 16 total_occurs 742 n_rules 7360 diff 7360 
+
+ 2--------------------------- 100002 size 16 total_occurs 721 n_rules 7365 diff 7365 
+
+ 3--------------------------- 100021 size 16 total_occurs 734 n_rules 7365 diff 7365 
+
+ 4--------------------------- 100020 size 16 total_occurs 735 n_rules 7365 diff 7365 
+
+ 5--------------------------- 100012 size 16 total_occurs 740 n_rules 7365 diff 7365 
+
+ 6--------------------------- 100022 size 16 total_occurs 747 n_rules 7365 diff 7365 
+
+ 7--------------------------- 100013 size 16 total_occurs 744 n_rules 7375 diff 7375 
+
+ 8--------------------------- 100015 size 16 total_occurs 733 n_rules 7385 diff 7385 
+
+ 9--------------------------- 100019 size 16 total_occurs 739 n_rules 7395 diff 7395 
+
+ 10--------------------------- 100005 size 16 total_occurs 743 n_rules 7395 diff 7395 
+
+ 11--------------------------- 100017 size 16 total_occurs 753 n_rules 7400 diff 7400 
+
+ 12--------------------------- 100010 size 16 total_occurs 754 n_rules 7400 diff 7400 
+
+ 13--------------------------- 100009 size 16 total_occurs 756 n_rules 7405 diff 7405 
+
+ 14--------------------------- 100014 size 16 total_occurs 740 n_rules 7431 diff 7431 
+
+ 15--------------------------- 100011 size 16 total_occurs 747 n_rules 7441 diff 7441 
+inserting instance 100003 0
+time: classify 0.146899
+time: create_itemset 0.008848
+time: get_THE_intersection 0.005590
+time: get_THE_score 0.000710
+time: get_THE_union 0.001182
+time: get_TOTAL_score 0.000726
+time: get_from_cache 0.095916
+time: induce_rules 0.140294
+time: insert_into_cache 0.009497
+time: lazy_active_classification 0.142659
+time: print_rules 0.000000
+time: project_training 0.000092
+time: read_test_set 0.001123
+time: read_training_set 0.003032
+time: reset_rules 0.000000
+

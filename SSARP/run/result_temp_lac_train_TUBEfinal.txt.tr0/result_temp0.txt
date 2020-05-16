@@ -1,0 +1,68 @@
+Reading training data [done]
+Reading test set 1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%[done]
+
+100006 total_occurs 983 n_rules 7130 diff 7130 
+100008 total_occurs 1001 n_rules 7130 diff 7130 
+TRAIN_EMPTY=0 
+OCCURS_CMP=1 
+
+ 0--------------------------- 100006 size 22 total_occurs 983 n_rules 7130 diff 7130 
+
+ 1--------------------------- 100008 size 22 total_occurs 1001 n_rules 7130 diff 7130 
+
+ 2--------------------------- 100007 size 22 total_occurs 1003 n_rules 7171 diff 7171 
+
+ 3--------------------------- 100016 size 22 total_occurs 1012 n_rules 7186 diff 7186 
+
+ 4--------------------------- 100004 size 22 total_occurs 1004 n_rules 7223 diff 7223 
+
+ 5--------------------------- 100001 size 22 total_occurs 990 n_rules 7238 diff 7238 
+
+ 6--------------------------- 100002 size 22 total_occurs 989 n_rules 7320 diff 7320 
+
+ 7--------------------------- 100021 size 22 total_occurs 1002 n_rules 7320 diff 7320 
+
+ 8--------------------------- 100022 size 22 total_occurs 1019 n_rules 7340 diff 7340 
+
+ 9--------------------------- 100012 size 22 total_occurs 1006 n_rules 7350 diff 7350 
+
+ 10--------------------------- 100018 size 22 total_occurs 1010 n_rules 7350 diff 7350 
+
+ 11--------------------------- 100020 size 22 total_occurs 1003 n_rules 7355 diff 7355 
+
+ 12--------------------------- 100003 size 22 total_occurs 999 n_rules 7360 diff 7360 
+
+ 13--------------------------- 100013 size 22 total_occurs 1013 n_rules 7370 diff 7370 
+
+ 14--------------------------- 100015 size 22 total_occurs 1004 n_rules 7375 diff 7375 
+
+ 15--------------------------- 100010 size 22 total_occurs 1026 n_rules 7380 diff 7380 
+
+ 16--------------------------- 100019 size 22 total_occurs 1011 n_rules 7385 diff 7385 
+
+ 17--------------------------- 100005 size 22 total_occurs 1018 n_rules 7395 diff 7395 
+
+ 18--------------------------- 100017 size 22 total_occurs 1026 n_rules 7395 diff 7395 
+
+ 19--------------------------- 100009 size 22 total_occurs 1029 n_rules 7395 diff 7395 
+
+ 20--------------------------- 100014 size 22 total_occurs 1010 n_rules 7421 diff 7421 
+
+ 21--------------------------- 100011 size 22 total_occurs 1018 n_rules 7436 diff 7436 
+inserting instance 100006 1
+time: classify 0.293432
+time: create_itemset 0.017153
+time: get_THE_intersection 0.010696
+time: get_THE_score 0.001696
+time: get_THE_union 0.002597
+time: get_TOTAL_score 0.001731
+time: get_from_cache 0.196569
+time: induce_rules 0.282396
+time: insert_into_cache 0.014401
+time: lazy_active_classification 0.287276
+time: print_rules 0.000000
+time: project_training 0.000190
+time: read_test_set 0.002371
+time: read_training_set 0.003760
+time: reset_rules 0.000000
+

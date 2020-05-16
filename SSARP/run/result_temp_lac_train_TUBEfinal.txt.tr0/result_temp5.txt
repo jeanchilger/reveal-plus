@@ -1,0 +1,58 @@
+Reading training data [done]
+Reading test set 1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%[done]
+
+100001 total_occurs 764 n_rules 7238 diff 7238 
+100002 total_occurs 766 n_rules 7320 diff 7320 
+TRAIN_EMPTY=0 
+OCCURS_CMP=1 
+
+ 0--------------------------- 100001 size 17 total_occurs 764 n_rules 7238 diff 7238 
+
+ 1--------------------------- 100002 size 17 total_occurs 766 n_rules 7320 diff 7320 
+
+ 2--------------------------- 100021 size 17 total_occurs 780 n_rules 7320 diff 7320 
+
+ 3--------------------------- 100022 size 17 total_occurs 790 n_rules 7340 diff 7340 
+
+ 4--------------------------- 100012 size 17 total_occurs 785 n_rules 7350 diff 7350 
+
+ 5--------------------------- 100018 size 17 total_occurs 786 n_rules 7350 diff 7350 
+
+ 6--------------------------- 100020 size 17 total_occurs 779 n_rules 7355 diff 7355 
+
+ 7--------------------------- 100003 size 17 total_occurs 774 n_rules 7360 diff 7360 
+
+ 8--------------------------- 100013 size 17 total_occurs 789 n_rules 7370 diff 7370 
+
+ 9--------------------------- 100015 size 17 total_occurs 777 n_rules 7375 diff 7375 
+
+ 10--------------------------- 100010 size 17 total_occurs 799 n_rules 7380 diff 7380 
+
+ 11--------------------------- 100019 size 17 total_occurs 784 n_rules 7385 diff 7385 
+
+ 12--------------------------- 100005 size 17 total_occurs 788 n_rules 7395 diff 7395 
+
+ 13--------------------------- 100017 size 17 total_occurs 798 n_rules 7395 diff 7395 
+
+ 14--------------------------- 100009 size 17 total_occurs 802 n_rules 7395 diff 7395 
+
+ 15--------------------------- 100014 size 17 total_occurs 784 n_rules 7421 diff 7421 
+
+ 16--------------------------- 100011 size 17 total_occurs 791 n_rules 7436 diff 7436 
+inserting instance 100001 1
+time: classify 0.158335
+time: create_itemset 0.009113
+time: get_THE_intersection 0.005640
+time: get_THE_score 0.000794
+time: get_THE_union 0.001196
+time: get_TOTAL_score 0.000817
+time: get_from_cache 0.105266
+time: induce_rules 0.151907
+time: insert_into_cache 0.009621
+time: lazy_active_classification 0.154563
+time: print_rules 0.000000
+time: project_training 0.000085
+time: read_test_set 0.001236
+time: read_training_set 0.002519
+time: reset_rules 0.000001
+
