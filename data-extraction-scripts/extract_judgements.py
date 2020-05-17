@@ -1,9 +1,9 @@
 import os
 
-if os.path.exists("qrels.cord_base.list"):
-    os.remove("qrels.cord_base.list")
+if os.path.exists("qrels.cord-19.list"):
+    os.remove("qrels.cord-19.list")
 
-with open("qrels-rnd1.txt", "r") as qrels_read, open("qrels.cord_base.list", "a") as qrels_write:
+with open("qrels-rnd1.txt", "r") as qrels_read, open("qrels.cord-19.list", "a") as qrels_write:
     while True:
         line = qrels_read.readline()
 
