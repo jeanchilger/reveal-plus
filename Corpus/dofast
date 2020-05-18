@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source "${ABS_PATH}/handle_errors"
 export LANG=C
 CORP=$1
 #
@@ -20,7 +20,7 @@ try
 ) 2> $STD_ERROR_OUT
 
 catch || {
-    kill -SIGUSR2 -SIGUR1 `ps --pid $$ -oppid=`; exit_on_error
+    kill -SIGUSR2 -SIGUSR1 `ps --pid $$ -oppid=`; exit_on_error
 }
 ../dotfidfinline $N < $CORP.tfdf > $CORP.svm.fil
 

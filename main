@@ -101,9 +101,9 @@ function show_help() {
 #----------------------------------------------------------------------
 POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
-CORPUS="MedicalDB"
+CORPUS="toyDataset"
 VERBOSE=false
-TOPICS_CONSIDERED="tr0"      # dummy value for empty topic list verification
+TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
 
@@ -300,7 +300,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         e_primary "Calling second sampling strategy proposed by REVEAL"
         ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
-
+        trap "echo EXIT ERROR.>&2;exit" SIGUSR1
         popd
 
         mv $TOPIC "${RESULT_DIR}/"
