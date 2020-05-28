@@ -10,14 +10,12 @@ to be used in the SCAL format.
 import pandas
 import os
 
+repeated = []      # list of repeated (used just for information)
+invalid = []       # list of invalid doc ids within metadata
+
 data = pandas.read_csv("metadata.csv")
 
-uids = data.cord_uid.tolist()
-
-print("Total columns:", len(uids))
-print("Unique uids:", len(set(uids)))
-
-repeated = []      # list of repeated (used just for information)
+all_uids = data.cord_uid.tolist()
 
 unique_count = 0   # tracks document name
 doc_mapping = {}   # maps names (could be used for uniqueness check)
@@ -25,18 +23,27 @@ doc_mapping = {}   # maps names (could be used for uniqueness check)
 if os.path.exists("topic.id.mapping"):
     os.remove("topic.id.mapping")
 
-with open("topic.id.mapping", "a") as map_file:
-    for elem in uids:
-        if elem in doc_mapping.keys():
-            repeated.append(elem)
+with open("topic.id.mapping", "a") as map_file, open("docids-rnd1.txt", "r") as valid_uids_file:
+    valid_uids = [line.strip() for line in valid_uids_file.readlines()]
+
+    for uid in all_uids:
+
+        if uid in valid_uids:
+
+            if uid in doc_mapping.keys():
+                repeated.append(uid)
+
+            else:
+                doc_mapping[uid] = str(unique_count).zfill(7)
+                unique_count += 1
+
+                map_file.write(" ".join([uid, doc_mapping[uid]]) + "\n")
 
         else:
-            doc_mapping[elem] = str(unique_count).zfill(7)
-            unique_count += 1
+            invalid.append(uid)
 
-            map_file.write(" ".join([elem, doc_mapping[elem]]) + "\n")
 
-        doc_name = doc_mapping[elem]
-
-print("Repeated elemets found:", len(repeated))
-print("Unique repeated elements:", len(set(repeated)))
+print("Repeated (valid) elements found:", len(repeated))
+print("Unique elements within the repeated:", len(set(repeated)))
+print("Invalid docs:", len(invalid))
+print("Valid docs:", len(doc_mapping.keys()))

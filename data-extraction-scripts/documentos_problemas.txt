@@ -1,0 +1,5 @@
+Documentos com problemas que não estão presentes na base:
+['0kfwnviw', '1f6m15gh', '1gg2vb8e', '2qnbxv4o', '3mnxxbbg', '8jft4wen', 'A.; Bennett', 'A.; Chamberlain', 'A.; Chen', 'A.; Kros', 'C.; Li', 'C.; Xi', 'D.; Gatuz', 'E.; Frei', 'E.; McCammon', 'F.; Kantor', 'J.; Norris', 'J.; Rogers', 'L.; Bellaousov', 'L.; Cao', 'M.; Barraza', 'M.; Bird', 'M.; Kumar', 'O.; Hilimire', 'R.; Murphy', 'S.; Shiddiky', 'T.; Garcia-Miranda', 'T.; Zhu', 'V.; Rani', 'W.; Smith', 'Yu; Cho', 'bq28phap', 'cvj9zn0w', 'dgi4ibym', 'eas4gr3z', 'exfensim', 'jt4gwttd', 'k017xaxh', 'l07t1tkq', 'mahieh3t', 'o7ze0xjt', 'ovdskcuu', 'q6sxulhd', 'qb35up1z', 'qbkv76yz', 'qcqulril', 'qhvd2o69', 'qiig9l5t', 'ssbp3ykf', 't2181hsf', 'voa4qkd0', 'xc0u1yop']
+Total de documentos não repetidos e que estão na base: 51018
+Numero de documentos que não estão na base: 52
+
