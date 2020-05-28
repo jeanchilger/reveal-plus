@@ -14,7 +14,7 @@
   mkdir data.$TOPIC
   pushd data.$TOPIC
 
-  split -l 30 -d  ../result_ranking.$TOPIC xxx --suffix-length=6
+  split -l 30 -d  ../final_ranking.$TOPIC xxx --suffix-length=6
   len=`ls | wc -l`
   len=$(($len))
   popd
