@@ -58,7 +58,7 @@
         cat x_posit.* x_negat.*   | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
         cat out_after_ssarp.$TOPIC | sort | uniq > temp
         cp temp out_after_ssarp.$TOPIC
-        echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda $perda_ac "
+        echo "positivos `cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l` total `wc -l < out_after_ssarp.$TOPIC` input $totalPairsInput perda $perda_ac " >> runs.log
         exit
 
     fi
@@ -111,7 +111,7 @@
         perda=$(($real_posit-$pos))
         perda_ac=$(($perda+$perda_ac))
 
-        echo "$name pos  $pos neg  $neg  real posit $real_posit  perda $perda_ac"
+        echo "$name pos  $pos neg  $neg  real posit $real_posit  perda $perda_ac" >> runs.log
         cat x_posit_ssarp_end.$j x_negat_ssarp_end.$j | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
 
         r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
@@ -119,21 +119,21 @@
         total=$Rel
         recall=`echo "scale=6; ($r / $total)" | bc`
         precisao=`echo "scale=6; ($r / $finalpares)" | bc`
-        echo "****final result AM is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` perda_ac $perda_ac "
-        echo "flag $flag"
+        echo "****final result AM is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` perda_ac $perda_ac " >> runs.log
+        echo "flag $flag" >> runs.log
 
         if [ $pos -le 0 ]; then
-                echo "increase flag value"
+                echo "increase flag value" >> runs.log
                 flag=$(($flag+1))
         else
-                echo "new flag equal zero"
+                echo "new flag equal zero" >> runs.log
                 flag=0
         fi
 
 
         if [ $flag -eq $sliding_windows ]; then
             new_mid=$i;
-            echo "break because flag sliding windows"
+            echo "break because flag sliding windows" >> runs.log
             break;
         fi
 
@@ -142,10 +142,10 @@
 
     temp=0
     if [ $new_mid -le 0 ]; then
-        echo "######inside active plus $len_plus"
+        echo "######inside active plus $len_plus" >> runs.log
         for i in $(seq $len_plus -1 0 ); do
             name=`printf "data_plus.$TOPIC/xxx%06d" $i`
-            echo "inside active plus $name ---- $i"
+            echo "inside active plus $name ---- $i" >> runs.log
             j=$(($j+1))
             temp=$(($temp+1))
             cat $name | sort > temp
@@ -159,7 +159,7 @@
             perda=$(($real_posit-$pos))
             perda_ac=$(($perda+$perda_ac))
 
-            echo "$name pos  $pos neg  $neg  real posit $real_posit  perda $perda_ac"
+            echo "$name pos  $pos neg  $neg  real posit $real_posit  perda $perda_ac" >> runs.log
             cat x_posit_ssarp_end.$j x_negat_ssarp_end.$j | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
 
             r=`cat out_after_ssarp.$TOPIC | cut -d' ' -f1 | sort -k1 |  uniq | join - goldendb |  wc -l`
@@ -168,8 +168,8 @@
             total=$Rel
             recall=`echo "scale=6; ($r / $total)" | bc`
             precisao=`echo "scale=6; ($r / $finalpares)" | bc`
-            echo "****final result AM is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` perda_ac $perda_ac "
-            echo "flag $flag"
+            echo "****final result AM is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` perda_ac $perda_ac " >> runs.log
+            echo "flag $flag" >> runs.log
 
            # if (( $(echo "$recall > 0.90" |bc -l) )); then
                 if [ $pos -le 0 ]; then
@@ -183,7 +183,7 @@
                     break;
                 fi
 		if [ $j -ge 2000 ]; then
-                        echo "##break because of stopping $i"
+                        echo "##break because of stopping $i" >> runs.log
 			break;
 		fi
         done
@@ -213,4 +213,6 @@
     #$perda_ac "
     echo "positivos $r total $finalpares recal  $recall precision $precision perda $perda_ac"
 
-echo "final REVEAL is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $r  labellingEffort `wc -l < training_set.$TOPIC`  onlyssarp  `wc -l < ssarp_labelling_full.$TOPIC` perda_ac $perda_ac sliding_windows $sliding_windows"
+echo "final REVEAL is $TOPIC $r ------$finalpares  Recall $recall  Precisao $precisao  posit  $r  labellingEffort `wc -l < training_set.$TOPIC`  onlyssarp  `wc -l < ssarp_labelling_full.$TOPIC` perda_ac $perda_ac sliding_windows $sliding_windows" >> runs.log
+
+echo "$recall $precisao `wc -l < training_set.$TOPIC`" > reveal.final
