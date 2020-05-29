@@ -14,14 +14,17 @@ with open(ALL_RESULTS_HELPER, "r") as runs_describer:
         # topic execution_number result_file
         line = _line.split()
 
-        topic_dir = "results/" + line[0]
-        topic_file = topic_dir + "/rel." + line[1] + ".rate.csv"
+        dst_dir = "results/" + line[0]
+        src_dir = "all_results/result-" + line[1]
 
-        if not os.path.exists(topic_dir):
-            os.mkdir(topic_dir)
+        scal_file = dst_dir + "/rel." + line[1] + ".rate.csv"
+        reveal_file = dst_dir + "/reveal." + line[1] + ".final.csv"
+
+        if not os.path.exists(dst_dir):
+            os.mkdir(dst_dir)
 
         # writes positives and all to a csv file
-        with open(line[2], "r") as rel_file, open(topic_file, "w") as rel_dst_file:
+        with open(os.path.join(src_dir, "rel.rate"), "r") as rel_file, open(scal_file, "w") as rel_dst_file:
             rel_writer = csv.writer(rel_dst_file)
 
             rel_writer.writerow(["positives", "all_docs", "limited_docs", "recall"])
@@ -47,15 +50,34 @@ with open(ALL_RESULTS_HELPER, "r") as runs_describer:
 
                 rel_writer.writerow([positives, all_docs, limited_docs, "{:.5f}".format(positives/total_positives)])
 
+        # saves final reveal to a csv file
+        with open(os.path.join(src_dir, "reveal.final")) as rev_file, open(reveal_file, "w") as rev_dst_file:
+
+            rev_writer = csv.writer(rev_dst_file)
+
+            rev_writer.writerow(["recall", "precision", "lab_eff"])
+
+            for _rev_line in rev_file:
+
+                rev_line = _rev_line.split()
+
+                recall = float(rev_line[0])
+                precision = float(rev_line[1])
+                lab_eff = int(rev_line[2])
+
+                rev_writer.writerow(["{:.5f}".format(recall), "{:.5f}".format(precision), lab_eff])
+
+
+
 # calculates mean and standard deviation over data samples taken
-
 results_path = "results/"
-for topic_dir in os.listdir(results_path):
+for dst_dir in os.listdir(results_path):
 
-    topic_path = os.path.join(results_path, topic_dir)
+    topic_path = os.path.join(results_path, dst_dir)
     rel_general_file = os.path.join(topic_path, "rel.general.rate.csv")
 
-    topic_rel_files = [os.path.join(topic_path, f) for f in os.listdir(topic_path) if os.path.isfile(os.path.join(topic_path, f))]
+    topic_rel_files = [os.path.join(topic_path, f) for f in os.listdir(topic_path) if f.split(".")[0] == "rel"]
+    print("AAAA", len(topic_rel_files))
 
     positives = []
     recall = []
@@ -64,9 +86,9 @@ for topic_dir in os.listdir(results_path):
 
     result_count = 0
 
-    for _topic_file in topic_rel_files:
-        with open(_topic_file, "r") as topic_file:
-            topic_reader = csv.reader(topic_file)
+    for _scal_file in topic_rel_files:
+        with open(_scal_file, "r") as scal_file:
+            topic_reader = csv.reader(scal_file)
 
             curr_idx = -1
 
