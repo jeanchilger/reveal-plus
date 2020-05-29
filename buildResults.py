@@ -1,7 +1,8 @@
-import os
-import sys
 import csv
+import os
+import shutil
 import statistics
+import sys
 
 ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
@@ -67,17 +68,24 @@ with open(ALL_RESULTS_HELPER, "r") as runs_describer:
 
                 rev_writer.writerow(["{:.5f}".format(recall), "{:.5f}".format(precision), lab_eff])
 
+        # copy logs
+        shutil.copy(src_dir + "/runs.log", dst_dir + "/run." + line[1] + ".log")
 
+results_path = "results/"
 
 # calculates mean and standard deviation over data samples taken
-results_path = "results/"
+# *SCAL data
 for dst_dir in os.listdir(results_path):
 
     topic_path = os.path.join(results_path, dst_dir)
     rel_general_file = os.path.join(topic_path, "rel.general.rate.csv")
 
     topic_rel_files = [os.path.join(topic_path, f) for f in os.listdir(topic_path) if f.split(".")[0] == "rel"]
-    print("AAAA", len(topic_rel_files))
+
+    # just one run (or some mistake happened)
+    if len(topic_rel_files) <= 1:
+        print("There was only one run, impossible calculate stdevs and means.")
+        break
 
     positives = []
     recall = []
@@ -93,6 +101,7 @@ for dst_dir in os.listdir(results_path):
             curr_idx = -1
 
             for row in topic_reader:
+                # skip header
                 if curr_idx == -1:
                     curr_idx += 1
                     continue
@@ -110,21 +119,74 @@ for dst_dir in os.listdir(results_path):
 
         result_count += 1
 
-    if result_count > 1:
-        with open(rel_general_file, "w") as rel_gen:
+    with open(rel_general_file, "w") as rel_gen:
 
-            rel_gen_writer = csv.writer(rel_gen)
+        rel_gen_writer = csv.writer(rel_gen)
 
-            rel_gen_writer.writerow(["all_docs", "limited_docs", "positives_mean", "positives_stdev", "recall_mean", "recall_stdev"])
+        rel_gen_writer.writerow(["all_docs", "limited_docs", "positives_mean", "positives_stdev", "recall_mean", "recall_stdev"])
 
-            for i in range(len(positives)):
-                rel_gen_writer.writerow([
-                    all_docs[i],
-                    limited_docs[i],
-                    "{:.5f}".format(statistics.mean(positives[i])),
-                    "{:.5f}".format(statistics.stdev(positives[i])),
-                    "{:.5f}".format(statistics.mean(recall[i])),
-                    "{:.5f}".format(statistics.stdev(recall[i]))
-                ])
-    else:
-        print("There was only one run, impossible calculate stdevs and means.")
+        for i in range(len(positives)):
+            rel_gen_writer.writerow([
+                all_docs[i],
+                limited_docs[i],
+                "{:.5f}".format(statistics.mean(positives[i])),
+                "{:.5f}".format(statistics.stdev(positives[i])),
+                "{:.5f}".format(statistics.mean(recall[i])),
+                "{:.5f}".format(statistics.stdev(recall[i]))
+            ])
+
+# calculates mean and standard deviation over data samples taken
+# *REVEAL data
+for dst_dir in os.listdir(results_path):
+
+    topic_path = os.path.join(results_path, dst_dir)
+    rev_general_file = os.path.join(topic_path, "reveal.general.final.csv")
+
+    topic_rev_files = [os.path.join(topic_path, f) for f in os.listdir(topic_path) if f.split(".")[0] == "reveal"]
+
+    # just one run (or some mistake happened)
+    if len(topic_rev_files) <= 1:
+        break
+
+    recall = []
+    precision = []
+    lab_eff = []
+
+    result_count = 0
+
+    for _reveal_file in topic_rev_files:
+        with open(_reveal_file, "r") as reveal_file:
+            rev_reader = csv.reader(reveal_file)
+
+            curr_idx = -1
+
+            for row in rev_reader:
+                # skip header
+                if curr_idx == -1:
+                    curr_idx += 1
+                    continue
+
+                recall.append(float(row[0]))
+                precision.append(float(row[1]))
+                lab_eff.append(int(row[2]))
+
+    with open(rev_general_file, "w") as reveal_gen:
+        rev_gen_writer = csv.writer(reveal_gen)
+
+        rev_gen_writer.writerow([
+            "recall_mean",
+            "recall_stdev",
+            "precision_mean",
+            "precision_stdev",
+            "lab_eff_mean",
+            "lab_eff_stdev"
+        ])
+
+        rev_gen_writer.writerow([
+            "{:.5f}".format(statistics.mean(recall)),
+            "{:.5f}".format(statistics.stdev(recall)),
+            "{:.5f}".format(statistics.mean(precision)),
+            "{:.5f}".format(statistics.stdev(precision)),
+            "{:.5f}".format(statistics.mean(lab_eff)),
+            "{:.5f}".format(statistics.stdev(lab_eff))
+        ])
