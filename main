@@ -254,11 +254,11 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         export t=`wc -l < new$j.$TOPIC`
 
-        documents_retrieved=$(($TOTAL_DOCUMENTS - $t))
+        ranking_size=$(($TOTAL_DOCUMENTS - $t))
 
         sort -k 2 -n inlr.out.$round.$TOPIC > sorted_ranking
 
-        tail -$documents_retrieved sorted_ranking \
+        tail -$ranking_size sorted_ranking \
             | cut -d$'\t' -f1 > result_ranking.$TOPIC
 
         n=$(($TOTAL_DOCUMENTS - $prevalence_int))
@@ -267,35 +267,68 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
             | cut -d' ' -f1 \
             | head -$n > result_plus.$TOPIC
 
-        cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
-
-        $VERBOSE && echo "t = $t; j = $j; documents_retrieved = $documents_retrieved; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
-
-        export relevants_found=`cat result.$TOPIC \
+        cat result_ranking.$TOPIC > result
+        cat sub_new[0-9][0-9]* >> result
+        cat result \
             | sort \
-            | uniq \
+            | uniq > temp
+
+        mv temp result
+
+        # cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
+
+        $VERBOSE && echo "t = $t; j = $j; ranking_size = $ranking_size; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
+
+        cat ssarp[0-9][0-9].$TOPIC \
+            | sort > already_labeled_docs.$TOPIC
+
+        cat sorted_ranking \
+            | cut -d' ' -f1 > ranking.$TOPIC
+
+        awk 'BEGIN {FS=OFS=" "; Q=" "} {print Q (NR==0 ? ID : ++n) Q, $0}' \
+            ranking.$TOPIC > ranking_with_order.$TOPIC
+
+        sort  -k2 ranking_with_order.$TOPIC \
+            | join - already_labeled_docs.$TOPIC -12 -v1 \
+            | sort -n  -k2 \
+            | cut -d' ' -f1 > final_ranking.$TOPIC
+
+
+        # relevants_found=`cat result.$TOPIC \
+        #     | sort \
+        #     | uniq \
+        #     | join - goldendb \
+        #     | uniq \
+        #     | wc -l`
+        #
+        # documents_labeled=`cat result.$TOPIC \
+        #     | sort \
+        #     | uniq \
+        #     | wc -l`
+
+        relevants_found=`cat result \
             | join - goldendb \
-            | uniq \
             | wc -l`
 
-        documents_retrieved=`cat result.$TOPIC \
-            | sort \
-            | uniq \
-            | wc -l`
+        documents_labeled=`cat result | wc -l`
 
-        total=`wc -l < goldendb`
+        total_relevants=`wc -l < goldendb`
 
-        recall=`echo "scale=5; ($relevants_found / $total)" \
+        recall=`echo "scale=5; ($relevants_found / $total_relevants)" \
             | bc`
 
-        precision=`echo "scale=5; ($relevants_found / $documents_retrieved)" \
+            precision=`echo "scale=5; ($relevants_found / $documents_labeled)" \
             | bc`
 
+        e_primary "-------------------------------------------------------------"
         e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
-        echo -e "\tRelevants: $relevants_found"
-        echo -e "\tDocuments retrieved: $documents_retrieved"
+        echo -e "\tRelevants Found: $relevants_found"
+        echo -e "\tTotal Relevants: $total_relevants"
+        echo -e "\tLabeled Documents: $documents_labeled"
+        echo -e "\tRanking Size: $ranking_size"
         echo -e "\tRecall: $recall"
         echo -e "\tPrecision: $precision"
+        e_primary "-------------------------------------------------------------"
 
         e_primary "Calling second sampling strategy proposed by REVEAL"
         ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
@@ -308,9 +341,11 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
     done < "judgement/$CORPUS.topic.stemming.txt"
 
     for topic in `ls ${RESULT_DIR}/`; do
-        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate
+        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.rate
+        cp "${RESULT_DIR}/${topic}/reveal.final" all_results/result-${i}/reveal.final
+        cp "${RESULT_DIR}/${topic}/runs.log" all_results/result-${i}/runs.log
 
-        echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
+        echo "${topic} ${i}" >> $ALL_RESULTS_HELPER
     done
 done
 

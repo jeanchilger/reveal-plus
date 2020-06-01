@@ -437,6 +437,10 @@ for _round in $(seq -f "%02g" 0 99); do
             $VERBOSE && e_info \
                 "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
 
+            echo "Positives documents collected ... `wc -l < x_posit.$round`\
+            Negative documents .............. `wc -l < x_negat.$round`\
+            Total positives in sub sample ... `wc -l < sub_new_positives.$round`" >> runs.log
+
         fi
 
         $VERBOSE && e_success "Active learning step finished."
