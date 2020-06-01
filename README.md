@@ -1,37 +1,84 @@
-# REVEAL
-High recall Information REtrieval (HIRE) aims at identifying only and (almost) all relevant documents for a given query. HIRE is paramount in applications such as systematic literature review, medicine, legal jurisprudence, etc. Supervised (classification) approaches are traditionally used in HIRE to produce a rank of relevant documents. However, such strategies depend on informative (very) large training sets with a wide variety of patterns to identify the relevant documents. In this context, active learning methods have proven to be quite useful to determine informative and non-redundant documents to compose these training sets, while reducing user effort for manual labeling. Here, we propose
-REVEAL-HIRE – a new active framework for the HIRE task that selects a very reduced set of documents to be labeled, significantly mitigating the user’s effort. 
-**Coordinating professor:** Guilherme Dal Bianco ([github](https://github.com/dbguilherme), [lattes]( http://lattes.cnpq.br/5152594034228273))
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-red.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-**Participants:** [Emili Willinghoefer](https://github.com/Emiliwillinghoefer), [Jean Carlo Hilger](https://github.com/jeanchilger) and [Matheus Vinícius Todescato](https://github.com/mvtodescato)
+# REVEAL-plus
 
-**NOTE:** Previously work were made in [mvtodescato's CAL fork](https://github.com/mvtodescato/CAL), however, since we don't intend to merge it with the original upstream, we decided to create another repository, therefore all modifications since 5 March, 2020 will be made in this repository.
+## Overview
+High-Recall Information Retrieval (HRIR) - the identification of nearly all relevant documents within a set of them, given a search query - is a pivotal task in a wide range of applications [1] such as electronic discovery and systematic review. The relevant documents are judge this way by the user conducting the search, which may cause excessive effort (for the user) in classifying documents.
+
+For the given context, several researches have focused on reducing this effort, still providing a high recall. As a result a considerable number of techniques have emerged, among which it is worth mentioning REVEAL - RelEVant rulE-based Active Learning (check out [1] for more details) - which uses active learning and association rules to improve the HRIR performance.
+
+This project intend to improve the REVEAL by providing:
+- An enhanced starting point for the method; and
+- A clear and definite sopping criteria;
 
 ## Installation
+1. Clone this repository and enter it:
+`git clone https://github.com/jeanchilger/scal.git && cd SCAL`
+1. Inside repository, build kissdb indexer and other necessary binaries:
+`make`
 
-1. Clone the repository: `git clone https://github.com/JeanCHilger/SCAL.git`
-2. Make kissdb indexer (from inside repository folder): `make`
-
-Ready to use
+You are ready to go
 
 ## Usage
+The bash file named `main` is the entry point for the system. Type `./main <option>` for using it. Check the available options below.
 
-We are working only with the `4-gram` version.
+```bash
+-s <samples>, --samples=<samples>
+      Set <samples> as the quantity of executions that will occurs.
+      After, the mean and standard deviation over the samples are taken.
+      The standard value is 1.
 
-### Running a single time
-1. Apply 4-gram tf-idf features: `bash doAll_Baseline_4gram`;
-2. The output of BMI are stored in `result/` folder;
-3. The gain curve can be plotted by analyzing `$TOPIC.record.list`.
+-c <corpus>, --corpus=<corpus>
+      Specifies the name of the corpus to be used.
 
-### Running several times (taking means and standard deviation over executions)
-This option will run the code several times and take means and standard deviations over all executions' result, given a more solid and reliable output (although it takes longer).
+-t <topic-list>, --topics=<topic-list>
+      Specifies which topics will be computed by the method.
+      <topic-list> must be a space separated string, containing
+      one or more topics.
 
-1. Change the `SAMPLES` variable in `wrap_results` to the number of times you wish to run the code;
-2. Select specific topics to be evaluated by adding them to the `TOPICS_CONSIDERED` list in the same file;
-3. Run `bash wrap_results`;
-4. The results are stored under `results/` folder, separated by topic. Within each topic folder, there are results of individual runs (`rel.{exec_number}.rate.csv`) and a file with means and standard deviations of them all (`rel.general.rate.csv`).
+-v, --verbose
+      If specified, verbose messages will be shown during execution.
+
+-o, --off-colors
+      Turns off colors of terminal outputs.
+
+-h, --help
+      Show a message like this.
+```
+
+## Datasets
+Some dataset we've adapted and used for assessment are listed below.
+
+### CLEF 2017 Dataset
+CLEF 2017 development set, which was created based on the Diagnostic Test Accuracy (DTA) systematic reviews conducted by the [Cochrane Library](https://www.cochranelibrary.com/).
+
+*See [3].*
+
+### CORD-19
+[COVID-19 Open Research Dataset](https://www.semanticscholar.org/cord19).
+
+*See [4].*
+
+## Team
+### Coordinating professor
+- Guilherme Dal Bianco
+  - [GitHub](https://github.com/dbguilherme)
+  - [Lattes (pt-br Curriculum)](http://lattes.cnpq.br/5152594034228273)
+
+### Academics participating
+- Emili Willinghoefer (early work)
+  - [GitHub](https://github.com/Emiliwillinghoefer)
+- Jean Carlo Hilger
+  - [GitHub](https://github.com/jeanchilger)
+- Matheus Vinícius Todescato
+  - [GitHub](https://github.com/mvtodescato)
 
 ## Credits
+The code used as basis is from [HTAustin](https://github.com/HTAustin)'s [CAL repository](https://github.com/HTAustin/CAL), we adapted his code from CAL to SCAL and later to the REVEAL method.
 
-This is a work intended to improve the CAL (Continuous Active Learning) protocol for TAR (Technology Assisted Review) processes by CORMACK, Gordon V. and GROSSMAN, Maura R. (2014). The code used is from [HTAustin](https://github.com/HTAustin)'s [CAL repository](https://github.com/HTAustin/CAL)
-
+## References
+Core articles that guided this project.
+- [1] Guilherme Dal Bianco. **Reveal-hire - a new active framework for the high recall task**. In *Proceedings of ACM Conference (Conference’17)*, 2018.
+- [2] Gordon  V.  Cormack  and  Maura  R.  Grossman. **Scalability  of  continuous active learning for reliable high-recall text classification**. In *Proceedings of the 25th ACM International Conference on Information and Knowledge Management*, 2016.
+- [3] Evangelos Kanoulas, Dan Li, Leif Azzopardi, and Rene Spijker. **CLEF 2017 technologically assisted reviews in empirical medicine overview**. *CEUR Workshop Proceedings*, 2017.
+- [4] Ellen M. Voorhees, Tasmeer Alam, Steven Bedrick, Dina Demner-Fushman, William R. Hersh, Kyle Lo, Kirk Roberts, Ian Soboroff, and Lucy Lu Wang. **Trec-covid: Constructing a pandemic information retrieval test collection**. *ArXiv*, 2020.
