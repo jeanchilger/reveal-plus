@@ -3,7 +3,7 @@
 FOLDER="XXX" # diretorio a ser criado dentro de cada Fold
 numfeatures=10 # numero de features no treino / teste
 partitions=3 # numero de particoes a ser usado
-binsfrom=10 # numero de bins (de) 
+binsfrom=10 # numero de bins (de)
 binsto=10 # numero de bins (at
 
 treina_arff=$1".arff"
@@ -13,7 +13,7 @@ suffix=B$3
 numfeatures=$3
 vez=$4
 seed_ssarp=$5
-topic=$6 
+topic=$6
 time=$7
 rules=$8
 
@@ -22,16 +22,16 @@ echo "execution number "$vez" the file have "$numfeatures;
 
 
 rm -r result_temp_lac_train_TUBE*
-rm train_nohead.arff  
+rm train_nohead.arff
 
-# 
+#
 # remove os headers dos arquivos weka
 if [ ! -f train_nohead.arff ]; then
     # grep  @ $treina_arff  > /tmp/final_treina.arff
     grep -v @ $treina_arff | grep -v ^$ > train_nohead.arff
 
 #     grep -v @ $test_arff | grep -v ^$ > test_nohead.arff
-fi 
+fi
 
 
 
@@ -67,23 +67,23 @@ echo ../discretize_TUBE.pl train-$suffix train_nohead.arff $numfeatures  lac_tra
 # echo  ./updateRows.pl lac_train_TUBE.txt lac_train_TUBEfinal.txt $numfeatures
 ./updateRows.pl lac_train_TUBE.txt.$topic lac_train_TUBEfinal.txt.$topic $vez
 
+tail -n 1 alac_lac_train_TUBEfinal.txt.$topic | grep "CLASS=0"  >> lac_train_TUBEfinal.txt.$topic
 
-
-if [ $time -eq 1 ]; 
+if [ $time -eq 1 ];
 then
     echo "removendo o arquivo bkp anterior "
-    rm  bkppairs 
+    rm bkppairs
     rm instanceFile
-    rm alac_full_lac_train_TUBEfinal.txt.$topic 
+    rm alac_full_lac_train_TUBEfinal.txt.$topic
     rm alac_lac_train_TUBEfinal.txt.$topic
     echo "iniciando o seed"
 
     echo "discretizando seed ssarp"
-    
-../discretize_TUBE.pl train-$suffix $seed_ssarp $numfeatures  lac_train_TUBE_seed.txt.$topic 
+
+../discretize_TUBE.pl train-$suffix $seed_ssarp $numfeatures  lac_train_TUBE_seed.txt.$topic
 ./updateRows.pl lac_train_TUBE_seed.txt.$topic  lac_train_TUBEfinal_seed.txt.$topic   0
-    
-    cat lac_train_TUBEfinal_seed.txt.$topic  >> alac_full_lac_train_TUBEfinal.txt.$topic 
+
+    cat lac_train_TUBEfinal_seed.txt.$topic  >> alac_full_lac_train_TUBEfinal.txt.$topic
 
     cat lac_train_TUBEfinal_seed.txt.$topic | grep "CLASS=0"  > bkpseed
     cat alac_full_lac_train_TUBEfinal.txt.$topic | grep "CLASS=1" | head -n 1 >> bkpseed
@@ -91,24 +91,24 @@ then
 
     cp alac_lac_train_TUBEfinal.txt.$topic  bkppairs
    # python3 testeActive.py lac_train_TUBE.txt.$topic 5 /tmp/fullAllacfile.$topic lac_train_TUBE_seed.txt.$topic 1
-    
+
 fi
 
 #python3 testeActive.py lac_train_TUBE.txt.$topic 5 /tmp/fullAllacfile.$topic lac_train_TUBE_seed.txt.$topic 0
 
-i=1 
+i=1
 while [[ $i -le 1 ]]; do
   # rm alac_lac_train_TUBEfinal.txt
    #rm alac_full_lac_train_TUBEfinal.txt
     echo " roda o ALAC ...."
   ../run_alac_repeated.sh lac_train_TUBEfinal.txt.$topic  $vez $rules
 #    cat alac_lac_train_TUBEfinal.txt | grep "CLASS=1" | awk '{ print $1 }' |  while read instance; do  sed -i  "/^$instance /d" lac_train_TUBEfinal.txt  ;  done
-#   
-#   
+#
+#
 #     x=$(cat lac_train_TUBEfinal.txt | wc -l)
-# 
+#
 #     if [ $x -le 1 ]; then
-#         echo "file almost empty" 
+#         echo "file almost empty"
 #         if [ $x -eq 1 ]; then
 #             cat lac_train_TUBEfinal.txt >> alac_lac_train_TUBEfinal.txt
 #         fi
@@ -120,7 +120,7 @@ done
 #junta as instancias selecionadas em cada particao em um arquivo unico contendo todas as features
 echo "Gerando o treino a partir das instancias selecionadas em cada particao..ssss"
 
-cp alac_lac_train_TUBEfinal.txt.$topic   bkppairs.$topic 
+cp alac_lac_train_TUBEfinal.txt.$topic   bkppairs.$topic
 
 
 
@@ -141,12 +141,12 @@ sort pairsStore -k1 |  uniq > pairsStoreB
 mv pairsStoreB pairsStore
 # ###################################
 # #cat alac_lac_train_TUBE.txt* | awk '{ print $1 }' |  while read instance; do  sed -i  "/^$instance /d" $file_original  ;  done
-# 
+#
 
 
 #cat composite_train_uniqB$numfeatures* >> bkppairs
-# 
-# 
+#
+#
 # cat alac_lac_train_TUBEfinal.txt*  > composite_train$suffix.txt
 
 # cat alac_lac_train_TUBEfinal.txt* | while read instance; do echo "$instance"; done

@@ -1,0 +1,30 @@
+tr1:coronavirus origin
+tr2:coronavirus response to weather changes
+tr3:coronavirus immunity
+tr4:how do people die from the coronavirus
+tr5:animal models of COVID-19
+tr6:coronavirus test rapid testing
+tr7:serological tests for coronavirus
+tr8:coronavirus under reporting
+tr9:coronavirus in Canada
+tr10:coronavirus social distancing impact
+tr11:coronavirus hospital rationing
+tr12:coronavirus quarantine
+tr13:how does coronavirus spread
+tr14:coronavirus super spreaders
+tr15:coronavirus outside body
+tr16:how long does coronavirus survive on surfaces
+tr17:coronavirus clinical trials
+tr18:masks prevent coronavirus
+tr19:what alcohol sanitizer kills coronavirus
+tr20:coronavirus and ACE inhibitors
+tr21:coronavirus mortality
+tr22:coronavirus heart impacts
+tr23:coronavirus hypertension
+tr24:coronavirus diabetes
+tr25:coronavirus biomarkers
+tr26:coronavirus early symptoms
+tr27:coronavirus asymptomatic
+tr28:coronavirus hydroxychloroquine
+tr29:coronavirus drug repurposing
+tr30:coronavirus remdesivir

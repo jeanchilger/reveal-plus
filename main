@@ -52,7 +52,7 @@ contains() {
 #==========================================================
 function show_usage() {
     echo "Usage: ./main [-s <samples>|--samples=<samples>]
-              [-c <corpus>|--corpus=<corpus>] [-d|--debug]
+              [-c <corpus>|--corpus=<corpus>] [-v|--verbose]
               [-o|--off-colors] -t <topic-list>|--topics <topic-list>
               [-h|--help]"
 }
@@ -83,8 +83,8 @@ function show_help() {
     echo "      one or more topics."
 
     echo ""
-    e_secondary "-d, --debug"
-    echo "      If specified, turns on the debug mode, showing verbose messages."
+    e_secondary "-v, --verbose"
+    echo "      If specified, verbose messages will be shown during execution."
 
     echo ""
     e_secondary "-o, --off-colors"
@@ -102,7 +102,7 @@ function show_help() {
 POSITIONAL=()                   # stores not recognized parameters
 SAMPLES=1
 CORPUS="toyDataset"
-DEBUG_MODE=false
+VERBOSE=false
 TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
@@ -129,8 +129,8 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
 
-        -d | --debug )
-            DEBUG_MODE=true
+        -v | --verbose )
+            VERBOSE=true
             ;;
 
         -o | --off-colors )
@@ -182,7 +182,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ $TOPICS_CONSIDERED == "empty" ]]; then
-    e_error "Topics must be explicitly specified, but none where given."
+    e_error "Topics must be explicitly specified, but none was given."
     show_usage
     exit
 fi
@@ -196,27 +196,6 @@ mkdir all_results
 rm -rf results
 mkdir results
 
-#----------------------------------------------------------------------
-# if data is already prepared, skips data extraction
-#----------------------------------------------------------------------
-if [ ! -f "${CORPUS}.svm.fil" ]; then
-    pushd Corpus
-
-    e_primary "Preparing dataset (executing dofast)..."
-    ./dofast "$CORPUS" $DEBUG_MODE
-    e_success "Done."
-
-    cp "$CORPUS".df ../"$CORPUS".df > /dev/null
-
-    cp "$CORPUS".svm.fil ../"$CORPUS".svm.fil
-
-    e_primary "Running feature compression SVD..."
-    ../svd/./script_create_svd.sh  ../$CORPUS.svm.fil 10
-    e_success "Done."
-
-    popd
-fi
-
 #-------------------------------------------------------------------------
 # runs the main code <SAMPLES> times
 #-------------------------------------------------------------------------
@@ -226,8 +205,6 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
     rm -rf all_results/result-${i}
     mkdir all_results/result-${i}
-
-    # bash doAll_Baseline_4gram $CORPUS `echo "$DEBUG_MODE"` "${TOPICS_CONSIDERED[@]}"
 
     #---------------------------------------------------------------------
     # iterates over every topic:query pair, and executes the method for
@@ -239,7 +216,6 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         TOPIC="${TEXT[0]}"
 
         if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
-            e_info "Skipping topic '$TOPIC'."
             continue
         fi
 
@@ -256,14 +232,120 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "${WHITE}Topic${END}:$TOPIC"
         echo -e "${WHITE}Query${END}:$QUERY"
 
-        bash doAll_Baseline_4gram $CORPUS `echo "$DEBUG_MODE"` $TOPIC $QUERY
+        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC $QUERY
+        source ./training $TOPIC $QUERY $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE
+
+        pushd $TOPIC
+
+        $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."
+        $VERBOSE && echo "20: Estimate ρ̂ = 1.05."
+        export prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
+            | bc`
+
+        $VERBOSE && echo "Prevalence: $prevalence"
+
+        export m=`echo "scale=5; ($prevalence * $TOTAL_DOCUMENTS ) * 0.90" \
+            | bc`
+        prevalence_int=${m%.*}
+
+        python3 ../selectRound.py store_estimation $prevalence_int
+
+        export j=`cat flagOut`
+
+        export t=`wc -l < new$j.$TOPIC`
+
+        ranking_size=$(($TOTAL_DOCUMENTS - $t))
+
+        sort -k 2 -n inlr.out.$round.$TOPIC > sorted_ranking
+
+        tail -$ranking_size sorted_ranking \
+            | cut -d$'\t' -f1 > result_ranking.$TOPIC
+
+        n=$(($TOTAL_DOCUMENTS - $prevalence_int))
+
+        tail -$TOTAL_DOCUMENTS sorted_ranking \
+            | cut -d' ' -f1 \
+            | head -$n > result_plus.$TOPIC
+
+        cat result_ranking.$TOPIC > result
+        cat sub_new[0-9][0-9]* >> result
+        cat result \
+            | sort \
+            | uniq > temp
+
+        mv temp result
+
+        # cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
+
+        $VERBOSE && echo "t = $t; j = $j; ranking_size = $ranking_size; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
+
+        cat ssarp[0-9][0-9].$TOPIC \
+            | sort > already_labeled_docs.$TOPIC
+
+        cat sorted_ranking \
+            | cut -d' ' -f1 > ranking.$TOPIC
+
+        awk 'BEGIN {FS=OFS=" "; Q=" "} {print Q (NR==0 ? ID : ++n) Q, $0}' \
+            ranking.$TOPIC > ranking_with_order.$TOPIC
+
+        sort  -k2 ranking_with_order.$TOPIC \
+            | join - already_labeled_docs.$TOPIC -12 -v1 \
+            | sort -n  -k2 \
+            | cut -d' ' -f1 > final_ranking.$TOPIC
+
+
+        # relevants_found=`cat result.$TOPIC \
+        #     | sort \
+        #     | uniq \
+        #     | join - goldendb \
+        #     | uniq \
+        #     | wc -l`
+        #
+        # documents_labeled=`cat result.$TOPIC \
+        #     | sort \
+        #     | uniq \
+        #     | wc -l`
+
+        relevants_found=`cat result \
+            | join - goldendb \
+            | wc -l`
+
+        documents_labeled=`cat result | wc -l`
+
+        total_relevants=`wc -l < goldendb`
+
+        recall=`echo "scale=5; ($relevants_found / $total_relevants)" \
+            | bc`
+
+            precision=`echo "scale=5; ($relevants_found / $documents_labeled)" \
+            | bc`
+
+        e_primary "-------------------------------------------------------------"
+        e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
+        echo -e "\tRelevants Found: $relevants_found"
+        echo -e "\tTotal Relevants: $total_relevants"
+        echo -e "\tLabeled Documents: $documents_labeled"
+        echo -e "\tRanking Size: $ranking_size"
+        echo -e "\tRecall: $recall"
+        echo -e "\tPrecision: $precision"
+        e_primary "-------------------------------------------------------------"
+
+        e_primary "Calling second sampling strategy proposed by REVEAL"
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
+
+        popd
+
+        mv $TOPIC "${RESULT_DIR}/"
+        rm $TOPIC.seed.doc
 
     done < "judgement/$CORPUS.topic.stemming.txt"
 
     for topic in `ls ${RESULT_DIR}/`; do
-        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.${topic}.rate
+        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.rate
+        cp "${RESULT_DIR}/${topic}/reveal.final" all_results/result-${i}/reveal.final
+        cp "${RESULT_DIR}/${topic}/runs.log" all_results/result-${i}/runs.log
 
-        echo "${topic} ${i} all_results/result-${i}/rel.${topic}.rate" >> $ALL_RESULTS_HELPER
+        echo "${topic} ${i}" >> $ALL_RESULTS_HELPER
     done
 done
 
