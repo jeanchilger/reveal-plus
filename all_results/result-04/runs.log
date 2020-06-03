@@ -1,0 +1,82 @@
+data.tr3/xxx001640 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1792  Recall   Precisao 0  posit  0  labellingEffort 1792 perda_ac 0 
+flag 0
+increase flag value
+data.tr3/xxx001639 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1792  Recall   Precisao 0  posit  0  labellingEffort 1792 perda_ac 0 
+flag 1
+increase flag value
+data.tr3/xxx001638 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1792  Recall   Precisao 0  posit  0  labellingEffort 1792 perda_ac 0 
+flag 2
+increase flag value
+data.tr3/xxx001637 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1796  Recall   Precisao 0  posit  0  labellingEffort 1796 perda_ac 0 
+flag 3
+increase flag value
+data.tr3/xxx001636 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1799  Recall   Precisao 0  posit  0  labellingEffort 1799 perda_ac 0 
+flag 4
+increase flag value
+data.tr3/xxx001635 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1800  Recall   Precisao 0  posit  0  labellingEffort 1800 perda_ac 0 
+flag 5
+increase flag value
+data.tr3/xxx001634 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1800  Recall   Precisao 0  posit  0  labellingEffort 1800 perda_ac 0 
+flag 6
+increase flag value
+data.tr3/xxx001633 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1803  Recall   Precisao 0  posit  0  labellingEffort 1803 perda_ac 0 
+flag 7
+increase flag value
+data.tr3/xxx001632 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1803  Recall   Precisao 0  posit  0  labellingEffort 1803 perda_ac 0 
+flag 8
+increase flag value
+data.tr3/xxx001631 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1803  Recall   Precisao 0  posit  0  labellingEffort 1803 perda_ac 0 
+flag 9
+increase flag value
+data.tr3/xxx001630 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1811  Recall   Precisao 0  posit  0  labellingEffort 1811 perda_ac 0 
+flag 10
+increase flag value
+data.tr3/xxx001629 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1811  Recall   Precisao 0  posit  0  labellingEffort 1811 perda_ac 0 
+flag 11
+increase flag value
+data.tr3/xxx001628 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1814  Recall   Precisao 0  posit  0  labellingEffort 1814 perda_ac 0 
+flag 12
+increase flag value
+data.tr3/xxx001627 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1818  Recall   Precisao 0  posit  0  labellingEffort 1818 perda_ac 0 
+flag 13
+increase flag value
+data.tr3/xxx001626 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1821  Recall   Precisao 0  posit  0  labellingEffort 1821 perda_ac 0 
+flag 14
+increase flag value
+data.tr3/xxx001625 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1822  Recall   Precisao 0  posit  0  labellingEffort 1822 perda_ac 0 
+flag 15
+increase flag value
+data.tr3/xxx001624 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1822  Recall   Precisao 0  posit  0  labellingEffort 1822 perda_ac 0 
+flag 16
+increase flag value
+data.tr3/xxx001623 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1822  Recall   Precisao 0  posit  0  labellingEffort 1822 perda_ac 0 
+flag 17
+increase flag value
+data.tr3/xxx001622 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1824  Recall   Precisao 0  posit  0  labellingEffort 1824 perda_ac 0 
+flag 18
+increase flag value
+data.tr3/xxx001621 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 0 ------1824  Recall   Precisao 0  posit  0  labellingEffort 1824 perda_ac 0 
+flag 19
+increase flag value
+break because flag sliding windows
+final REVEAL is tr3 0 ------1824  Recall 0  Precisao 0  posit  0  labellingEffort 1824  onlyssarp  33 perda_ac 0 sliding_windows 20

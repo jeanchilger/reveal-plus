@@ -1,0 +1,127 @@
+Positives documents collected ... 0            Negative documents .............. 3            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 1            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 1            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 4            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 3            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 1            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 2            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 2            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 3            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 4            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 2            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 3            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 2            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+Positives documents collected ... 0            Negative documents .............. 0            Total positives in sub sample ... 0
+data.tr3/xxx001668 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 1 ------952  Recall .111111  Precisao .001050  posit  0  labellingEffort 952 perda_ac 0 
+flag 0
+increase flag value
+data.tr3/xxx001667 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 1 ------952  Recall .111111  Precisao .001050  posit  0  labellingEffort 952 perda_ac 0 
+flag 1
+increase flag value
+data.tr3/xxx001666 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 1 ------952  Recall .111111  Precisao .001050  posit  0  labellingEffort 952 perda_ac 0 
+flag 2
+increase flag value
+data.tr3/xxx001665 pos  1 neg    real posit 1  perda 0
+****final result AM is tr3 2 ------955  Recall .222222  Precisao .002094  posit  1  labellingEffort 955 perda_ac 0 
+flag 3
+new flag equal zero
+data.tr3/xxx001664 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------957  Recall .222222  Precisao .002089  posit  0  labellingEffort 957 perda_ac 0 
+flag 0
+increase flag value
+data.tr3/xxx001663 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------958  Recall .222222  Precisao .002087  posit  0  labellingEffort 958 perda_ac 0 
+flag 1
+increase flag value
+data.tr3/xxx001662 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------958  Recall .222222  Precisao .002087  posit  0  labellingEffort 958 perda_ac 0 
+flag 2
+increase flag value
+data.tr3/xxx001661 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------961  Recall .222222  Precisao .002081  posit  0  labellingEffort 961 perda_ac 0 
+flag 3
+increase flag value
+data.tr3/xxx001660 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------961  Recall .222222  Precisao .002081  posit  0  labellingEffort 961 perda_ac 0 
+flag 4
+increase flag value
+data.tr3/xxx001659 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------961  Recall .222222  Precisao .002081  posit  0  labellingEffort 961 perda_ac 0 
+flag 5
+increase flag value
+data.tr3/xxx001658 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------965  Recall .222222  Precisao .002072  posit  0  labellingEffort 965 perda_ac 0 
+flag 6
+increase flag value
+data.tr3/xxx001657 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------965  Recall .222222  Precisao .002072  posit  0  labellingEffort 965 perda_ac 0 
+flag 7
+increase flag value
+data.tr3/xxx001656 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------968  Recall .222222  Precisao .002066  posit  0  labellingEffort 968 perda_ac 0 
+flag 8
+increase flag value
+data.tr3/xxx001655 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------972  Recall .222222  Precisao .002057  posit  0  labellingEffort 972 perda_ac 0 
+flag 9
+increase flag value
+data.tr3/xxx001654 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------973  Recall .222222  Precisao .002055  posit  0  labellingEffort 973 perda_ac 0 
+flag 10
+increase flag value
+data.tr3/xxx001653 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------974  Recall .222222  Precisao .002053  posit  0  labellingEffort 974 perda_ac 0 
+flag 11
+increase flag value
+data.tr3/xxx001652 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------974  Recall .222222  Precisao .002053  posit  0  labellingEffort 974 perda_ac 0 
+flag 12
+increase flag value
+data.tr3/xxx001651 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------974  Recall .222222  Precisao .002053  posit  0  labellingEffort 974 perda_ac 0 
+flag 13
+increase flag value
+data.tr3/xxx001650 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------976  Recall .222222  Precisao .002049  posit  0  labellingEffort 976 perda_ac 0 
+flag 14
+increase flag value
+data.tr3/xxx001649 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------976  Recall .222222  Precisao .002049  posit  0  labellingEffort 976 perda_ac 0 
+flag 15
+increase flag value
+data.tr3/xxx001648 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------976  Recall .222222  Precisao .002049  posit  0  labellingEffort 976 perda_ac 0 
+flag 16
+increase flag value
+data.tr3/xxx001647 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------976  Recall .222222  Precisao .002049  posit  0  labellingEffort 976 perda_ac 0 
+flag 17
+increase flag value
+data.tr3/xxx001646 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------976  Recall .222222  Precisao .002049  posit  0  labellingEffort 976 perda_ac 0 
+flag 18
+increase flag value
+data.tr3/xxx001645 pos  0 neg    real posit 0  perda 0
+****final result AM is tr3 2 ------976  Recall .222222  Precisao .002049  posit  0  labellingEffort 976 perda_ac 0 
+flag 19
+increase flag value
+break because flag sliding windows
+final REVEAL is tr3 2 ------976  Recall .050000  Precisao .002049  posit  2  labellingEffort 976  onlyssarp  24 perda_ac 0 sliding_windows 20
