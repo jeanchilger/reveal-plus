@@ -1,0 +1,142 @@
+#!/bin/bash
+
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+JUDGECLASS=$1; shift
+VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
+TOPIC=$1; shift
+round=$1; shift
+discretize=$1; shift
+flag_allac_first_time=$1; shift
+
+$VERBOSE && e_secondary "\n\n Starting active learning..."
+
+rules=5
+
+cat sub_new$round.$TOPIC \
+    | sort \
+    | uniq \
+    | join - goldendb \
+    | cut -d' ' -f1 \
+    | sed -e 's/^/1 /' > temp_posit.$round.$TOPIC
+
+cat sub_new$round.$TOPIC \
+    | sort \
+    | uniq \
+    | join - goldendb -v1 \
+    | cut -d' ' -f1 \
+    | sed -e 's/^/-1 /' > temp_negat.$round.$TOPIC
+
+cat temp_posit.$round.$TOPIC temp_negat.$round.$TOPIC \
+    | sort -k2 \
+    | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2  > trainset.$round.$TOPIC
+
+cut -d ' ' -f2- trainset.$round.$TOPIC  > trainset_labels.$round.$TOPIC
+
+  #-------------------------------------------------------------
+  #
+  #-------------------------------------------------------------
+if [ $discretize -eq 0 ]; then
+        $VERBOSE && e_secondary "\tGenerating bins"
+
+        python3 ../svd/convert_txt.py \
+            ../$JUDGECLASS.svm.fil.svd \
+            /tmp/total.$TOPIC.arff goldendb
+
+        pushd ../SSARP/run/
+        rm train*
+        .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
+        popd
+
+fi
+
+$VERBOSE && e_secondary "\tConverting files to txt..."
+
+python3 ../svd/convert_txt.py \
+    trainset_labels.$round.$TOPIC \
+    out.$round.$TOPIC.arff \
+    goldendb
+
+# python3 ../svd/convert_txt.py \
+#     seed_ssarp_labels.$TOPIC \
+#     seed_out.$round.$TOPIC.arff \
+#     goldendb
+
+cp trainset.$round.$TOPIC ../SSARP/run/
+cp seed_out.$round.$TOPIC.arff ../SSARP/run/
+cp out.$round.$TOPIC.arff ../SSARP/run/
+
+$VERBOSE && e_secondary "\tExecuting alac rules in `wc -l < trainset.$round.$TOPIC` docs"
+
+
+pushd SSARP/run/
+
+
+./SSARPX.sh out.$round.$TOPIC \
+    trainset.$round.$TOPIC \
+    50 \
+    $round \
+    seed_out.$round.$TOPIC.arff \
+    $TOPIC \
+    $flag_allac_first_time \
+    $rules
+
+flag_allac_first_time=$(($flag_allac_first_time+1))
+cat label.$round.$TOPIC > /tmp/ssarp$round.$TOPIC
+
+popd
+
+$VERBOSE && e_success "\tDone."
+
+mv /tmp/ssarp$round.$TOPIC .
+
+cat sub_new$round.$TOPIC \
+    | sort \
+    | uniq \
+    | join - goldendb \
+    | cut -d' ' -f1 \
+    | sed -e 's/^/1 /' > sub_new_positives.$round
+
+cat sub_new$round.$TOPIC \
+    | sort \
+    | uniq \
+    | join - goldendb -v1 \
+    | cut -d' ' -f1 \
+    | sed -e 's/^/-1 /' > sub_new_negatives.$round
+
+# TODO: Check if the files x_posit and x_negat
+# could be united into a single file.
+
+cat ssarp$round.$TOPIC \
+    | sort \
+    | uniq \
+    | join - goldendb \
+    | cut -d' ' -f1 \
+    | sed -e 's/^/1 /' > x_posit.$round
+
+cat ssarp$round.$TOPIC \
+    | sort \
+    | uniq \
+    | join - goldendb -v1 \
+    | cut -d' ' -f1 \
+    | sed -e 's/^/-1 /' > x_negat.$round
+
+cat x_posit.$round x_negat.$round \
+    | cut -d' ' -f2 \
+    | sort \
+    | uniq > ssarp$round.$TOPIC
+    
+ssarp_relevants=`wc -l < x_posit.$round`
+
+$VERBOSE && e_info \
+    "Positives documents collected ... `wc -l < x_posit.$round`"
+$VERBOSE && e_info \
+    "Negative documents .............. `wc -l < x_negat.$round`"
+$VERBOSE && e_info \
+    "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
+
+echo "Positives documents collected ... `wc -l < x_posit.$round`\
+  Negative documents .............. `wc -l < x_negat.$round`\
+  Total positives in sub sample ... `wc -l < sub_new_positives.$round`" 

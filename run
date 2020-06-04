@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+TOPICNUMBER=20
+for i in `seq 0 $TOPICNUMBER`; do 
+
+    ./main -c MedicalDB  -t tr`echo $i` 
+
+done
+wait
