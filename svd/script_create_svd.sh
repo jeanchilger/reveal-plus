@@ -1,8 +1,7 @@
 
 input=$1
 cp $input /tmp/athome1
-
-echo "`pwd`"
+cat $2 >> /tmp/athome1
 pushd ../svd
 cut -d' ' -f2- /tmp/athome1 > /tmp/athome1_2
 cut -d' ' -f1 /tmp/athome1 > /tmp/labels

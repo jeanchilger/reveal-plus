@@ -8,7 +8,7 @@ my $outfile = $ARGV[3];
 my @bins;
 my @vals;
 my $linecount = 1;
-print "dddddddddddddd  $infile $train_file **** $ARGV[3]*** \n";
+#print "dddddddddddddd  $infile $train_file **** $ARGV[3]*** \n";
 open (F1, $train_file) || die ("Could not open $file!");
 open (F3, ">$outfile") || die ("Could not open $file!");
 #open (F4, ">>$outfile.weka") || die ("Could not open $file!");

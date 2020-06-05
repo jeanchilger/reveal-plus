@@ -10,16 +10,16 @@ cat $1 | sort | uniq | join - goldendb | cut -d' ' -f1 | sed -e 's/^/1 /' > temp
 cat $1 | sort | uniq | join - goldendb -v1 | cut -d' ' -f1 | sed -e 's/^/-1 /' > temp_negat.$N.$TOPIC
 
 #produce the training set file used by SSARP
-cat temp_posit.$N.$TOPIC temp_negat.$N.$TOPIC |  sort -k2  | join - ../"$file".svm.fil.svd  -2 1 -1 2 > trainset.$N.$TOPIC
+cat temp_posit.$N.$TOPIC temp_negat.$N.$TOPIC |  sort -k2  | join - "$file".svm.fil.svd  -2 1 -1 2 > trainset.$N.$TOPIC
 cut -d ' ' -f2- trainset.$N.$TOPIC  > trainsetB.$N.$TOPIC
 python3 ../svd/convert_txt.py trainsetB.$N.$TOPIC trainset.$N.$TOPIC.arff goldendb
 
 cp seed_out.10.* seed_out
 #clean some files
-cp trainset.$N.$TOPIC ../SSARP/run/
-cp seed_out ../SSARP/run/
-cp trainset.$N.$TOPIC.arff ../SSARP/run/
-cd ../SSARP/run/
+cp trainset.$N.$TOPIC SSARP/run/
+cp seed_out SSARP/run/
+cp trainset.$N.$TOPIC.arff SSARP/run/
+cd SSARP/run/
 
 #run active learning
 ./SSARPX.sh trainset.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out $TOPIC $flag $rules &>   log_ssarp_stoping_$N

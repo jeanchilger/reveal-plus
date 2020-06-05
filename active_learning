@@ -11,10 +11,13 @@ round=$1; shift
 discretize=$1; shift
 flag_allac_first_time=$1; shift
 
-$VERBOSE && e_secondary "\n\n Starting active learning..."
+$VERBOSE && e_primary    "Starting active learning..."
 
 rules=5
-
+if [ `wc -l < sub_new$round.$TOPIC` -eq 0 ]; then
+    $VERBOSE && e_secondary "Error input  active learning "
+    break;
+fi
 cat sub_new$round.$TOPIC \
     | sort \
     | uniq \
@@ -31,7 +34,7 @@ cat sub_new$round.$TOPIC \
 
 cat temp_posit.$round.$TOPIC temp_negat.$round.$TOPIC \
     | sort -k2 \
-    | join - ../$JUDGECLASS.svm.fil.svd -2 1 -1 2  > trainset.$round.$TOPIC
+    | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2  > trainset.$round.$TOPIC
 
 cut -d ' ' -f2- trainset.$round.$TOPIC  > trainset_labels.$round.$TOPIC
 
@@ -42,10 +45,10 @@ if [ $discretize -eq 0 ]; then
         $VERBOSE && e_secondary "\tGenerating bins"
 
         python3 ../svd/convert_txt.py \
-            ../$JUDGECLASS.svm.fil.svd \
+            $JUDGECLASS.svm.fil.svd \
             /tmp/total.$TOPIC.arff goldendb
 
-        pushd ../SSARP/run/
+        pushd SSARP/run/
         rm train*
         .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
         popd
@@ -59,20 +62,19 @@ python3 ../svd/convert_txt.py \
     out.$round.$TOPIC.arff \
     goldendb
 
-# python3 ../svd/convert_txt.py \
-#     seed_ssarp_labels.$TOPIC \
-#     seed_out.$round.$TOPIC.arff \
-#     goldendb
+python3 ../svd/convert_txt.py \
+    seed_ssarp_labels.$TOPIC \
+    seed_out.$round.$TOPIC.arff \
+    goldendb
 
-cp trainset.$round.$TOPIC ../SSARP/run/
-cp seed_out.$round.$TOPIC.arff ../SSARP/run/
-cp out.$round.$TOPIC.arff ../SSARP/run/
+cp trainset.$round.$TOPIC SSARP/run/
+cp seed_out.$round.$TOPIC.arff SSARP/run/
+cp out.$round.$TOPIC.arff SSARP/run/
 
-$VERBOSE && e_secondary "\tExecuting alac rules in `wc -l < trainset.$round.$TOPIC` docs"
+$VERBOSE && e_secondary "\tExecuting alac in `wc -l < trainset.$round.$TOPIC` docs `wc -l < out.$round.$TOPIC.arff`"
 
 
 pushd SSARP/run/
-
 
 ./SSARPX.sh out.$round.$TOPIC \
     trainset.$round.$TOPIC \
@@ -81,7 +83,7 @@ pushd SSARP/run/
     seed_out.$round.$TOPIC.arff \
     $TOPIC \
     $flag_allac_first_time \
-    $rules
+    $rules #&>> std.out.activelearning
 
 flag_allac_first_time=$(($flag_allac_first_time+1))
 cat label.$round.$TOPIC > /tmp/ssarp$round.$TOPIC
@@ -130,13 +132,3 @@ cat x_posit.$round x_negat.$round \
     
 ssarp_relevants=`wc -l < x_posit.$round`
 
-$VERBOSE && e_info \
-    "Positives documents collected ... `wc -l < x_posit.$round`"
-$VERBOSE && e_info \
-    "Negative documents .............. `wc -l < x_negat.$round`"
-$VERBOSE && e_info \
-    "Total positives in sub sample ... `wc -l < sub_new_positives.$round`"
-
-echo "Positives documents collected ... `wc -l < x_posit.$round`\
-  Negative documents .............. `wc -l < x_negat.$round`\
-  Total positives in sub sample ... `wc -l < sub_new_positives.$round`" 

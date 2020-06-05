@@ -196,6 +196,8 @@ mkdir all_results
 rm -rf results
 mkdir results
 
+
+
 #-------------------------------------------------------------------------
 # runs the main code <SAMPLES> times
 #-------------------------------------------------------------------------
@@ -215,6 +217,8 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         TOPIC="${TEXT[0]}"
 
+       
+        
         if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
             continue
         fi
@@ -232,8 +236,12 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "${WHITE}Topic${END}:$TOPIC"
         echo -e "${WHITE}Query${END}:$QUERY"
 
-        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC $QUERY
-        source ./training $TOPIC $QUERY $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE
+        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
+        
+        source ./seed_selection $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
+        echo "round is $round"
+        
+        source ./training $TOPIC "$QUERY" $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE $round
 
         pushd $TOPIC
 
@@ -335,7 +343,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         popd
 
-        mv $TOPIC "${RESULT_DIR}/"
+        cp $TOPIC "${RESULT_DIR}/"
         rm $TOPIC.seed.doc
 
     done < "judgement/$CORPUS.topic.stemming.txt"

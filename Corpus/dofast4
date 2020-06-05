@@ -21,7 +21,7 @@ PRINT=$2
         significa enviar o stderror de <arquivo1> para <arquivo2>).
 '
 
-zcat $CORP.tgz | ./tar4 /dev/stdin | sort -k3 > $CORP.concordance 2> dofast.stderr
+zcat $CORP.tgz | ./tar /dev/stdin | sort -k3 > $CORP.concordance 2> dofast.stderr
 
 ######
 if [[ $PRINT == "y" ]]; then

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 
-TOPICNUMBER=20
-for i in `seq 0 $TOPICNUMBER`; do 
-
-    ./main -c MedicalDB  -t tr`echo $i` 
+TOPICNUMBER=1
+for i in `seq 1 $TOPICNUMBER`; do 
+    rm -r tr`echo $i`
+    ./main -c MedicalDB  -t tr`echo $i` -v
 
 done
 wait

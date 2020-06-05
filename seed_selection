@@ -14,13 +14,13 @@ pushd $TOPIC
 $VERBOSE && e_success "Starting seed selection..."
 
 
-export discretize=1
+export discretize=0
 #loop over the ranking
 roundSize=30
 startActive=1
-#cat $TOPIC.synthetic.seed > seed_ssarp_labels.$TOPIC
+cat $TOPIC.synthetic.seed.svd  > seed_ssarp_labels.$TOPIC
 #tail -n 30 ranking/ranking`echo $TOPIC`.txt > botton_rank
-for i in `seq 0 10`; do
+for i in `seq 0 100`; do
    step=$((i+1))
    begin=$((i*roundSize+1))
    end=$((i*roundSize+roundSize))
@@ -28,8 +28,8 @@ for i in `seq 0 10`; do
    
    #cat ranking/ranking`echo $TOPIC`.txt> top_small
    #head -n 10 goldendb.$TOPIC
-   printf "\n\n $begin $end--------- "
-   echo "Relevants in the seed `cat sub_new$i.$TOPIC | sort | join - goldendb | wc -l `" 
+   
+   $VERBOSE && e_success "Relevants in the seed `cat sub_new$i.$TOPIC | sort | join - goldendb | wc -l `" 
    
    round=$i
    source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive
@@ -42,7 +42,7 @@ for i in `seq 0 10`; do
    then 
        j=$(($round+1))
        printf -v round "%02d" $j
-       echo "we found a  pos doc, next round $round"
+       $VERBOSE && e_success "we found a  pos doc, next round $round"
        export round
        break;
    fi
