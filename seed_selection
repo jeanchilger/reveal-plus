@@ -19,8 +19,8 @@ export discretize=0
 roundSize=30
 startActive=1
 cat $TOPIC.synthetic.seed.svd  > seed_ssarp_labels.$TOPIC
-#tail -n 30 ranking/ranking`echo $TOPIC`.txt > botton_rank
-for i in `seq 0 100`; do
+i=0
+while true; do
    step=$((i+1))
    begin=$((i*roundSize+1))
    end=$((i*roundSize+roundSize))
@@ -35,8 +35,7 @@ for i in `seq 0 100`; do
    source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive
    discretize=1
    startActive=2
-   #cat top_small
-   echo "`pwd`"
+   
    pos=`wc -l < x_posit.$round`
    if [ $pos -ge 1 ]
    then 
@@ -46,6 +45,7 @@ for i in `seq 0 100`; do
        export round
        break;
    fi
+   i=$(($i+1))
 done
 popd
   

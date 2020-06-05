@@ -41,8 +41,11 @@ estimate=0                               #
 
 not_relevants=`cat x_negat.* | wc -l `                          # Documents not relevant so far
 relevants=`cat x_posit.* | wc -l `                              # Documents relevant so far
-SAMPLE_SIZE=$(($not_relevants+$relevants))
-
+if [ $(($not_relevants+$relevants)) -gt 30 ]; then
+	SAMPLE_SIZE=30
+else 
+	SAMPLE_SIZE=$(($not_relevants+$relevants))
+fi
 
 function check_file {
     if [ `wc -l < $1` -eq 0 ]; then
@@ -65,7 +68,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
         try
         (
-            #cp $TOPIC.synthetic.seed trainset
+            cp $TOPIC.synthetic.seed trainset
 
             cut -f2 docfils \
                 | shuf -n $R \
@@ -86,7 +89,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         try
         (
             cat ssarp* > seed
-            cat goldendb | shuf -n 50 > seed
+    
             cat seed \
                 | sort \
                 | join - goldendb \
@@ -490,21 +493,22 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 #             $VERBOSE && e_info "\t\tNegative documents .............. `wc -l < x_negat.$round`"
 #             
 #            
-#             temp=$((`wc -l < sub_new_positives.$round`- `wc -l < x_posit.$round`))
-#             MISSING_REL=$(($temp+$MISSING_REL))
-#             $VERBOSE && e_info       "\t\tRevelants missed ... $MISSING_REL"
+        temp=$((`wc -l < sub_new_positives.$round`- `wc -l < x_posit.$round`))
+	MISSING_REL=$(($temp+$MISSING_REL))
+        
 #             
             
         $VERBOSE && e_info "\tRelevants ......... $rel_found_sample"
         $VERBOSE && e_info "\tSample size ....... $SAMPLE_SIZE"
         $VERBOSE && e_info "\tSub sample size ... $sub_sample"   
-        $VERBOSE && e_info "\tTotal positives in the sub sample ... `wc -l < sub_new_positives.$round`"
-        $VERBOSE && e_info "\tTotal positives in sample ... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
+        $VERBOSE && e_info "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`"
+        $VERBOSE && e_info "\tSample Rel Doc.... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
         $VERBOSE && e_info "\tAlready labeled ... $already_labeled_docs"
         $VERBOSE && e_info "\tAll docs .......... $all_docs"
         $VERBOSE && e_info "\tRelevants rate .... $rel_rate"
         $VERBOSE && e_info "\tCurrent relevants . $current_rel"
         $VERBOSE && e_info "\tTotal relevants ... `wc -l < goldendb`"
+	$VERBOSE && e_info "\tRevelants missed .. $MISSING_REL"
 
         relevants=$(($relevants + \
             ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
