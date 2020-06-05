@@ -10,7 +10,7 @@ X, y_train = load_svmlight_file(sys.argv[1])
 
 
 print(X.shape)
-SVD = TruncatedSVD(n_components=int(sys.argv[3])) 
+SVD = TruncatedSVD(n_components=10) 
 U = SVD.fit_transform(X)
 print(U.shape)
 
