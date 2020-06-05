@@ -97,7 +97,7 @@ echo "$QUERY" > "$TOPIC".seed.doc
 cp $TOPIC.seed.doc ../$TOPIC.seed.doc
 
 e_primary "bm25 seed selection `echo $QUERY` $TOPIC ..."
-
+mkdir obj
 tar -cvzf seed.$TOPIC.tgz "$TOPIC".seed.doc
 
 zcat seed.$TOPIC.tgz | ./tar /dev/stdin  |  cut -d' ' -f3 > PorterSeed.$TOPIC 2> /dev/null  
