@@ -50,7 +50,7 @@ for _round in $(seq -f "%02g" 0 99); do
 
         $VERBOSE && e_primary "Preparing trainset..."
 
-        try
+        try 55 61
         (
             cp $TOPIC.synthetic.seed trainset
 
@@ -70,9 +70,10 @@ for _round in $(seq -f "%02g" 0 99); do
 
         $VERBOSE && e_primary "Preparing seed..."
 
-        try
+        try 75 91
         (
-            cat ssarp* > seed
+            [[ -e ssarp* ]] && \
+                cat ssarp* > seed
 
             cat seed \
                 | sort \
@@ -99,7 +100,7 @@ for _round in $(seq -f "%02g" 0 99); do
 
         $VERBOSE && e_primary "Adding content from seed to trainset..."
 
-        try
+        try 105
         (
             cut -d' ' -f2 intermediate_seed \
                 | .././indexer $JUDGECLASS.db $KEYSIZE $VALSIZE \
@@ -128,7 +129,7 @@ for _round in $(seq -f "%02g" 0 99); do
 
         $VERBOSE && e_primary "Executing training algorithm (sofia-ml)..."
 
-        try
+        try 134 139
         (
             $SOFIA --learner_type logreg-pegasos --loop_type roc \
                 --lambda $LAMBDA --iterations 2000000 \

@@ -138,6 +138,8 @@ try
     rm -f new[0-9][0-9].$TOPIC tail[0-9][0-9].$TOPIC self*.$TOPIC gold*.$TOPIC
     touch new00.$TOPIC
 
+    touch seed
+
 ) 2> $STD_ERROR_OUT
 
 catch || {
