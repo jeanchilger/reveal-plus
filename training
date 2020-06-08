@@ -198,37 +198,41 @@ for _round in $(seq -f "%02g" 0 99); do
 
         $VERBOSE && e_primary "Preparing ranking.$round.$TOPIC..."
 
-        try
-        (
+        # try
+        # (
             cat new[0-9][0-9].$TOPIC > seed.$TOPIC
 
-            [[ -e pout.svm.test.* ]] && \
-                cut -f1 pout.svm.test.* \
-                    | ../fixnum \
-                    | cat -n \
-                    | join -o2.2,1.2 -t$'\t' - docfils \
-                    | sort -k1 -n  > inlr.out.$round.$TOPIC
+                  # problem is here
+            cut -f1 pout.svm.test.* \
+                | ../fixnum \
+                | cat -n \
+                | join -o2.2,1.2 -t$'\t' - docfils \
+                | sort -k1 -n  > inlr.out.$round.$TOPIC
 
-            [[ -e inlr.out.$round.$TOPIC ]] && \
-                sort -n seed.$TOPIC \
-                    | join  -v2 - inlr.out.$round.$TOPIC -2 1 \
-                    | shuf \
-                    | sort -k 2 -r -g -s  > ranking.$round.$TOPIC
+            sort -n seed.$TOPIC \
+                | join  -v2 - inlr.out.$round.$TOPIC -2 1 \
+                | shuf \
+                | sort -k 2 -r -g -s  > ranking.$round.$TOPIC
 
-        ) 2> $STD_ERROR_OUT
-
-        catch || {
-            exit_on_error
-        }
+        # ) 2> $STD_ERROR_OUT
+        #
+        # catch || {
+        #     exit_on_error
+        # }
 
         $VERBOSE && e_success "Done."
 
         $VERBOSE && e_primary "Preparing new$round.$TOPIC."
 
+        if [[ ! -e ranking.$round.$TOPIC ]]; then
+            touch ranking.$round.$TOPIC
+        fi
+
         try
         (
-            cat ranking.$round.$TOPIC \
-                | cut -d' ' -f1 > new$round.$TOPIC
+            [[ -e ranking.$round.$TOPIC ]] && \
+                cat ranking.$round.$TOPIC \
+                    | cut -d' ' -f1 > new$round.$TOPIC
 
             cat new[0-9][0-9].$TOPIC > intermediate_seed
 
