@@ -83,7 +83,7 @@ if [ ! -f "${JUDGECLASS}.svm.fil" ]; then
     cp "$JUDGECLASS".svm.fil ../"$JUDGECLASS".svm.fil
 
       
-    rm "$JUDGECLASS".svm.fil.svd
+    #rm "$JUDGECLASS".svm.fil.svd
      
     popd
 fi
@@ -103,15 +103,15 @@ tar -cvzf seed.$TOPIC.tgz "$TOPIC".seed.doc
 zcat seed.$TOPIC.tgz | ./tar /dev/stdin  |  cut -d' ' -f3 > PorterSeed.$TOPIC 2> /dev/null  
 
 
-#try
-#(        
+try
+(        
    python3 bm25.py ${JUDGECLASS}.tfdf PorterSeed.$TOPIC ../$TOPIC/goldendb $TOPIC
 
-#) 2> $STD_ERROR_OUT
+) 2> $STD_ERROR_OUT
 
-#catch || {
-#    exit_on_error
-#}
+catch || {
+    exit_on_error
+}
 popd
 
 e_success "Done."
@@ -224,7 +224,7 @@ $VERBOSE && e_success "Done."
     
     sed -i -e 's/^/0 /' $TOPIC.synthetic.seed.svd  
     
-    head -n -2 $JUDGECLASS.svm.fil.svd > temp.txt ; mv temp.txt $JUDGECLASS.svm.fil.svd
+    head -n -1 $JUDGECLASS.svm.fil.svd > temp.txt ; mv temp.txt $JUDGECLASS.svm.fil.svd
     
      $VERBOSE && e_secondary "New svd file size is  `wc -l < $JUDGECLASS.svm.fil.svd`..."     
     ) 2> $STD_ERROR_OUT

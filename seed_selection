@@ -32,7 +32,7 @@ while true; do
    $VERBOSE && e_success "Relevants in the seed `cat sub_new$i.$TOPIC | sort | join - goldendb | wc -l `" 
    
    round=$i
-   source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive
+   source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive  sub_new$i.$TOPIC
    discretize=1
    startActive=2
    

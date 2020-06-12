@@ -7,36 +7,38 @@ source "${ABS_PATH}/colors"
 JUDGECLASS=$1; shift
 VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
 TOPIC=$1; shift
-round=$1; shift
+roundActive=$1; shift
 discretize=$1; shift
 flag_allac_first_time=$1; shift
+file_input=$1; shift
+
 
 $VERBOSE && e_primary    "Starting active learning..."
 
 rules=5
-if [ `wc -l < sub_new$round.$TOPIC` -eq 0 ]; then
+if [ `wc -l < $file_input` -eq 0 ]; then
     $VERBOSE && e_secondary "Error input  active learning "
     break;
 fi
-cat sub_new$round.$TOPIC \
+cat $file_input \
     | sort \
     | uniq \
     | join - goldendb \
     | cut -d' ' -f1 \
-    | sed -e 's/^/1 /' > temp_posit.$round.$TOPIC
+    | sed -e 's/^/1 /' > temp_posit.$roundActive.$TOPIC
 
-cat sub_new$round.$TOPIC \
+cat $file_input \
     | sort \
     | uniq \
     | join - goldendb -v1 \
     | cut -d' ' -f1 \
-    | sed -e 's/^/-1 /' > temp_negat.$round.$TOPIC
+    | sed -e 's/^/-1 /' > temp_negat.$roundActive.$TOPIC
 
-cat temp_posit.$round.$TOPIC temp_negat.$round.$TOPIC \
+cat temp_posit.$roundActive.$TOPIC temp_negat.$roundActive.$TOPIC \
     | sort -k2 \
-    | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2  > trainset.$round.$TOPIC
+    | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2  > trainset.$roundActive.$TOPIC
 
-cut -d ' ' -f2- trainset.$round.$TOPIC  > trainset_labels.$round.$TOPIC
+cut -d ' ' -f2- trainset.$roundActive.$TOPIC  > trainset_labels.$roundActive.$TOPIC
 
   #-------------------------------------------------------------
   #
@@ -58,77 +60,77 @@ fi
 $VERBOSE && e_secondary "\tConverting files to txt..."
 
 python3 ../svd/convert_txt.py \
-    trainset_labels.$round.$TOPIC \
-    out.$round.$TOPIC.arff \
+    trainset_labels.$roundActive.$TOPIC \
+    out.$roundActive.$TOPIC.arff \
     goldendb
 
 python3 ../svd/convert_txt.py \
     seed_ssarp_labels.$TOPIC \
-    seed_out.$round.$TOPIC.arff \
+    seed_out.$roundActive.$TOPIC.arff \
     goldendb
 
-cp trainset.$round.$TOPIC SSARP/run/
-cp seed_out.$round.$TOPIC.arff SSARP/run/
-cp out.$round.$TOPIC.arff SSARP/run/
+cp trainset.$roundActive.$TOPIC SSARP/run/
+cp seed_out.$roundActive.$TOPIC.arff SSARP/run/
+cp out.$roundActive.$TOPIC.arff SSARP/run/
 
-$VERBOSE && e_secondary "\tExecuting alac in `wc -l < trainset.$round.$TOPIC` docs `wc -l < out.$round.$TOPIC.arff`"
+$VERBOSE && e_secondary "\tExecuting alac in `wc -l < trainset.$roundActive.$TOPIC` docs `wc -l < out.$roundActive.$TOPIC.arff`"
 
 
 pushd SSARP/run/
 
-./SSARPX.sh out.$round.$TOPIC \
-    trainset.$round.$TOPIC \
+./SSARPX.sh out.$roundActive.$TOPIC \
+    trainset.$roundActive.$TOPIC \
     50 \
-    $round \
-    seed_out.$round.$TOPIC.arff \
+    $roundActive \
+    seed_out.$roundActive.$TOPIC.arff \
     $TOPIC \
     $flag_allac_first_time \
     $rules #&>> std.out.activelearning
 
 flag_allac_first_time=$(($flag_allac_first_time+1))
-cat label.$round.$TOPIC > /tmp/ssarp$round.$TOPIC
+cat label.$roundActive.$TOPIC > /tmp/ssarp$roundActive.$TOPIC
 
 popd
 
 $VERBOSE && e_success "\tDone."
 
-mv /tmp/ssarp$round.$TOPIC .
+mv /tmp/ssarp$roundActive.$TOPIC .
 
-cat sub_new$round.$TOPIC \
+cat $file_input \
     | sort \
     | uniq \
     | join - goldendb \
     | cut -d' ' -f1 \
-    | sed -e 's/^/1 /' > sub_new_positives.$round
+    | sed -e 's/^/1 /' > sub_new_positives.$roundActive
 
-cat sub_new$round.$TOPIC \
+cat $file_input \
     | sort \
     | uniq \
     | join - goldendb -v1 \
     | cut -d' ' -f1 \
-    | sed -e 's/^/-1 /' > sub_new_negatives.$round
+    | sed -e 's/^/-1 /' > sub_new_negatives.$roundActive
 
 # TODO: Check if the files x_posit and x_negat
 # could be united into a single file.
 
-cat ssarp$round.$TOPIC \
+cat ssarp$roundActive.$TOPIC \
     | sort \
     | uniq \
     | join - goldendb \
     | cut -d' ' -f1 \
-    | sed -e 's/^/1 /' > x_posit.$round
+    | sed -e 's/^/1 /' > x_posit.$roundActive
 
-cat ssarp$round.$TOPIC \
+cat ssarp$roundActive.$TOPIC \
     | sort \
     | uniq \
     | join - goldendb -v1 \
     | cut -d' ' -f1 \
-    | sed -e 's/^/-1 /' > x_negat.$round
+    | sed -e 's/^/-1 /' > x_negat.$roundActive
 
-cat x_posit.$round x_negat.$round \
+cat x_posit.$roundActive x_negat.$roundActive \
     | cut -d' ' -f2 \
     | sort \
-    | uniq > ssarp$round.$TOPIC
+    | uniq > ssarp$roundActive.$TOPIC
     
-ssarp_relevants=`wc -l < x_posit.$round`
+ssarp_relevants=`wc -l < x_posit.$roundActive`
 
