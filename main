@@ -293,19 +293,6 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
             | sort -n  -k2 \
             | cut -d' ' -f1 > final_ranking.$TOPIC
 
-
-        # relevants_found=`cat result.$TOPIC \
-        #     | sort \
-        #     | uniq \
-        #     | join - goldendb \
-        #     | uniq \
-        #     | wc -l`
-        #
-        # documents_labeled=`cat result.$TOPIC \
-        #     | sort \
-        #     | uniq \
-        #     | wc -l`
-
         relevants_found=`cat result \
             | join - goldendb \
             | wc -l`
@@ -345,7 +332,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         cp "${RESULT_DIR}/${topic}/reveal.final" all_results/result-${i}/reveal.final
         cp "${RESULT_DIR}/${topic}/runs.log" all_results/result-${i}/runs.log
 
-        echo "${topic} ${i}" >> $ALL_RESULTS_HELPER
+        echo "${topic} ${i} `cat ${RESULT_DIR}/${topic}/goldendb | wc -l`" >> $ALL_RESULTS_HELPER
     done
 done
 

@@ -21,6 +21,8 @@ with open(ALL_RESULTS_HELPER, "r") as runs_describer:
         scal_file = dst_dir + "/rel." + line[1] + ".rate.csv"
         reveal_file = dst_dir + "/reveal." + line[1] + ".final.csv"
 
+        total_positives = int(line[2])
+
         if not os.path.exists(dst_dir):
             os.mkdir(dst_dir)
 
@@ -32,7 +34,6 @@ with open(ALL_RESULTS_HELPER, "r") as runs_describer:
 
             all_so_far = 0
             limited_so_far = 0
-            total_positives = int(rel_file.readlines()[-1].split()[4])
 
             if total_positives == 0:
                 total_positives = 1
