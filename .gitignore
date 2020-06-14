@@ -18,6 +18,7 @@ logs/
 *.svd
 *.db
 indexer
+svd/out
 
 # Topic files
 *.doc

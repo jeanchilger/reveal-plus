@@ -4,6 +4,7 @@ source "${ABS_PATH}/colors"
 
 CODE_START=""
 CODE_END=""
+BLOCK_LINE=""
 
 export STD_ERROR_OUT="std.error.log"
 
@@ -12,24 +13,29 @@ export EMPTY_VARIABLE_EXCEPTION=12
 try() {
     set +e
     if (( $# > 0 )); then
-        echo -e "${BLUE}${1}${END}" > /dev/tty
+        CODE_START=$1
 
         if (( $# > 1 )); then
-            CODE_START=$2
-
-            if (( $# > 2 )); then
-                CODE_END=$3
-            else
-                CODE_END=$CODE_START
-            fi
+            CODE_END=$2
+        else
+            CODE_END=$CODE_START
         fi
+
+    else
+        CODE_START=""
+        CODE_END=""
+
     fi
+
+    BLOCK_LINE=`caller | cut -d ' ' -f1`
 }
 
 catch() {
-    export ERROR_CODE=$?
+    if [[ `cat "$STD_ERROR_OUT" | wc -l` -ne 0 ]]; then
+        export ERROR_CODE=1
 
-    return $ERROR_CODE
+        return $ERROR_CODE
+    fi
 }
 
 throw() {
@@ -43,7 +49,7 @@ throw() {
     case $EXCEPTION_CODE in
 
         $EMPTY_VARIABLE_EXCEPTION )
-            output_msg="${output_msg}${RED}EMPTY VARIABLE EXCEPTION: \n"
+            output_msg="${output_msg}${RED}EMPTY VARIABLE EXCEPTION:${END} \n"
 
             if [[ -n $EXCEPTION_MSG ]]; then
                 output_msg="${output_msg}\t${EXCEPTION_MSG}\nAborting..."
@@ -53,20 +59,19 @@ throw() {
 
             fi
 
-            echo -e $output_msg > /dev/tty
-
-            exit $EMPTY_VARIABLE_EXCEPTION
-
             ;;
-
     esac
+
+    echo -e $output_msg > /dev/tty
+
+    exit $EXCEPTION_CODE
 }
 
 __get_error_log_msg() {
     STD_ERROR=""
 
     while IFS="" read -r line; do
-        STD_ERROR="${STD_ERROR}${line}\n"
+        STD_ERROR="\t${STD_ERROR}${line}\n"
     done < $STD_ERROR_OUT
 
     echo -ne $STD_ERROR
@@ -79,16 +84,20 @@ exit_on_error() {
     if [[ $ERROR_CODE ]]; then
         output_msg="${output_msg}${RED}ERROR "
 
-        if [[ $CODE_START == $CODE_END ]]; then
-            output_msg="${output_msg}near line ${CODE_START} "
+        # if [[ -n $CODE_START ]]; then
+        #     if [[ $CODE_START == $CODE_END ]]; then
+        #         output_msg="${output_msg}near line ${CODE_START} "
+        #
+        #     else
+        #         output_msg="${output_msg}near lines ${CODE_START} and ${CODE_END} "
+        #     fi
+        # fi
 
-        else
-            output_msg="${output_msg}near lines ${CODE_START} and ${CODE_END} "
-        fi
+        e_error "${output_msg}within block line ${BLOCK_LINE}." > /dev/tty
 
-        echo -e "${output_msg}Aborting...${END}" > /dev/tty
+        echo -e `__get_error_log_msg`
 
-        echo -e "\t${RED}LOG:${END} `__get_error_log_msg`"
+        e_error "Aborting..." > /dev/tty
 
         exit $ERROR_CODE
     fi
