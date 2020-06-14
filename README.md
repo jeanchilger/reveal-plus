@@ -3,7 +3,7 @@
 # REVEAL-plus
 
 ## Overview
-High-Recall Information Retrieval (HRIR) - the identification of nearly all relevant documents within a set of them, given a search query - is a pivotal task in a wide range of applications [1] such as electronic discovery and systematic review. The relevant documents are judge this way by the user conducting the search, which may cause excessive effort (for the user) in classifying documents.
+High-Recall Information Retrieval (HRIR) - the identification of nearly all relevant documents within a set of them, given a search query - is a pivotal task in a wide range of applications [1] such as electronic discovery and systematic review. The relevant documents are judged this way by the user conducting the search, which may cause excessive effort (for the user) in classifying documents.
 
 For the given context, several researches have focused on reducing this effort, still providing a high recall. As a result a considerable number of techniques have emerged, among which it is worth mentioning REVEAL - RelEVant rulE-based Active Learning (check out [1] for more details) - which uses active learning and association rules to improve the HRIR performance.
 
