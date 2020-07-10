@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "${ABS_PATH}/colors"
+source "${UTIL_PATH}/colors"
 
 CODE_START=""
 CODE_END=""
