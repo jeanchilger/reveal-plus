@@ -8,7 +8,9 @@
 #===============================================================================
 
 export ABS_PATH=`pwd`
-source "${ABS_PATH}/handle_errors"
+export UTIL_PATH="${ABS_PATH}/utils"
+
+source "${UTIL_PATH}/handle_errors"
 
 #=== FUNCTION =============================================
 # Utility function that returns true if a given
@@ -105,7 +107,7 @@ CORPUS="toyDataset"
 VERBOSE=false
 TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
 
-sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" "${UTIL_PATH}/colors"
 
 #----------------------------------------------------------------------
 # space separated argument parsing
@@ -134,8 +136,8 @@ while [[ $# -gt 0 ]]; do
             ;;
 
         -o | --off-colors )
-            sed -r -i "s/COLORS_ON=true/COLORS_ON=false/" colors
-            source "${ABS_PATH}/colors"
+            sed -r -i "s/COLORS_ON=true/COLORS_ON=false/" "${UTIL_PATH}/color"
+            source "${UTIL_PATH}/colors"
             ;;
 
         -h | --help )
@@ -338,6 +340,6 @@ done
 
 e_info "Finished taking results...\nComputing mean and standard deviation of samples."
 
-python3 buildResults.py                               # takes mean and standard deviations
+python3 "${UTIL_PATH/}build_results.py"                               # takes mean and standard deviations
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option

@@ -6,8 +6,8 @@
 # DESCRIPTION: Creates and loads start up files, creates seed trainsets.
 #===============================================================================
 
-source "${ABS_PATH}/handle_errors"
-source "${ABS_PATH}/colors"
+source "${UTIL_PATH}/handle_errors"
+source "${UTIL_PATH}/colors"
 
 JUDGECLASS=$1; shift
 VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
