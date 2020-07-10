@@ -320,7 +320,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         e_primary "-------------------------------------------------------------"
 
         e_primary "Calling second sampling strategy proposed by REVEAL"
-        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
+        bash "${UTIL_PATH}/script_select_pairs.sh" $TOPIC $JUDGECLASS $prevalence_int $rules 20
 
         popd
 
@@ -340,6 +340,6 @@ done
 
 e_info "Finished taking results...\nComputing mean and standard deviation of samples."
 
-python3 "${UTIL_PATH/}build_results.py"                               # takes mean and standard deviations
+python3 "${UTIL_PATH}/build_results.py" $ABS_PATH                    # takes mean and standard deviations
 
-sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" "${UTIL_PATH}/colors"  # resets color option
