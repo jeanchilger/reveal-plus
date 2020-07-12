@@ -248,7 +248,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
             | bc`
         prevalence_int=${m%.*}
 
-        python3 ../selectRound.py store_estimation $prevalence_int
+        python3 ../select_round.py store_estimation $prevalence_int
 
         export j=`cat flagOut`
 
