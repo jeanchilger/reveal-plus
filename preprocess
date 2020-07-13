@@ -59,7 +59,10 @@ cat judgement/qrels.$JUDGECLASS.list \
     | cut -d' ' -f3 \
     | sort > $TOPIC/goldendb
 
-) 2> $STD_ERROR_OUT
+)
+
+$VERBOSE && e_primary "Creating goldendb with size `wc -l < $TOPIC/goldendb`"
+2> $STD_ERROR_OUT
 
 catch || {
     exit_on_error

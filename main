@@ -214,9 +214,9 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
     #---------------------------------------------------------------------
     while IFS="" read -r line || [[ -n $line ]]; do
         IFS=':' read -ra TEXT <<< "$line"
-
+        
         TOPIC="${TEXT[0]}"
-
+        e_info "Running sample ${i} with topic $TOPIC---."
        
         
         if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
@@ -235,7 +235,13 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         echo -e "${WHITE}Topic${END}:$TOPIC"
         echo -e "${WHITE}Query${END}:$QUERY"
-
+        
+        $VERBOSE && echo "do split input file "
+        
+        pushd $TOPIC 
+        sed -e 's/[^ ]*/0/' ../$CORPUS.svm.fil | .././dosplit        
+        popd
+        
         source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
         
         source ./seed_selection $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"

@@ -25,11 +25,13 @@ def top_n(d, n):
   return sorted(dct.items())[-n:][::-1]
 
 def save_obj(obj, name ):
-    with open('obj/'+ name + '.pkl', 'wb') as f:
+    with open('obj/'+ name + '.pkl'+topic, 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+    #close('obj/'+ name + '.pkl'+topic)
 
 def load_obj(name ):
-    with open('obj/' + name + '.pkl', 'rb') as f:
+    print("load .... ",'obj/' + name + '.pkl'+topic)
+    with open('obj/' + name + '.pkl'+topic, 'rb') as f:
         return pickle.load(f)        
         
 ############################
@@ -52,7 +54,7 @@ queryid=[]
 query=[]
 
 #create the seed with the query string mapping to ids
-for ind in seed[1:len(seed)]:
+for ind in seed[0:len(seed)]:
     
     i=ind.split(":")[0].strip()    
     query.append(i)
@@ -67,7 +69,7 @@ count=0
 
 print ("Loading file ")
 vector=[]
-if (path.exists('obj/vector.pkl')):
+if (path.exists('obj/vector.pkl'+topic)):
     vector=load_obj("vector")
     
 else: 
@@ -78,7 +80,7 @@ else:
         for line in fileobject:
             vector.append(line.split(" "));      
             count+=1
-          
+    
     print(" vector len ",len(vector))
     save_obj(vector, "vector")    
         

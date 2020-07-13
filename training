@@ -70,7 +70,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
         try
         (
-            cp $TOPIC.synthetic.seed trainset
+            #cp $TOPIC.synthetic.seed trainset
 
             cut -f2 docfils \
                 | shuf -n $R \
@@ -151,7 +151,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
             $SOFIA --learner_type logreg-pegasos --loop_type roc \
                 --lambda $LAMBDA --iterations 2000000 \
                 --training_file trainset --dimensionality 3300000 \
-                --model_out svm_model &> classifier_output  
+                --model_out svm_model #&> classifier_output  
 
             sofia_status=$?
 
@@ -177,7 +177,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
                  try
                 (
                     $SOFIA --test_file $test_file --dimensionality 3300000 \
-                        --model_in svm_model --results_file pout.$test_file  &>> classifier_output
+                        --model_in svm_model --results_file pout.$test_file # &>> classifier_output
                              
 
                  ) 2> $STD_ERROR_OUT
@@ -414,22 +414,22 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         
 #             
             
-        $VERBOSE && e_info "\tRelevants lab ..... $rel_found_sample"
-        $VERBOSE && e_info "\t Not Relevants lab. `wc -l < x_negat."$round"`"
-        $VERBOSE && e_info "\n"
-        $VERBOSE && e_info "\tSample size ....... $SAMPLE_SIZE"
-        $VERBOSE && e_info "\tRel in the Sample ....... $all_positive"
-        $VERBOSE && e_info "\tSub sample size ... $sub_sample"   
-        $VERBOSE && e_info "\n"
-        $VERBOSE && e_info "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`"
-        $VERBOSE && e_info "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
-        $VERBOSE && e_info "\n"
-        $VERBOSE && e_info "\tAlready labeled ... $already_labeled_docs"
-        $VERBOSE && e_info "\tAll docs .......... $all_docs"
-        $VERBOSE && e_info "\tRelevants rate .... $rel_rate"
-        $VERBOSE && e_info "\tCurrent relevants . $current_rel"
-        $VERBOSE && e_info "\tTotal relevants ... `wc -l < goldendb`"
-        $VERBOSE && e_info "\tRevelants missed .. $MISSING_REL"
+        $VERBOSE  "\tRelevants lab ..... $rel_found_sample"
+        $VERBOSE  "\tNot Relevants lab. `wc -l < x_negat."$round"`"
+        
+        $VERBOSE "\tSample size ....... $SAMPLE_SIZE"
+        $VERBOSE "\tRel in the Sample . $all_positive"
+        $VERBOSE "\tSub sample size ... $sub_sample"   
+        
+        $VERBOSE "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`"
+        $VERBOSE "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
+     
+        $VERBOSE "\tAlready labeled ... $already_labeled_docs"
+        $VERBOSE "\tAll docs .......... $all_docs"
+        $VERBOSE "\tRelevants rate .... $rel_rate"
+        $VERBOSE "\tCurrent relevants . $current_rel"
+        $VERBOSE "\tTotal relevants ... `wc -l < goldendb`"
+        $VERBOSE "\tRevelants missed .. $MISSING_REL"
 
         relevants=$(($relevants + \
             ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
