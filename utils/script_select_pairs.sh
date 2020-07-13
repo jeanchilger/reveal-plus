@@ -8,7 +8,9 @@ export sliding_windows=$5
 
 echo "Starting script stopping point with sliding windows of $sliding_windows..."
 
-# spliting dataset into files of 30 docs
+#----------------------------------------------------------------------
+# splits dataset into files of 30 docs
+#----------------------------------------------------------------------
 sort -k1 goldendb > temp
 mv temp goldendb
 rm -r data.$TOPIC
@@ -35,7 +37,6 @@ totalNeg=0
 totalPairsInput=0
 mem_i=0
 
-# cp seed_out.80.$TOPIC.arff seed_out
 exitstatus=0
 j=100
 rm out_after_ssarp.$TOPIC
@@ -55,7 +56,9 @@ inicialize_allac=2
 count=0
 loss_ac=0
 
-# se o numero de documentos é 0 termina
+#----------------------------------------------------------------------
+# if number of docs is 0, ends execution
+#----------------------------------------------------------------------
 if [ $len -le 0 ]; then
     cat x_posit_ssarp_end.* x_negat_ssarp_end.* \
         | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
@@ -98,12 +101,12 @@ r=`cat out_after_ssarp.$TOPIC \
     | join - goldendb \
     |  wc -l`
 
-finalpares=`wc -l < out_after_ssarp.$TOPIC`
+final_pairs=`wc -l < out_after_ssarp.$TOPIC`
 total=$Rel
 recall=`echo "scale=6; ($r / $total)" | bc`
-precision=`echo "scale=6; ($r / $finalpares)" | bc`
+precision=`echo "scale=6; ($r / $final_pairs)" | bc`
 
-echo "cleaning from $len until 0 stopping when $pos equal zero "
+echo "Cleaning from $len until 0 stopping when $pos equal zero"
 flag=0
 temp=0
 mid=$len
@@ -115,7 +118,7 @@ for i in $(seq $mid -1 0 ); do
     temp=$(($temp+1))
 
     name=`printf "data.$TOPIC/xxx%06d" $i` # create name of datafile
-    echo "cleaning 2 $name ---- $i"
+    echo "Cleaning 2 $name ---- $i"
 
     cat $name | sort > temp
     cat x_negat.* x_posit.* \
@@ -124,7 +127,7 @@ for i in $(seq $mid -1 0 ); do
         | join - temp -v2 \
         | sort > clean_data # data without already labeled docs
 
-    echo "script prune pairs..."
+    echo "Script prune pairs..."
 
     bash "${UTIL_PATH}/script_prune_pairs.sh" clean_data $j $TOPIC $inicialize_allac $rules $sliding_windows > /tmp/lixo.$TOPIC
 
@@ -132,14 +135,12 @@ for i in $(seq $mid -1 0 ); do
 
     cat /tmp/lixo.$TOPIC
 
-    ####################################
-    #read -n1 ans
-    ####################################
-
     pos=`grep "docs positivos coletados" /tmp/lixo.$TOPIC \
         | cut -d' ' -f4`
+
     neg=`grep "docs negativos coletados" /tmp/lixo.$TOPIC \
         | cut -d' ' -f11`
+
     real_posit=`cat clean_data \
         | cut -d' ' -f1 \
         | sort -k1 \
@@ -151,6 +152,7 @@ for i in $(seq $mid -1 0 ); do
     loss_ac=$(($loss+$loss_ac))
 
     echo "$name pos $pos neg $neg real posit $real_posit loss $loss_ac" >> runs.log
+
     cat x_posit_ssarp_end.$j x_negat_ssarp_end.$j \
         | cut -d' ' -f2  >> out_after_ssarp.$TOPIC
 
@@ -161,13 +163,16 @@ for i in $(seq $mid -1 0 ); do
         | join - goldendb \
         | wc -l`
 
-    finalpares=`wc -l < out_after_ssarp.$TOPIC`
+    final_pairs=`wc -l < out_after_ssarp.$TOPIC`
     total=$Rel
+
     recall=`echo "scale=6; ($r / $total)" \
         | bc`
-    precision=`echo "scale=6; ($r / $finalpares)" \
+
+    precision=`echo "scale=6; ($r / $final_pairs)" \
         | bc`
-    echo "****final result AM is $TOPIC $r ------$finalpares Recall $recall Precision $precision posit $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` loss_ac $loss_ac " >> runs.log
+
+    echo "****final result AM is $TOPIC $r ------$final_pairs Recall $recall Precision $precision posit $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` loss_ac $loss_ac " >> runs.log
     echo "flag $flag" >> runs.log
 
     if [ $pos -le 0 ]; then
@@ -235,11 +240,11 @@ if [ $new_mid -le 0 ]; then
             | join - goldendb \
             | wc -l`
 
-        finalpares=`wc -l < out_after_ssarp.$TOPIC`
+        final_pairs=`wc -l < out_after_ssarp.$TOPIC`
         total=$Rel
         recall=`echo "scale=6; ($r / $total)" | bc`
-        precision=`echo "scale=6; ($r / $finalpares)" | bc`
-        echo "****final result AM is $TOPIC $r ------$finalpares  Recall $recall  Precision $precision  posit  $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` loss_ac $loss_ac " >> runs.log
+        precision=`echo "scale=6; ($r / $final_pairs)" | bc`
+        echo "****final result AM is $TOPIC $r ------$final_pairs  Recall $recall  Precision $precision  posit  $pos $net labellingEffort `wc -l < out_after_ssarp.$TOPIC` loss_ac $loss_ac " >> runs.log
         echo "flag $flag" >> runs.log
 
         if [ $pos -le 0 ]; then
@@ -292,14 +297,22 @@ r=`cat out_after_ssarp.$TOPIC \
     | join - goldendb \
     | wc -l`
 
-finalpares=`wc -l < out_after_ssarp.$TOPIC`
+final_pairs=`wc -l < out_after_ssarp.$TOPIC`
 total=`wc -l < goldendb`
 echo "total de relevantes $total"
 recall=`echo "scale=6; ($r / $total)" | bc`
-precision=`echo "scale=6; ($r / $finalpares)" | bc`
+precision=`echo "scale=6; ($r / $final_pairs)" | bc`
 
-echo "positivos $r total $finalpares recal $recall precision $precision loss $loss_ac"
+echo "final REVEAL is $TOPIC $r ------$final_pairs  Recall $recall  Precision $precision  posit  $r  labellingEffort `wc -l < training_set.$TOPIC`  onlyssarp  `wc -l < ssarp_labelling_full.$TOPIC` loss_ac $loss_ac sliding_windows $sliding_windows" >> runs.log
 
-echo "final REVEAL is $TOPIC $r ------$finalpares  Recall $recall  Precision $precision  posit  $r  labellingEffort `wc -l < training_set.$TOPIC`  onlyssarp  `wc -l < ssarp_labelling_full.$TOPIC` loss_ac $loss_ac sliding_windows $sliding_windows" >> runs.log
+e_primary "-------------------------------------------------------------"
+e_secondary "Final result REVEAL ${YELLOW}Topic:${END} $TOPIC"
+echo -e "\tRelevants Found ..... $r"
+echo -e "\tTotal Relevants ..... $total"
+echo -e "\tLoss ................ $loss_ac"
+echo -e "\tLabeled Documents ... `wc -l < training_set.$TOPIC`"
+echo -e "\tRecall .............. $recall"
+echo -e "\tPrecision ........... $precision"
+e_primary "-------------------------------------------------------------"
 
 echo "$recall $precision `wc -l < training_set.$TOPIC`" > reveal.final
