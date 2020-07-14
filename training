@@ -387,16 +387,16 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
         
         
-        if [ $acc -eq 0 ]; then
-            memory=$(($memory +1))
-            if [ $memory -gt 5 ]; then
-                echo "memory stop"
-                break
-            fi
-        else
-            memory=0
-        fi
-        echo "memory value is $memory"
+#         if [ $acc -eq 0 ]; then
+#             memory=$(($memory +1))
+#             if [ $memory -gt 5 ]; then
+#                 echo "memory stop"
+#                 break
+#             fi
+#         else
+#             memory=0
+#         fi
+#        echo "memory value is $memory"
         rel_found_sample=`wc -l < x_posit."$round"`  # relevants on previous sample
         rel_rate=`echo "scale=4; $rel_found_sample / $SAMPLE_SIZE" | bc`
         current_rel=`cat x_posit.* | wc -l`
@@ -406,30 +406,30 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
 
         
-#             $VERBOSE && e_info "\t\tNegative documents .............. `wc -l < x_negat.$round`"
-#             
-#            
+        $VERBOSE && e_info "\t\tNegative documents .............. `wc -l < x_negat.$round`"
+            
+           
         temp=$((`wc -l < sub_new_positives.$round`- `wc -l < x_posit.$round`))
         MISSING_REL=$(($temp+$MISSING_REL))    
         
 #             
             
-        $VERBOSE  "\tRelevants lab ..... $rel_found_sample"
-        $VERBOSE  "\tNot Relevants lab. `wc -l < x_negat."$round"`"
+        $VERBOSE  && e_info "\tRelevants lab ..... $rel_found_sample"
+        $VERBOSE  && e_info "\tNot Relevants lab. `wc -l < x_negat."$round"`"
         
-        $VERBOSE "\tSample size ....... $SAMPLE_SIZE"
-        $VERBOSE "\tRel in the Sample . $all_positive"
-        $VERBOSE "\tSub sample size ... $sub_sample"   
+        $VERBOSE  && e_info "\tSample size ....... $SAMPLE_SIZE"
+        $VERBOSE  && e_info "\tRel in the Sample . $all_positive"
+        $VERBOSE  && e_info "\tSub sample size ... $sub_sample"   
         
-        $VERBOSE "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`"
-        $VERBOSE "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
+        $VERBOSE  && e_info "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`"
+        $VERBOSE  && e_info "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
      
-        $VERBOSE "\tAlready labeled ... $already_labeled_docs"
-        $VERBOSE "\tAll docs .......... $all_docs"
-        $VERBOSE "\tRelevants rate .... $rel_rate"
-        $VERBOSE "\tCurrent relevants . $current_rel"
-        $VERBOSE "\tTotal relevants ... `wc -l < goldendb`"
-        $VERBOSE "\tRevelants missed .. $MISSING_REL"
+        $VERBOSE  && e_info "\tAlready labeled ... $already_labeled_docs"
+        $VERBOSE  && e_info "\tAll docs .......... $all_docs"
+        $VERBOSE  && e_info "\tRelevants rate .... $rel_rate"
+        $VERBOSE  && e_info "\tCurrent relevants . $current_rel"
+        $VERBOSE  && e_info "\tTotal relevants ... `wc -l < goldendb`"
+        $VERBOSE  && e_info "\tRevelants missed .. $MISSING_REL"
 
         relevants=$(($relevants + \
             ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))

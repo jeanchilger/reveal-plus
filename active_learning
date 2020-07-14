@@ -48,11 +48,11 @@ if [ $discretize -eq 0 ]; then
 
         python3 ../svd/convert_txt.py \
             $JUDGECLASS.svm.fil.svd \
-            /tmp/total.$TOPIC.arff goldendb
+           SSARP/run/total.$TOPIC.arff goldendb
 
         pushd SSARP/run/
         rm train*
-        .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
+        .././gera_bins_TUBE.sh total.$TOPIC.arff 50 10 10
         popd
 
 fi
@@ -88,13 +88,13 @@ pushd SSARP/run/
     $rules #&>> std.out.activelearning
 
 flag_allac_first_time=$(($flag_allac_first_time+1))
-cat label.$roundActive.$TOPIC > /tmp/ssarp$roundActive.$TOPIC
+cat label.$roundActive.$TOPIC > ../../ssarp$roundActive.$TOPIC
 
 popd
 
 $VERBOSE && e_success "\tDone."
 
-mv /tmp/ssarp$roundActive.$TOPIC .
+
 
 cat $file_input \
     | sort \

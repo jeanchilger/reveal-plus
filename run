@@ -4,11 +4,11 @@
 TOPICNUMBER=2
 rm saida.*
 for i in `seq 0 $TOPICNUMBER`; do 
-    rm -r athome10`echo $i`
+    rm -r tr`echo $i`
     echo "running $i"
     #./main -c MedicalDB  -t tr`echo $i` -v -o --off-colors &> saida.$i &
-#    ./main -c MedicalDB  -s 10  -t tr`echo $i` -v -o --off-colors &>> saida.$i &
-    ./main -c athome1mu4x7  -t athome10`echo $i` -v -o --off-colors -s 10 &>> saida.$i &
+    ./main -c MedicalDB  -s 10  -t tr`echo $i` -v -o --off-colors &>> saida.$i &
+   # ./main -c athome1mu4x7  -t athome10`echo $i` -v -o --off-colors -s 10 &>> saida.$i &
      sleep 5
 done
 wait

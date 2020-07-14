@@ -1,23 +1,18 @@
 
 input=$1
-cp $input /tmp/athome1
-cat $2 >> /tmp/athome1
+cp $input ../svd/athome1
+cat $2 >> ../svd/athome1
 pushd ../svd
 
 
-
-
-#cut -d' ' -f2- /tmp/athome1 > /tmp/athome1_2
-#cut -d' ' -f1 /tmp/athome1 > /tmp/labels
-#sed -i 's/^/0 /' /tmp/athome1_2
-
-#python3 trans.py /tmp/athome1_2  out 
-python3 trans.py <(sed  's/^/0 /' <(cut -d' ' -f2- /tmp/athome1))  out
+python3 trans.py <(sed  's/^/0 /' <(cut -d' ' -f2- athome1))  out
 
 sed -i 's/^0//' out
 
-paste <(cut -d' ' -f1 /tmp/athome1) out -d ' ' | sed 's/  / /'  > $input.svd
+paste <(cut -d' ' -f1 athome1) out -d ' ' | sed 's/  / /'  > $input.svd
 popd
+
+mv ../svd/$input.svd .
 echo "file $input.svd was created"
 
 

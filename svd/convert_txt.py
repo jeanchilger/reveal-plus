@@ -59,15 +59,15 @@ for line in reader:
                 
 	
 	#print (line)	
-	line = map(lambda x: tuple( x.split( ":" )), line)
+	linemap = map(lambda x: tuple( x.split( ":" )), line)
 	#print (line)	
-	# ('1', '0.194035105364'), ('2', '0.186042408882'), ('3', '-0.148706067206'), ...
+	
 	pos=0
 	new_line =  [ 0 ] * (d+1)
 	
 	
 	try:
-            for i, v in line:
+            for i, v in linemap:
                     i = int( i )
                     if i < d:
                             v=float(v)
@@ -79,7 +79,7 @@ for line in reader:
                             new_line[i] = round(temp,2)	
                     pos+=1                
 	except:
-            #print ("Error linha 80 ", line)
+            print ("Error linha 80 ", linemap)
             #for i in line:
                 #print (i)
             continue;

@@ -5,7 +5,7 @@ from sklearn.datasets import dump_svmlight_file
 import sys
 
 
-print ("file eh ==", sys.argv[1])
+print ("file eh ==", sys.argv[0])
 X, y_train = load_svmlight_file(sys.argv[1])
 
 
