@@ -9,6 +9,9 @@ std.error.log
 # Logs
 logs/
 
+# Other
+temp*
+
 ### SCAL ###
 # Dataset files
 *.df
@@ -24,7 +27,9 @@ svd/out
 *.doc
 tr**/
 
+# Other
 N
+store_estimation
 
 ### SSARP ###
 SSARP/run/train**
