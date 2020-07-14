@@ -349,18 +349,18 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         popd
 
-        cp $TOPIC "${RESULT_DIR}/"
+        cp -r $TOPIC "${RESULT_DIR}/"
         rm $TOPIC.seed.doc
 
     done < "judgement/$CORPUS.topic.stemming.txt"
 
-    for topic in `ls ${RESULT_DIR}/`; do
-        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.rate
-        cp "${RESULT_DIR}/${topic}/reveal.final" all_results/result-${i}/reveal.final
-        cp "${RESULT_DIR}/${topic}/runs.log" all_results/result-${i}/runs.log
+    #for topic in `ls ${RESULT_DIR}/`; do
+    cp "${RESULT_DIR}/$TOPIC/rel.rate" all_results/result-${i}/rel.rate
+    cp "${RESULT_DIR}/$TOPIC/reveal.final" all_results/result-${i}/reveal.final
+    cp "${RESULT_DIR}/$TOPIC/runs.log" all_results/result-${i}/runs.log
 
-        echo "${topic} ${i}" >> $ALL_RESULTS_HELPER
-    done
+    echo "$TOPIC" >> $ALL_RESULTS_HELPER
+    #done
 done
 
 e_info "Finished taking results...\nComputing mean and standard deviation of samples."

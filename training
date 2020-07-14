@@ -406,7 +406,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
 
         
-        $VERBOSE && e_info "\t\tNegative documents .............. `wc -l < x_negat.$round`"
+        $VERBOSE && e_info "\tNegative documents .............. `wc -l < x_negat.$round`"
             
            
         temp=$((`wc -l < sub_new_positives.$round`- `wc -l < x_posit.$round`))
