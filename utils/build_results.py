@@ -4,6 +4,9 @@ import shutil
 import statistics
 import sys
 
+ABS_PATH = sys.argv[1]
+print(ABS_PATH)
+
 ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 if not os.path.exists("results"):

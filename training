@@ -7,8 +7,8 @@
 # DESCRIPTION:  Contains the training loop that judges files as relevant or not.
 #===============================================================================
 
-source "${ABS_PATH}/handle_errors"
-source "${ABS_PATH}/colors"
+source "${UTIL_PATH}/handle_errors"
+source "${UTIL_PATH}/colors"
 
 SOFIA="${ABS_PATH}/sofia-ml-read-only/sofia-ml"
 

@@ -1,3 +1,4 @@
+echo "↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓"
 
   export TOPIC=$1
   export file=$2
@@ -97,7 +98,7 @@
         cat $name | sort > temp
         cat x_negat.* x_posit.* | cut -d' ' -f2 | sort | join - temp -v2 | sort > clean_data #data without already labeled docs
        echo "script prune pairs..."
-         .././script_prune_pairs.sh clean_data  $j $TOPIC $inicialize_allac $rules $sliding_windows >  /tmp/lixo.$TOPIC
+         bash "${UTIL_PATH}/script_prune_pairs.sh" clean_data  $j $TOPIC $inicialize_allac $rules $sliding_windows >  /tmp/lixo.$TOPIC
 	inicialize_allac=3
         cat /tmp/lixo.$TOPIC
 
@@ -151,7 +152,7 @@
             cat $name | sort > temp
             cat x_negat.* x_posit.* | cut -d' ' -f2 | sort | join - temp -v2 | sort > new_data
             #echo "positivos no seed `cat $name | sort | join - posit_file -2 2  | wc -l `"
-            .././script_prune_pairs.sh new_data  $j $TOPIC $inicialize_allac $rules $sliding_windows &> /tmp/lixo.$TOPIC
+            bash "${UTIL_PATH}/script_prune_pairs.sh" new_data  $j $TOPIC $inicialize_allac $rules $sliding_windows &> /tmp/lixo.$TOPIC
             cat /tmp/lixo.$TOPIC
             pos=`grep "docs positivos coletados" /tmp/lixo.$TOPIC | cut -d' ' -f4`
             neg=`grep "docs positivos coletados" /tmp/lixo.$TOPIC | cut -d' ' -f11`
