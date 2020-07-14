@@ -262,7 +262,7 @@ for _round in $(seq -f "%02g" 0 99); do
         # TODO: Check the viability of adding the output
         # of this script to a variable instead in a file
 
-        python2.7 ../doJudgementMain.py --topic=$TOPIC \
+        python2.7 ../do_judgement_main.py --topic=$TOPIC \
             --judgefile=../judgement/qrels.$JUDGECLASS.list \
             --input=sub_new$round.$TOPIC \
             --output=rel.$TOPIC.$round.Judged.doc.list \
