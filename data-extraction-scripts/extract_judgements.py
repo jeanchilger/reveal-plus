@@ -1,15 +1,26 @@
+"""
+Generates a file with the judgements, that is,
+the relevant documents at judgement/qrels.cord-19.list.
+
+Input:
+    relevance_file => cord-19 file with relevance judgements (e.g. qrels-rnd1.txt).
+"""
+
 import os
+import sys
+
+relevance_file = sys.argv[1]
 
 if os.path.exists("judgement/qrels.cord-19.list"):
     os.remove("judgement/qrels.cord-19.list")
 
 mapping = {}
-with open("topic.id.mapping", "r") as mapping_file:
+with open("map", "r") as mapping_file:
     for line in mapping_file.readlines():
-        info = line.strip().split(" ")
+        info = line.strip().split(",")
         mapping[info[0]] = info[1]
 
-with open("qrels-rnd1.txt", "r") as qrels_read, open("judgement/qrels.cord-19.list", "a") as qrels_write:
+with open(relevance_file, "r") as qrels_read, open("judgement/qrels.cord-19.list", "a") as qrels_write:
     while True:
         line = qrels_read.readline()
 
@@ -26,6 +37,3 @@ with open("qrels-rnd1.txt", "r") as qrels_read, open("judgement/qrels.cord-19.li
             judgement = "1"
 
             qrels_write.write(" ".join([topic_id, dummy, cord_id, judgement]) + "\n")
-
-
-
