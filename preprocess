@@ -107,7 +107,8 @@ zcat seed.$TOPIC.tgz | ./tar /dev/stdin  |  cut -d' ' -f3 > PorterSeed.$TOPIC 2>
 
 
 try
-(        
+(   
+
    python3 bm25.py ${JUDGECLASS}.tfdf PorterSeed.$TOPIC ../$TOPIC/goldendb $TOPIC
 
 ) 2> $STD_ERROR_OUT
@@ -214,7 +215,7 @@ $VERBOSE && e_success "Done."
 
 
 
-# if [ ! -f "${JUDGECLASS}.svm.fil.svd" ]; then
+if [ ! -f "../${JUDGECLASS}.svm.fil.svd" ]; then
     $VERBOSE && e_primary "Running feature compression SVD..."  
     try
     ( 
@@ -234,8 +235,12 @@ $VERBOSE && e_success "Done."
 
     catch || {
         exit_on_error
-    }    
-# fi
+    }  
+else 
+    #just copy the file 
+    $VERBOSE && e_primary "copy  SVD file ..."  
+    cp "../${JUDGECLASS}.svm.fil.svd" .
+fi
 
 
 
