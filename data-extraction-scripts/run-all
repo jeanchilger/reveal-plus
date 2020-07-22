@@ -1,0 +1,10 @@
+#!/bin/bash
+
+mkdir judgement
+
+#valid_docs_file=$1; shift # e.g. docids-rnd1.txt
+relevance_file=$1; shift  # e.g. qrels-rnd1.txt
+queries_file=$1; shift    # e.g. topics-rnd1.xml
+
+python3 extract_judgements.py $relevance_file
+python3 extract_queries.py $queries_file
