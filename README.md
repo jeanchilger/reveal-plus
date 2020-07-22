@@ -7,7 +7,7 @@ High-Recall Information Retrieval (HRIR) - the identification of nearly all rele
 
 For the given context, several researches have focused on reducing this effort, still providing a high recall. As a result a considerable number of techniques have emerged, among which it is worth mentioning REVEAL - RelEVant rulE-based Active Learning (check out [1] for more details) - which uses active learning and association rules to improve the HRIR performance.
 
-This project intend to improve the REVEAL by providing:
+This project intend to improve REVEAL by providing:
 - An enhanced starting point for the method; and
 - A clear and definite sopping criteria;
 
