@@ -269,7 +269,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         if [ $SAMPLE_SIZE -le 30 ]; then
             sub_sample=$SAMPLE_SIZE
         else
-            sub_sample=30
+            sub_sample=$SAMPLE_SIZE
         fi
 
         head -n $sub_sample new"$round".$TOPIC  | sort -k2> sub_new"$round".$TOPIC
@@ -326,10 +326,11 @@ for _round in $(seq -f "%02g" $ROUND 99); do
                 | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp_docs.$TOPIC
 
             cut -d ' ' -f2- seed_ssarp_docs.$TOPIC  > seed_ssarp_labels.$TOPIC
-
+            
             cp x_posit."$round" sub_new_positives."$round"
             cp x_negat."$round" sub_new_negatives."$round"
-
+            cat  x_posit."$round" >> evalutionclef.$TOPIC.txt
+            cp x_negat."$round"  >> evalutionclef.$TOPIC.txt
             ssarp_relevants=`wc -l < x_posit."$round"`
 
         #-----------------------------------------------------------------
@@ -338,7 +339,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         else
             $VERBOSE && e_primary "Call SSARP with input size `wc -l < sub_new"$round".$TOPIC` sub sub_new"$round".$TOPIC "
             
-            source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC "$round" $discretize 2  sub_new"$round".$TOPIC          
+            source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC "$round" $discretize 2  sub_new"$round".$TOPIC  2        
             discretize=1
             
             rel_found_sample=`wc -l < x_posit."$round"`  # relevants on previous sample
@@ -449,7 +450,8 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
 
         LABELED_DOCUMENTS=$(($LABELED_DOCUMENTS + $SAMPLE_SIZE))
-        SAMPLE_SIZE=$(($SAMPLE_SIZE + ($SAMPLE_SIZE + 9) / 10))
+        #SAMPLE_SIZE=$(($SAMPLE_SIZE + ($SAMPLE_SIZE + 9) / 10))
+        SAMPLE_SIZE=$(($SAMPLE_SIZE *2))
     fi
 done
 

@@ -79,7 +79,7 @@ for line in reader:
                             new_line[i] = round(temp,2)	
                     pos+=1                
 	except:
-            print ("Error linha 80 ", linemap)
+ #           print ("Error linha 80 ", linemap)
             #for i in line:
                 #print (i)
             continue;

@@ -106,16 +106,16 @@ tar -cvzf seed.$TOPIC.tgz "$TOPIC".seed.doc
 zcat seed.$TOPIC.tgz | ./tar /dev/stdin  |  cut -d' ' -f3 > PorterSeed.$TOPIC 2> /dev/null  
 
 
-try
-(   
+# try
+# (   
 
-   python3 bm25.py ${JUDGECLASS}.tfdf PorterSeed.$TOPIC ../$TOPIC/goldendb $TOPIC
+   python3 bm25.py ${JUDGECLASS}.tfdf "$TOPIC".seed.doc ../$TOPIC/goldendb $TOPIC
 
-) 2> $STD_ERROR_OUT
-
-catch || {
-    exit_on_error
-}
+# ) 2> $STD_ERROR_OUT
+# 
+# catch || {
+#     exit_on_error
+# }
 popd
 
 e_success "Done."

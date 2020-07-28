@@ -3,13 +3,14 @@
 loop=1
 count=0;
 rule=$3
+max_rules=$4
 if [ ! -f alac_$1 ]; then touch alac_$1; fi
 if [ ! -d result_temp_$1 ]; then mkdir result_temp_$1; fi
 if [ ! -f alac_full_$1 ]; then touch alac_full_$1; fi
 
-echo "starting alac test threshold  ../../alac`echo $rule`  $1 $2  with size `wc -l < $1`"
+echo "starting alac test threshold  ../../alac`echo $rule`  $1 $2  with size `wc -l < $1` with max rules $max_rules--"
 while [ $loop == 1 ]; do
-  ../alac`echo $rule` -i alac_$1 -t $1 -s 1 -m 3 -e 1000000000 -c 0.001 -j 1 -d 3 -o 1 > result_temp_$1/result_temp$count.txt
+  ../alac`echo $rule` -i alac_$1 -t $1 -s 1 -m $max_rules -e 1000000000 -c 0.001 -j 1 -d 3 -o 1 > result_temp_$1/result_temp$count.txt
   instance=`cat result_temp_$1/result_temp$count.txt | grep inserting | awk '{ print $3 }'`; 
   newclass=`cat result_temp_$1/result_temp$count.txt | grep "New CLASS" | awk '{ print $4 }'`;
 

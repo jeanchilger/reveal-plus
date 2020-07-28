@@ -22,7 +22,7 @@ cp trainset.$N.$TOPIC.arff SSARP/run/
 cd SSARP/run/
 
 #run active learning
-./SSARPX.sh trainset.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out $TOPIC $flag $rules &>   log_ssarp_stoping_$N
+./SSARPX.sh trainset.$N.$TOPIC trainset.$N.$TOPIC 50 $N seed_out $TOPIC $flag $rules 3 &>   log_ssarp_stoping_$N
 
 #store result
 cat label.$N.$TOPIC > /tmp/ssarp$N.$TOPIC
@@ -30,7 +30,8 @@ cat log_ssarp_stoping_$N
 cd -
 mv /tmp/ssarp$N.$TOPIC .
 
-
+cat  ssarp$N.$TOPIC >> evalutionclef.$TOPIC.txt
+            
 
 #compute docs positivos and negativos
 cat ssarp$N.$TOPIC   | sort -k 2 | uniq | join - goldendb  | cut -d' ' -f1 | sed -e 's/^/1 /' > x_posit_ssarp_end.$N

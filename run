@@ -1,15 +1,27 @@
 #!/bin/bash
 
+declare -a clef=("CD008122" "CD008587" "CD008759" "CD008892" "CD009175" "CD009263" "CD009694" "CD010213" "CD010296" "CD010502" "CD010657" "CD010680" "CD010864" "CD011053" "CD011126" "CD011420" "CD011431" "CD011515" "CD011602" "CD011686" "CD011912" "CD011926" "CD012009" "CD012010" "CD012083" "CD012165" "CD012179" "CD012216" "CD012281" "CD012599")
 
-TOPICNUMBER=0
+
+# TOPICNUMBER=2
+# rm saida.*
+# for i in `seq 0 $TOPICNUMBER`; do 
+#     rm -r tr`echo $i`
+#     echo "running $i"
+#     #./main -c MedicalDB  -t tr`echo $i` -v -o --off-colors &> saida.$i &
+#     ./main -c clef2018  -s 1  -t CD008122 -v -o --off-colors &>> saida.$i &
+#    # ./main -c athome1mu4x7  -t athome10`echo $i` -v -o --off-colors -s 10 &>> saida.$i &
+#      sleep 12
+# done
+# wait
+MAXTHREADS=3
 rm saida.*
-for i in `seq 0 $TOPICNUMBER`; do 
-    rm -r tr`echo $i`
-    echo "running $i"
-    #./main -c MedicalDB  -t tr`echo $i` -v -o --off-colors &> saida.$i &
-    ./main -c MedicalDB  -s 7  -t tr`echo $i` -v -o --off-colors &>> saida.$i &
-   # ./main -c athome1mu4x7  -t athome10`echo $i` -v -o --off-colors -s 10 &>> saida.$i &
-     sleep 120
+for i in "${clef[@]}"; do 
+     while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
+                sleep 10
+                #echo "sleeping"
+    done 
+    echo "running $i...."
+    ./main -c clef2018  -s 1  -t $i -v -o --off-colors &>> saida.$i  
+    
 done
-wait
-

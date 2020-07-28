@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COLORS_ON=true
+COLORS_ON=false
 
 if ! $COLORS_ON; then
     RED=""

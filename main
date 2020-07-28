@@ -345,8 +345,10 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         e_primary "-------------------------------------------------------------"
 
         e_primary "Calling second sampling strategy proposed by REVEAL"
-        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
-
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int 1000 20
+        
+        
+        python3 ../script_transform_clef.py evalutionclef.$TOPIC.txt $TOPIC ../data-extraction-scripts/html-pid-mapping
         popd
 
         cp -r $TOPIC "${RESULT_DIR}/"

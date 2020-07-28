@@ -11,11 +11,11 @@ roundActive=$1; shift
 discretize=$1; shift
 flag_allac_first_time=$1; shift
 file_input=$1; shift
+max_rules=$1;
 
+$VERBOSE && e_primary    "Starting active learning...with $max_rules ----"
 
-$VERBOSE && e_primary    "Starting active learning..."
-
-rules=5
+rules=1000
 if [ `wc -l < $file_input` -eq 0 ]; then
     $VERBOSE && e_secondary "Error input  active learning "
     break;
@@ -85,10 +85,14 @@ pushd SSARP/run/
     seed_out.$roundActive.$TOPIC.arff \
     $TOPIC \
     $flag_allac_first_time \
-    $rules #&>> std.out.activelearning
+    $rules \
+    $max_rules 
+    #&>> std.out.activelearning
 
 flag_allac_first_time=$(($flag_allac_first_time+1))
 cat label.$roundActive.$TOPIC > ../../ssarp$roundActive.$TOPIC
+
+cat ../../ssarp$roundActive.$TOPIC >> ../../evalutionclef.$TOPIC.txt
 
 popd
 

@@ -20,7 +20,7 @@ roundSize=30
 startActive=1
 cat $TOPIC.synthetic.seed.svd  > seed_ssarp_labels.$TOPIC
 i=0
-while true; do
+for i in $(seq -f "%02g" 99); do
    step=$((i+1))
    begin=$((i*roundSize+1))
    end=$((i*roundSize+roundSize))
@@ -31,8 +31,8 @@ while true; do
    
    $VERBOSE && e_success "Relevants in the seed `cat sub_new$i.$TOPIC | sort | join - goldendb | wc -l `" 
    
-   round=$i
-   source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive  sub_new$i.$TOPIC
+   round=$step
+   source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive  sub_new$i.$TOPIC 3
    discretize=1
    startActive=2
    

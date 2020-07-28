@@ -16,6 +16,7 @@ seed_ssarp=$5
 topic=$6
 time=$7
 rules=$8
+max_rules=$9
 
 
 echo "execution number "$round" the file have "$numfeatures" features and size `wc -l < $file_original` treina arff `wc -l < $treina_arff` ";
@@ -63,7 +64,7 @@ echo ../discretize_TUBE.pl train-$suffix train_nohead.arff $numfeatures  lac_tra
 # echo  ./updateRows.pl lac_train_TUBE.txt lac_train_TUBEfinal.txt $numfeatures
 ./updateRows.pl lac_train_TUBE.txt.$topic lac_train_TUBEfinal.txt.$topic $round
 
-tail -n 3 alac_lac_train_TUBEfinal.txt.$topic | grep "CLASS=0"  >> lac_train_TUBEfinal.txt.$topic
+cat alac_lac_train_TUBEfinal.txt.$topic | grep "CLASS=0"  >> lac_train_TUBEfinal.txt.$topic
 
 if [ $time -eq 1 ];
 then
@@ -101,7 +102,7 @@ while [[ $i -le 1 ]]; do
   # rm alac_lac_train_TUBEfinal.txt
    #rm alac_full_lac_train_TUBEfinal.txt
     echo " roda o ALAC ....     `wc -l < alac_lac_train_TUBEfinal.txt.$topic`"
-  ../run_alac_repeated.sh lac_train_TUBEfinal.txt.$topic  $round $rules
+  ../run_alac_repeated.sh lac_train_TUBEfinal.txt.$topic  $round $rules $max_rules
  i=$(($i+1))
 done
 #junta as instancias selecionadas em cada particao em um arquivo unico contendo todas as features
