@@ -1,0 +1,30 @@
+ CD008122:Rapid diagnostic tests for diagnosing uncomplicated P. falciparum malaria in endemic countries 
+ CD008587:Cytology versus HPV testing for cervical cancer screening in the general population 
+ CD008759:Platelet count, spleen length, and platelet count-to-spleen length ratio for the diagnosis of oesophageal varices in people with chronic liver disease or portal vein thrombosis 
+ CD008892:Rapid diagnostic tests for typhoid and paratyphoid (enteric) fever 
+ CD009175:Clinical symptoms and signs for the diagnosis of Mycoplasma pneumoniae in children and adolescents with community-acquired pneumonia 
+ CD009263:123I-MIBG scintigraphy and 18F-FDG-PET imaging for diagnosing neuroblastoma 
+ CD009694:Computed tomography (CT) angiography for confirmation of the clinical diagnosis of brain death 
+ CD010213:Imaging modalities for characterising focal pancreatic lesions 
+ CD010296:Ultrasonography for endoleak detection after endoluminal abdominal aortic aneurysm repair 
+ CD010502:Rapid antigen detection test for group A streptococcus in children with pharyngitis 
+ CD010657:Dimercaptosuccinic acid scan or ultrasound in screening for vesicoureteral reflux among children with urinary tract infections 
+ CD010680:Ankle brachial index for the diagnosis of lower limb peripheral arterial disease 
+ CD010864:D-dimer test for excluding the diagnosis of pulmonary embolism 
+ CD011053:Imaging for the exclusion of pulmonary embolism in pregnancy 
+ CD011126:Three-dimensional saline infusion sonography compared to two-dimensional saline infusion sonography for the diagnosis of focal intracavitary lesions 
+ CD011420:Lateral flow urine lipoarabinomannan assay for detecting active tuberculosis in HIV-positive adults 
+ CD011431:Rapid diagnostic tests for diagnosing uncomplicated non-falciparum or Plasmodium vivax malaria in endemic countries 
+ CD011515:Diagnostic accuracy of different imaging modalities following computed tomography (CT) scanning for assessing the resectability with curative intent in pancreatic and periampullary cancer 
+ CD011602:Ultrasonography for diagnosis of alcoholic cirrhosis in people with alcoholic liver disease 
+ CD011686:Triage tools for detecting cervical spine injury in pediatric trauma patients 
+ CD011912:Pulse oximetry screening for critical congenital heart defects 
+ CD011926:Molecular assays for the diagnosis of sepsis in neonates 
+ CD012009:Amylase in drain fluid for the diagnosis of pancreatic leak in post-pancreatic resection 
+ CD012010:Serum amylase and lipase and urinary trypsinogen and amylase for diagnosis of acute pancreatitis 
+ CD012083:Ultrasonography for confirmation of gastric tube placement 
+ CD012165:Endometrial biomarkers for the non-invasive diagnosis of endometriosis 
+ CD012179:Blood biomarkers for the non-invasive diagnosis of endometriosis 
+ CD012216:18F PET with florbetapir for the early diagnosis of Alzheimer’s disease dementia and other dementias in people with mild cognitive impairment (MCI) 
+ CD012281:Combination of the non-invasive tests for the diagnosis of endometriosis 
+ CD012599:First and second trimester serum tests with and without first trimester ultrasound tests for Down's syndrome screening 
