@@ -1,1 +1,0 @@
-CT/PET image registration based on a region similarity measure. In this paper, CT/PET multimodality medical image registration is performed by a region similarity measure (RSM), accompanied with an improved segment method and Powell optimization algorithm. RSM has been proved to be a quick, accurate and robust algorithm by the experimental results.

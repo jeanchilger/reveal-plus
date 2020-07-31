@@ -1,1 +1,0 @@
-Lossless compression of emission tomography images. An adaptive lossless compression method using predictive coding with the Rice codes is proposed for low resolution three-dimensional biomedical images. The method is evaluated with the brain positron emission tomography (PET) images. The results are considerably better than with static arithmetic coding.

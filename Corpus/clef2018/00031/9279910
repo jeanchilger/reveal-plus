@@ -1,1 +1,0 @@
-Scatter compensation methods in 3D iterative SPECT reconstruction: a simulation study. Effects of different scatter compensation methods incorporated in fully 3D iterative reconstruction are investigated. The methods are: (i) the inclusion of an 'ideal scatter estimate' (ISE) (ii) like (i) but with a noiseless scatter estimate (ISE-NF)
