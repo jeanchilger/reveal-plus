@@ -1,0 +1,1 @@
+Monte Carlo simulations verifying sampling schemes in multislice mode PET. GATE Monte Carlo simulations are performed to verify sampling schemes in multislice mode PET. Two types of scanner were simulated. The effect of attenuation and scatter were investigated by simulating a realistic phantom. The results are in accordance with the theoretical expectations.
