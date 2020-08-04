@@ -64,7 +64,7 @@ echo ../discretize_TUBE.pl train-$suffix train_nohead.arff $numfeatures  lac_tra
 # echo  ./updateRows.pl lac_train_TUBE.txt lac_train_TUBEfinal.txt $numfeatures
 ./updateRows.pl lac_train_TUBE.txt.$topic lac_train_TUBEfinal.txt.$topic $round
 
-cat alac_lac_train_TUBEfinal.txt.$topic | grep "CLASS=0"  >> lac_train_TUBEfinal.txt.$topic
+
 
 if [ $time -eq 1 ];
 then
@@ -77,10 +77,10 @@ then
     
     echo "discretizando seed ssarp"
 
-../discretize_TUBE.pl train-$suffix $seed_ssarp $numfeatures  lac_train_TUBE_seed.txt.$topic
-echo "seed_ssarp----------"
-cat $seed_ssarp
-./updateRows.pl lac_train_TUBE_seed.txt.$topic  lac_train_TUBEfinal_seed.txt.$topic   0
+    ../discretize_TUBE.pl train-$suffix $seed_ssarp $numfeatures  lac_train_TUBE_seed.txt.$topic
+    echo "seed_ssarp----------"
+    cat $seed_ssarp
+    ./updateRows.pl lac_train_TUBE_seed.txt.$topic  lac_train_TUBEfinal_seed.txt.$topic   0
 
     cat lac_train_TUBEfinal_seed.txt.$topic  >> alac_full_lac_train_TUBEfinal.txt.$topic
 
@@ -95,13 +95,15 @@ cat $seed_ssarp
 
 fi
 
+
+cat alac_full_lac_train_TUBEfinal.txt.$topic | grep "CLASS=0" >> lac_train_TUBEfinal.txt.$topic
 #python3 testeActive.py lac_train_TUBE.txt.$topic 5 /tmp/fullAllacfile.$topic lac_train_TUBE_seed.txt.$topic 0
 
 i=1
 while [[ $i -le 1 ]]; do
   # rm alac_lac_train_TUBEfinal.txt
    #rm alac_full_lac_train_TUBEfinal.txt
-    echo " roda o ALAC ....     `wc -l < alac_lac_train_TUBEfinal.txt.$topic`"
+    echo " roda o ALAC with input of ...     `wc -l < lac_train_TUBEfinal.txt.$topic`"
   ../run_alac_repeated.sh lac_train_TUBEfinal.txt.$topic  $round $rules $max_rules
  i=$(($i+1))
 done

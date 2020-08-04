@@ -14,14 +14,22 @@ declare -a clef=("CD008122" "CD008587" "CD008759" "CD008892" "CD009175" "CD00926
 #      sleep 12
 # done
 # wait
-MAXTHREADS=3
-rm saida.*
+MAXTHREADS=15
+rm clefevaluation
+rm out/saida.*
 for i in "${clef[@]}"; do 
      while [ "$(jobs | grep 'Running' | wc -l)" -ge "$MAXTHREADS" ]; do
-                sleep 10
+                sleep 2
                 #echo "sleeping"
     done 
     echo "running $i...."
-    ./main -c clef2018  -s 1  -t $i -v -o --off-colors &>> saida.$i  
+    ./main -c clef2018  -s 1  -t $i -v -o --off-colors &>> out/saida.$i  &
+   
+    
     
 done
+wait
+
+for i in "${clef[@]}"; do 
+    echo "$i `cat out/saida.$i | grep "^final REVEAL"`"
+done 

@@ -14,15 +14,20 @@ def main( topic):
     with open("clef2018.svm.fil", "r") as mapping_file:
         for line in mapping_file.readlines():
             info = line.strip().split(" ",1)
+            
             svmfil[info[0]] = info[1]
+            
 
     
     with open("data/"+topic+".pids", "r") as mapping_file,  open(topic+".svm.fil", "w") as outdocs:
         for line in mapping_file.readlines():
             info = line.strip().split(" ")
             #print (info[1], svmfil[info[1]])
-            outdocs.write(info[1]+ " "+ svmfil[info[1]]+"\n")
-            
+            try:
+                outdocs.write(info[1]+ " "+ svmfil[info[1]]+"\n")
+            except:
+                print("erro label ", line)
+                pass
     
     #for i in mapping[1]:
         #print (i)

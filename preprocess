@@ -14,6 +14,13 @@ VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
 TOPIC=$1; shift
 QUERY=$1; shift
 
+function check_file {
+    if [ `wc -l < $1` -eq 0 ]; then
+            $VERBOSE && e_secondary "Error FILE $1 EQUAL TO ZERO"
+            break;
+    fi
+}
+
 
 RESULT_DIR="result/${JUDGECLASS}"
 
@@ -50,23 +57,24 @@ catch || {
 
 $VERBOSE && e_success "Done."
 
-$VERBOSE && e_primary "Creating goldendb..."
+$VERBOSE && e_primary "Creating goldendb.$TOPIC..."
 
-try
-(
+# try
+# (
 cat judgement/qrels.$JUDGECLASS.list \
     | grep "$TOPIC " \
     | cut -d' ' -f3 \
-    | sort > $TOPIC/goldendb
+    | sort > $TOPIC/goldendb.$TOPIC
 
-)
+#)
+echo "Creating goldendb.$TOPIC with size `wc -l < $TOPIC/goldendb.$TOPIC`"
+$VERBOSE && e_primary "Creating goldendb.$TOPIC with size `wc -l < $TOPIC/goldendb.$TOPIC`"
+# 2> $STD_ERROR_OUT
+# 
+# catch || {
+#     exit_on_error
+# }
 
-$VERBOSE && e_primary "Creating goldendb with size `wc -l < $TOPIC/goldendb`"
-2> $STD_ERROR_OUT
-
-catch || {
-    exit_on_error
-}
 
 $VERBOSE && e_success "Done."
 
@@ -93,6 +101,29 @@ fi
 
 
 
+if [ ! -f "${TOPIC}.svm.fil" ]; then
+    pushd Corpus
+    
+    python3 script_create_pids.py $TOPIC
+    mv $TOPIC.svm.fil ../$TOPIC/
+    e_primary "svm fil file with `wc -l < ../$TOPIC/$TOPIC.svm.fil` docs"
+    
+#     e_primary "Preparing dataset (executing dofast)..."
+#     ./dofast "$JUDGECLASS" $VERBOSE
+#     e_success "Done."
+# 
+#     cp "$JUDGECLASS".df ../"$JUDGECLASS".df > /dev/null
+# 
+#     cp "$JUDGECLASS".svm.fil ../"$JUDGECLASS".svm.fil
+
+      
+    #rm "$JUDGECLASS".svm.fil.svd
+     
+    popd
+fi
+
+
+
 
 pushd Corpus
 
@@ -109,7 +140,7 @@ zcat seed.$TOPIC.tgz | ./tar /dev/stdin  |  cut -d' ' -f3 > PorterSeed.$TOPIC 2>
 # try
 # (   
 
-   python3 bm25.py ${JUDGECLASS}.tfdf "$TOPIC".seed.doc ../$TOPIC/goldendb $TOPIC
+   python3 bm25.py ${JUDGECLASS} "$TOPIC".seed.doc ../$TOPIC/goldendb.$TOPIC $TOPIC
 
 # ) 2> $STD_ERROR_OUT
 # 
@@ -145,7 +176,7 @@ $VERBOSE && echo "Preparing 'docfils' file with all documents..."
 
 try
 (
-    cut -d' ' -f1 ../$JUDGECLASS.svm.fil \
+    cut -d' ' -f1 $TOPIC.svm.fil \
         | sed -e 's/.*/& &/' > docfil
 
     cut -d' ' -f1 docfil \
@@ -192,9 +223,9 @@ $VERBOSE && e_success "Finished ./dofeaturesseed."
 pushd $TOPIC
 
 # TODO: Adds error detection here.
-$VERBOSE && e_primary "Preparing ../$JUDGECLASS.svm.fil (runs ../dosplit)..."
+$VERBOSE && e_primary "Preparing ../$TOPIC.svm.fil (runs ../dosplit)..."
 
-sed -e 's/[^ ]*/0/' ../$JUDGECLASS.svm.fil \
+sed -e 's/[^ ]*/0/' $TOPIC.svm.fil \
     | ../dosplit
 
 $VERBOSE && e_success "Done."
@@ -214,35 +245,41 @@ catch || {
 $VERBOSE && e_success "Done."
 
 
-
-if [ ! -f "../${JUDGECLASS}.svm.fil.svd" ]; then
+rm ../${TOPIC}.svm.fil.svd
+if [ ! -f "../${TOPIC}.svm.fil.svd" ]; then
     $VERBOSE && e_primary "Running feature compression SVD..."  
-    try
-    ( 
+#     try
+#     ( 
 
 #   cat $TOPIC.synthetic.seed > seed.short.$TOPIC
-    #cat $TOPIC.synthetic.seed >>   $JUDGECLASS.svm.fil
-    ../svd/./script_create_svd.sh  $JUDGECLASS.svm.fil $TOPIC.synthetic.seed 10
-    mv ../svd/$JUDGECLASS.svm.fil.svd .
-    tail -n 1 $JUDGECLASS.svm.fil.svd > $TOPIC.synthetic.seed.svd  
+    #cat $TOPIC.synthetic.seed >>   $TOPIC.svm.fil
+    ../svd/./script_create_svd.sh  $TOPIC.svm.fil $TOPIC.synthetic.seed 10 $TOPIC
+    #mv ../svd/$TOPIC.svm.fil.svd .
     
+    tail -n 1 $TOPIC.svm.fil.svd > $TOPIC.synthetic.seed.svd  
+    
+    sort -k 1 $TOPIC.svm.fil.svd > temp 
+    mv temp $TOPIC.svm.fil.svd
+    cp $TOPIC.svm.fil.svd ../
     sed -i -e 's/^/0 /' $TOPIC.synthetic.seed.svd  
     
-    head -n -1 $JUDGECLASS.svm.fil.svd > temp.txt ; mv temp.txt $JUDGECLASS.svm.fil.svd
+    head -n -1 $TOPIC.svm.fil.svd > temp.txt ; mv temp.txt $TOPIC.svm.fil.svd
     
-     $VERBOSE && e_secondary "New svd file size is  `wc -l < $JUDGECLASS.svm.fil.svd`..."     
-    ) 2> $STD_ERROR_OUT
-
-    catch || {
-        exit_on_error
-    }  
+     $VERBOSE && e_secondary "New svd file size is  `wc -l < $TOPIC.svm.fil.svd`..."   
+   
+#     ) 2> $STD_ERROR_OUT
+# 
+#     catch || {
+#         exit_on_error
+#     }  
 else 
     #just copy the file 
-    $VERBOSE && e_primary "copy  SVD file ..."  
-    cp "../${JUDGECLASS}.svm.fil.svd" .
+    $VERBOSE && e_primary "copy  SVD file ..."
+    sort -k 1 ../${TOPIC}.svm.fil.svd > ${TOPIC}.svm.fil.svd
+    #cp "../${JUDGECLASS}.svm.fil.svd" .
 fi
 
-
+check_file $TOPIC.svm.fil.svd
 
 $VERBOSE && e_success "Done."
 
@@ -250,18 +287,20 @@ $VERBOSE && e_success "Done."
 # set kissdb parameters and execute it if database doesn't exists
 #-------------------------------------------------------------------------
 KEYSIZE=$(awk 'BEGIN{a=0}{len = length($1); a=a<len?len:a}END{print a}' \
-    $JUDGECLASS.svm.fil)
+    $TOPIC.svm.fil)
 VALSIZE=$(awk 'BEGIN{a=0}{len = length($0); a=a<len?len:a}END{print a}' \
-    $JUDGECLASS.svm.fil)
-export KEYSIZE=$((KEYSIZE+2))
-export VALSIZE=$((VALSIZE+2))
+    $TOPIC.svm.fil)
+KEYSIZE=$((KEYSIZE+2))
+VALSIZE=$((VALSIZE+2))
 
-if [ ! -f "$JUDGECLASS.db" ]; then
-    $VERBOSE && e_primary "Indexing $JUDGECLASS, keysize = $KEYSIZE, valsize = $VALSIZE"
+rm $TOPIC.db
+
+if [ ! -f "$TOPIC.db" ]; then
+    $VERBOSE && e_primary "Indexing $TOPIC, keysize = $KEYSIZE, valsize = $VALSIZE"
 
     try
     (
-        ../indexer $JUDGECLASS.svm.fil "$JUDGECLASS".db $KEYSIZE $VALSIZE
+        ../indexer $TOPIC.svm.fil "$TOPIC".db $KEYSIZE $VALSIZE
 
     ) 2> $STD_ERROR_OUT
 

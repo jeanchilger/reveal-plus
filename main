@@ -7,7 +7,7 @@
 #               argument parsing.
 #===============================================================================
 
-export ABS_PATH=`pwd`
+ABS_PATH=`pwd`
 source "${ABS_PATH}/handle_errors"
 
 #=== FUNCTION =============================================
@@ -42,6 +42,13 @@ contains() {
 
     false
     return
+}
+
+function check_file {
+    if [ `wc -l < $1` -eq 0 ]; then
+            $VERBOSE && e_secondary "Error FILE $1 EQUAL TO ZERO"
+            break;
+    fi
 }
 
 #=== FUNCTION =============================================
@@ -238,63 +245,70 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         
         $VERBOSE && echo "do split input file "
         mkdir -p $TOPIC 
-        pushd $TOPIC 
-        sed -e 's/[^ ]*/0/' ../$CORPUS.svm.fil | .././dosplit        
-        popd
+        
         
         source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
         
+        pushd $TOPIC 
+        sed -e 's/[^ ]*/0/' $TOPIC.svm.fil | .././dosplit        
+        popd
+        
         source ./seed_selection $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
-        echo "round is $round"
+        
+        check_file goldendb.$TOPIC       
+        
+        echo "round is $round stating training "
         
         source ./training $TOPIC "$QUERY" $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE $round
-
+        
+        #exit
+        
         pushd $TOPIC
 
-        $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."
-        $VERBOSE && echo "20: Estimate ρ̂ = 1.05."
-        export prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
-            | bc`
+#         $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."
+#         $VERBOSE && echo "20: Estimate ρ̂ = 1.05."
+#         prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
+#             | bc`
+# 
+#         $VERBOSE && echo "Prevalence: $prevalence"
 
-        $VERBOSE && echo "Prevalence: $prevalence"
+#         m=`echo "scale=5; ($prevalence * $TOTAL_DOCUMENTS ) * 0.90" \
+#             | bc`
+#         prevalence_int=${m%.*}
+# 
+#         python3 ../selectRound.py store_estimation $prevalence_int
+# 
+#         j=`cat flagOut`
+# 
+#         t=`wc -l < new$j.$TOPIC`
 
-        export m=`echo "scale=5; ($prevalence * $TOTAL_DOCUMENTS ) * 0.90" \
-            | bc`
-        prevalence_int=${m%.*}
-
-        python3 ../selectRound.py store_estimation $prevalence_int
-
-        export j=`cat flagOut`
-
-        export t=`wc -l < new$j.$TOPIC`
-
-        ranking_size=$(($TOTAL_DOCUMENTS - $t))
+#         ranking_size=$(($TOTAL_DOCUMENTS - $t))
 
         sort -k 2 -n inlr.out.$round.$TOPIC > sorted_ranking
 
-        tail -$ranking_size sorted_ranking \
-            | cut -d$'\t' -f1 > result_ranking.$TOPIC
+       # tail -$ranking_size sorted_ranking \
+       #     | cut -d$'\t' -f1 > result_ranking.$TOPIC
 
-        n=$(($TOTAL_DOCUMENTS - $prevalence_int))
+#         n=$(($TOTAL_DOCUMENTS - $prevalence_int))
+# 
+#         tail -$TOTAL_DOCUMENTS sorted_ranking \
+#             | cut -d' ' -f1 \
+#             | head -$n > result_plus.$TOPIC
+# 
+# #         cat result_ranking.$TOPIC > result
+#         cat sub_new[0-9][0-9]* >> result
+#         cat result \
+#             | sort \
+#             | uniq > temp
+# 
+#         mv temp result
 
-        tail -$TOTAL_DOCUMENTS sorted_ranking \
-            | cut -d' ' -f1 \
-            | head -$n > result_plus.$TOPIC
-
-        cat result_ranking.$TOPIC > result
-        cat sub_new[0-9][0-9]* >> result
-        cat result \
-            | sort \
-            | uniq > temp
-
-        mv temp result
-
-        # cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
+#         cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
 
         $VERBOSE && echo "t = $t; j = $j; ranking_size = $ranking_size; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
 
-        cat ssarp[0-9][0-9].$TOPIC \
-            | sort > already_labeled_docs.$TOPIC
+        cat x_posit* x_negat* \
+            | sort -k2 > already_labeled_docs.$TOPIC
 
         cat sorted_ranking \
             | cut -d' ' -f1 > ranking.$TOPIC
@@ -303,7 +317,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
             ranking.$TOPIC > ranking_with_order.$TOPIC
 
         sort  -k2 ranking_with_order.$TOPIC \
-            | join - already_labeled_docs.$TOPIC -12 -v1 \
+            | join - already_labeled_docs.$TOPIC -12 -22 -v1 \
             | sort -n  -k2 \
             | cut -d' ' -f1 > final_ranking.$TOPIC
 
@@ -311,7 +325,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         # relevants_found=`cat result.$TOPIC \
         #     | sort \
         #     | uniq \
-        #     | join - goldendb \
+        #     | join - goldendb.$TOPIC \
         #     | uniq \
         #     | wc -l`
         #
@@ -320,34 +334,35 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         #     | uniq \
         #     | wc -l`
 
-        relevants_found=`cat result \
-            | join - goldendb \
-            | wc -l`
-
-        documents_labeled=`cat result | wc -l`
-
-        total_relevants=`wc -l < goldendb`
-
-        recall=`echo "scale=5; ($relevants_found / $total_relevants)" \
-            | bc`
-
-            precision=`echo "scale=5; ($relevants_found / $documents_labeled)" \
-            | bc`
-
-        e_primary "-------------------------------------------------------------"
-        e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
-        echo -e "\tRelevants Found: $relevants_found"
-        echo -e "\tTotal Relevants: $total_relevants"
-        echo -e "\tLabeled Documents: $documents_labeled"
-        echo -e "\tRanking Size: $ranking_size"
-        echo -e "\tRecall: $recall"
-        echo -e "\tPrecision: $precision"
-        e_primary "-------------------------------------------------------------"
+#         relevants_found=`cat result \
+#             | join - goldendb.$TOPIC \
+#             | wc -l`
+# 
+#         documents_labeled=`cat result | wc -l`
+# 
+#         total_relevants=`wc -l < goldendb.$TOPIC`
+#         
+#         
+#         recall=`echo "scale=5; ($relevants_found / $total_relevants)" \
+#             | bc`
+# 
+#             precision=`echo "scale=5; ($relevants_found / $documents_labeled)" \
+#             | bc`
+# 
+#         e_primary "-------------------------------------------------------------"
+#         e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
+#         echo -e "\tRelevants Found: $relevants_found"
+#         echo -e "\tTotal Relevants: $total_relevants"
+#         echo -e "\tLabeled Documents: $documents_labeled"
+#         echo -e "\tRanking Size: $ranking_size"
+#         echo -e "\tRecall: $recall"
+#         echo -e "\tPrecision: $precision"
+#         e_primary "-------------------------------------------------------------"
 
         e_primary "Calling second sampling strategy proposed by REVEAL"
-        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int 1000 20
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS `wc -l < goldendb.$TOPIC` 1000 20
         
-        
+        #cat x_neg* | cut -d' ' -f2 > negfile
         python3 ../script_transform_clef.py evalutionclef.$TOPIC.txt $TOPIC ../html-pid-mapping
         popd
 

@@ -58,13 +58,16 @@ function check_file {
 temp_round=200
 memory=0
 all_positive=0
+
+
 #-------------------------------------------------------------------------
 # performs the 100 looping rounds
 #-------------------------------------------------------------------------
 for _round in $(seq -f "%02g" $ROUND 99); do
-
+    
+  
     if [ $LABELED_DOCUMENTS -lt $TOTAL_DOCUMENTS ]; then
-        export round=$_round
+        round=$_round
 
         $VERBOSE && e_primary "Preparing trainset from round $round wiht $relevants docs relevant "
 
@@ -75,7 +78,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
             cut -f2 docfils \
                 | shuf -n $R \
                 | sort \
-                | .././indexer "$JUDGECLASS".db $KEYSIZE $VALSIZE \
+                | .././indexer "$TOPIC".db $KEYSIZE $VALSIZE \
                 | sed -e's/[^ ]*/-1/' >> trainset
 
         ) 2> $STD_ERROR_OUT
@@ -94,14 +97,14 @@ for _round in $(seq -f "%02g" $ROUND 99); do
     
             cat seed \
                 | sort \
-                | join - goldendb \
+                | join - goldendb.$TOPIC \
                 | sed -e 's/^/1 /' \
                 | sort \
                 | uniq > intermediate_seed
 
             cat seed \
                 | sort \
-                | join -v1 - goldendb \
+                | join -v1 - goldendb.$TOPIC \
                 | shuf -n 50000 \
                 | sed -e 's/^/-1 /' \
                 | sort \
@@ -120,7 +123,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         try
         (
             cut -d' ' -f2 intermediate_seed \
-                | .././indexer $JUDGECLASS.db $KEYSIZE $VALSIZE \
+                | .././indexer $TOPIC.db $KEYSIZE $VALSIZE \
                 | cut -d' ' -f2- \
                 | paste -d' ' <(cut -d' ' -f1 intermediate_seed) - \
                 | sort -n >> trainset
@@ -146,21 +149,22 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
         $VERBOSE && e_primary "Executing training algorithm (sofia-ml)..."
        
-        try
-        (
+#         try
+#         (
             $SOFIA --learner_type logreg-pegasos --loop_type roc \
                 --lambda $LAMBDA --iterations 2000000 \
                 --training_file trainset --dimensionality 3300000 \
-                --model_out svm_model #&> classifier_output  
+                --model_out svm_model &> classifier_output  
 
             sofia_status=$?
 
-        ) 2> $STD_ERROR_OUT
-
-        catch || {
-            exit_on_error
-        }
-
+#         ) 2> $STD_ERROR_OUT
+# 
+#         catch || {
+#             exit_on_error
+#         }
+        check_file trainset
+        
         $VERBOSE && e_success "Done."
 
         #-----------------------------------------------------------------
@@ -174,17 +178,17 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
                 $VERBOSE && e_primary "Testing previously trained model..."
 
-                 try
-                (
+#                  try
+#                 (
                     $SOFIA --test_file $test_file --dimensionality 3300000 \
-                        --model_in svm_model --results_file pout.$test_file # &>> classifier_output
+                        --model_in svm_model --results_file pout.$test_file  &>> classifier_output
                              
 
-                 ) 2> $STD_ERROR_OUT
- 
-               catch || {
-                     exit_on_error
-                 }
+#                  ) 2> $STD_ERROR_OUT
+#  
+#                catch || {
+#                      exit_on_error
+#                  }
 
                 $VERBOSE && e_success "Done."
 
@@ -214,31 +218,35 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         check_file pout.svm.test.*
         $VERBOSE && e_primary "Preparing ranking... "
 
-        try
-        (
+#         try
+#         (
             cat new[0-9][0-9].$TOPIC  | sort | uniq >  LABELED_DOCS.$TOPIC
+            echo "LABELED_DOCS.$TOPIC ---> `wc -l < LABELED_DOCS.$TOPIC`"
             cat x_posit.* x_negat.* | cut -d' ' -f2  >> LABELED_DOCS.$TOPIC
+            sort  LABELED_DOCS.$TOPIC | uniq > temp
+            mv temp LABELED_DOCS.$TOPIC
+            
             cut -f1 pout.svm.test.* \
                 | ../fixnum \
                 | cat -n \
                 | join -o2.2,1.2 -t$'\t' - docfils \
-                | sort -k1 -n  > inlr.out."$round".$TOPIC
+                | sort -k1   > inlr.out."$round".$TOPIC
 
                       
             check_file inlr.out."$round".$TOPIC
             
-            sort -n LABELED_DOCS.$TOPIC \
+            sort  LABELED_DOCS.$TOPIC \
                 | join  -v2 - inlr.out."$round".$TOPIC -2 1 \
                 | shuf \
                 | sort -k 2 -r -g -s  > ranking."$round".$TOPIC
-                
+            echo "ranking."$round".$TOPIC ---> `wc -l < ranking."$round".$TOPIC`"    
             check_file ranking."$round".$TOPIC
 
-        ) 2> $STD_ERROR_OUT
-
-        catch || {
-            exit_on_error
-        }
+#         ) 2> $STD_ERROR_OUT
+# 
+#         catch || {
+#             exit_on_error
+#         }
         
         $VERBOSE && e_success "Done."
 
@@ -274,7 +282,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
         head -n $sub_sample new"$round".$TOPIC  | sort -k2> sub_new"$round".$TOPIC
     
-        temp=`cat new"$round".$TOPIC  | sort | join - goldendb | wc -l `
+        temp=`cat new"$round".$TOPIC  | sort | join - goldendb.$TOPIC | wc -l `
         all_positive=$(($temp+$all_positive))
         # TODO: Check the viability of adding the output
         # of this script to a variable instead in a file
@@ -305,25 +313,25 @@ for _round in $(seq -f "%02g" $ROUND 99); do
             cat sub_new"$round".$TOPIC \
                 | sort \
                 | uniq \
-                | join - goldendb \
+                | join - goldendb.$TOPIC \
                 | cut -d' ' -f1 \
                 | sed -e 's/^/1 /' > x_posit."$round"
 
             cat sub_new"$round".$TOPIC \
                 | sort \
                 | uniq \
-                | join - goldendb -v1 \
+                | join - goldendb.$TOPIC -v1 \
                 | cut -d' ' -f1 \
                 | sed -e 's/^/-1 /' > x_negat."$round"
 
             cat  x_negat.* \
                 | sort -k2 \
-                | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2 > seed_ssarp_docs.$TOPIC
+                | join - $TOPIC.svm.fil.svd -2 1 -1 2 > seed_ssarp_docs.$TOPIC
 
             cat  x_posit.* \
                 | shuf -n 1 \
                 | sort -k2 \
-                | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2 >> seed_ssarp_docs.$TOPIC
+                | join - $TOPIC.svm.fil.svd -2 1 -1 2 >> seed_ssarp_docs.$TOPIC
 
             cut -d ' ' -f2- seed_ssarp_docs.$TOPIC  > seed_ssarp_labels.$TOPIC
             
@@ -361,7 +369,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 #                 
 #                 sed -n "${begin},${end}p" new"$round".$TOPIC > sub_new_active_$temp_round.$TOPIC
 # 
-#                 echo "subsample relevants size `cat sub_new_active_$temp_round.$TOPIC | sort | join - goldendb | wc -l `"
+#                 echo "subsample relevants size `cat sub_new_active_$temp_round.$TOPIC | sort | join - goldendb.$TOPIC | wc -l `"
 #                 
 #                 if [ `wc -l < sub_new_active_$temp_round.$TOPIC` -lt 2 ]; then
 #                     echo "continue processing"
@@ -423,13 +431,13 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         $VERBOSE  && e_info "\tSub sample size ... $sub_sample"   
         
         $VERBOSE  && e_info "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`"
-        $VERBOSE  && e_info "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
+        $VERBOSE  && e_info "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb.$TOPIC | wc -l`" 
      
         $VERBOSE  && e_info "\tAlready labeled ... $already_labeled_docs"
         $VERBOSE  && e_info "\tAll docs .......... $all_docs"
         $VERBOSE  && e_info "\tRelevants rate .... $rel_rate"
         $VERBOSE  && e_info "\tCurrent relevants . $current_rel"
-        $VERBOSE  && e_info "\tTotal relevants ... `wc -l < goldendb`"
+        $VERBOSE  && e_info "\tTotal relevants ... `wc -l < goldendb.$TOPIC`"
         $VERBOSE  && e_info "\tRevelants missed .. $MISSING_REL"
 
         relevants=$(($relevants + \
@@ -437,8 +445,8 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 
         echo $rel_found_sample $SAMPLE_SIZE $sub_sample $rel_rate $current_rel >> rel.rate
 
-        sort goldendb | sed -e 's/$/ 1/' > prel.$TOPIC
-        cut -d' ' -f1 prel.$TOPIC > goldendb
+        #sort goldendb.$TOPIC | sed -e 's/$/ 1/' > prel.$TOPIC
+        #cut -d' ' -f1 prel.$TOPIC > goldendb.$TOPIC
 
         estimate=$(($estimate + \
             ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
@@ -456,9 +464,9 @@ for _round in $(seq -f "%02g" $ROUND 99); do
 done
 
 # TODO: Change this approach
-export estimate=$estimate
-export TOTAL_DOCUMENTS=$TOTAL_DOCUMENTS
-export rules=$rules
-export N=$round
+estimate=$estimate
+TOTAL_DOCUMENTS=$TOTAL_DOCUMENTS
+rules=$rules
+N=$round
 
 popd

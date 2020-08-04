@@ -23,20 +23,20 @@ fi
 cat $file_input \
     | sort \
     | uniq \
-    | join - goldendb \
+    | join - goldendb.$TOPIC \
     | cut -d' ' -f1 \
     | sed -e 's/^/1 /' > temp_posit.$roundActive.$TOPIC
 
 cat $file_input \
     | sort \
     | uniq \
-    | join - goldendb -v1 \
+    | join - goldendb.$TOPIC -v1 \
     | cut -d' ' -f1 \
     | sed -e 's/^/-1 /' > temp_negat.$roundActive.$TOPIC
 
 cat temp_posit.$roundActive.$TOPIC temp_negat.$roundActive.$TOPIC \
     | sort -k2 \
-    | join - $JUDGECLASS.svm.fil.svd -2 1 -1 2  > trainset.$roundActive.$TOPIC
+    | join - $TOPIC.svm.fil.svd -2 1 -1 2  > trainset.$roundActive.$TOPIC
 
 cut -d ' ' -f2- trainset.$roundActive.$TOPIC  > trainset_labels.$roundActive.$TOPIC
 
@@ -47,8 +47,8 @@ if [ $discretize -eq 0 ]; then
         $VERBOSE && e_secondary "\tGenerating bins"
 
         python3 ../svd/convert_txt.py \
-            $JUDGECLASS.svm.fil.svd \
-           SSARP/run/total.$TOPIC.arff goldendb
+            $TOPIC.svm.fil.svd \
+           SSARP/run/total.$TOPIC.arff goldendb.$TOPIC
 
         pushd SSARP/run/
         rm train*
@@ -62,12 +62,12 @@ $VERBOSE && e_secondary "\tConverting files to txt..."
 python3 ../svd/convert_txt.py \
     trainset_labels.$roundActive.$TOPIC \
     out.$roundActive.$TOPIC.arff \
-    goldendb
+    goldendb.$TOPIC
 
 python3 ../svd/convert_txt.py \
     seed_ssarp_labels.$TOPIC \
     seed_out.$roundActive.$TOPIC.arff \
-    goldendb
+    goldendb.$TOPIC
 
 cp trainset.$roundActive.$TOPIC SSARP/run/
 cp seed_out.$roundActive.$TOPIC.arff SSARP/run/
@@ -103,14 +103,14 @@ $VERBOSE && e_success "\tDone."
 cat $file_input \
     | sort \
     | uniq \
-    | join - goldendb \
+    | join - goldendb.$TOPIC \
     | cut -d' ' -f1 \
     | sed -e 's/^/1 /' > sub_new_positives.$roundActive
 
 cat $file_input \
     | sort \
     | uniq \
-    | join - goldendb -v1 \
+    | join - goldendb.$TOPIC -v1 \
     | cut -d' ' -f1 \
     | sed -e 's/^/-1 /' > sub_new_negatives.$roundActive
 
@@ -120,14 +120,14 @@ cat $file_input \
 cat ssarp$roundActive.$TOPIC \
     | sort \
     | uniq \
-    | join - goldendb \
+    | join - goldendb.$TOPIC \
     | cut -d' ' -f1 \
     | sed -e 's/^/1 /' > x_posit.$roundActive
 
 cat ssarp$roundActive.$TOPIC \
     | sort \
     | uniq \
-    | join - goldendb -v1 \
+    | join - goldendb.$TOPIC -v1 \
     | cut -d' ' -f1 \
     | sed -e 's/^/-1 /' > x_negat.$roundActive
 

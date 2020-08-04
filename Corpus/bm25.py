@@ -12,25 +12,35 @@ import numpy as np
 
 from rank_bm25 import BM25Okapi
 
-def loadinput(inputfile):
+def loadinput(inputfile,topic):
+    
+    svmfil = []
+    with open("data/"+topic+".pids", "r") as mapping_file:
+        for line in mapping_file.readlines():
+            info = line.strip().split(" ")
+            svmfil.append(info[1])
+            
     corpus = []
     pool=[]
     max_docs = 5000000
+    cont=0
     for folder, subs, files in os.walk(inputfile.split(".")[0]):
         for filename in files:
             with open(os.path.join(folder, filename), 'r') as src:
                 try:
                     txt = ' '.join(src.readlines())
-                    if len(txt) > 0:
+                    if len(txt)> 0 and filename in svmfil :
                         corpus.append(txt)
                         pool.append(filename)
+                        cont+=1                        
                 except:
+                    print("error exeption")
                     pass
             if len(corpus) > max_docs:
                 break                
         if len(corpus) > max_docs:
             break
-    
+    print("Number of files in bm25 is ", cont)
     return corpus,pool
 
 def loadfile(name):
@@ -89,7 +99,7 @@ file_out="SeedRanking"+topic
 f_out = open(file_out, "w")
 
 
-corpus,pool = loadinput(inputfile)
+corpus,pool = loadinput(inputfile,topic)
 
 query=loadfile(queryfile).lower()
 goldendb=loadgolden(relfile)
