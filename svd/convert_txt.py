@@ -15,7 +15,7 @@ f=open( output_file, 'w' )
 #writer = csv.writer(open( output_file, 'w' ), delimiter =",",quoting=csv.QUOTE_MINIMAL)
 
 
-features=50
+features=51
 
 maior=0
 min=[1]*features
