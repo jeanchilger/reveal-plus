@@ -1,0 +1,62 @@
+#!/bin/bash
+
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+JUDGECLASS=$1; shift
+VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
+TOPIC=$1; shift
+
+
+pushd $TOPIC
+
+$VERBOSE && e_success "Starting seed selection..."
+cp ../Corpus/SeedRanking"$TOPIC" .
+tail -n 300 SeedRanking"$TOPIC" > TAIL_FILE
+
+shuf -n 500 TAIL_FILE   \
+                | sort -k1 \
+                | join - $JUDGECLASS.svm.fil.svd -2 1 -1 1 \
+                | cut -d' ' -f2- \
+                | sed -e's/[^ ]*/-1/' > seed_ssarp_labels.$TOPIC
+
+export discretize=0
+#loop over the ranking
+roundSize=30
+startActive=1
+#cat $TOPIC.synthetic.seed.svd  > seed_ssarp_labels.$TOPIC
+i=0
+echo "VAMO Q AGORA É PRA DAR CERTO"
+while true; do
+   step=$((i+1))
+   begin=$((i*roundSize+1))
+   end=$((i*roundSize+roundSize))
+   sed -n "${begin},${end}p" ../Corpus/"SeedRanking"$TOPIC > sub_new$i.$TOPIC
+   
+   #cat ranking/ranking`echo $TOPIC`.txt> top_small
+   #head -n 10 goldendb.$TOPIC
+   
+   $VERBOSE && e_success "Relevants in the seed `cat sub_new$i.$TOPIC | sort | join - goldendb | wc -l `" 
+   
+   round=$i
+   source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive  sub_new$i.$TOPIC
+   discretize=1
+   startActive=2
+   
+   pos=`wc -l < x_posit.$round`
+   if [ $pos -ge 1 ]
+   then 
+       sed -n -e 's/^\(1 \)*//' -e 1p x_posit.$round > posit_seed
+       j=$(($round+1))
+       printf -v round "%02d" $j
+       $VERBOSE && e_success "we found a  pos doc, next round $round"
+       export round
+       break;
+   fi
+   i=$(($i+1))
+done
+popd
+  
+  
+  

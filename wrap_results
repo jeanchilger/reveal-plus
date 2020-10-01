@@ -6,7 +6,7 @@ source "${ABS_PATH}/handle_errors"
 source "${ABS_PATH}/colors"
 
 # Controls how many time results will be taken
-SAMPLES=10
+SAMPLES=1
 
 CORPLIST=("MedicalDB")
 RESULT_DIR="result/baseline"
@@ -15,11 +15,11 @@ ALL_RESULTS_HELPER="all_results/runs.describe.txt"
 
 # Topics to be used in doAll_Baseline_4gram.
 # Topics omited are ignored.
-TOPICS_CONSIDERED=("tr18")
+TOPICS_CONSIDERED=("tr0")
 
 # creates directory to store samples results
-rm -rf all_results
-mkdir all_results
+#rm -rf all_results
+#mkdir all_results
 
 # creates directry to store definitive results
 rm -rf results

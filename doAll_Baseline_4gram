@@ -153,8 +153,8 @@ for CORP in "${CORPLIST[@]}"; do
         
         try 
         (
-            rm -rf $TOPIC
-            mkdir $TOPIC
+            #rm -rf $TOPIC
+            #mkdir $TOPIC
             cat judgement/qrels.$CORP.list | grep "$TOPIC " | cut -d' ' -f3 | sort   > $TOPIC/goldendb
 
         ) 2> $STD_ERROR_OUT
@@ -276,10 +276,12 @@ for CORP in "${CORPLIST[@]}"; do
         catch || {
             exit_on_error
         }
-        
         try 
         (
-            sed -e 's/[^ ]*/1/' svm.$TOPIC.seed.doc.fil > $TOPIC.synthetic.seed
+            seednumber=$(cat posit_seed)
+            echo "$seednumber"
+            grep -e "^$seednumber" ../$CORP.svm.fil > seed_doc
+            sed -e 's/[^ ]*/1/' seed_doc > $TOPIC.synthetic.seed
             echo  "Preparing $TOPIC.synthetic.seed..."
 
         ) 2> $STD_ERROR_OUT
@@ -589,12 +591,12 @@ for CORP in "${CORPLIST[@]}"; do
                     
                     if [[ $PRINT == "y" ]]; then
                         echo "rel $RELFINDDOC L $L b $b  alreadyLabeledDocs $alreadyLabeledDocs  allDocs $allDocs REL $RELRATE CURRENTREL $CURRENTREL relevant docs `wc -l < rel.$TOPIC.fil` "
-                    fi
-                    
+
+                    fi                   
                     aux=$((($RELFINDDOC*$L)/$b))
                     Rel=$(($Rel+$aux*1000))
 
-                    echo $RELFINDDOC $L $b $RELRATE $CURRENTREL >> rel.rate
+                    echo $RELFINDDOC $alreadyLabeledDocs $RELRATE $CURRENTREL >> rel.rate
                     sort rel.$TOPIC.fil | sed -e 's/$/ 1/' > prel.$TOPIC
 
                     cut -d' ' -f1 prel.$TOPIC > rel.$TOPIC.fil

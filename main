@@ -1,0 +1,371 @@
+#!/bin/bash
+
+#===============================================================================
+#       USAGE:  ./main [options] (see usage function below)
+#
+# DESCRIPTION:  Performs the management of the other resources, providing
+#               argument parsing.
+#===============================================================================
+
+export ABS_PATH=`pwd`
+source "${ABS_PATH}/handle_errors"
+
+#=== FUNCTION =============================================
+# Utility function that returns true if a given
+# value is within the given array and false otherwise.
+#
+# Parameters:
+#    $1 -> target value
+#    $2 -> array to be searched
+# Returns:
+#    boolean -> whether or not the value is within array.
+#==========================================================
+contains() {
+    : '
+        Utility function that returns true if a given
+        value is within the given array and false otherwise.
+
+        $1 -> value to check
+        $2... -> array
+    '
+
+
+    value=$1; shift
+    array=("$@")
+
+    for v in "${array[@]}"; do
+        if [[ $v == $value ]]; then
+            true
+            return
+        fi
+    done
+
+    false
+    return
+}
+
+#=== FUNCTION =============================================
+# Display usage information for this script.
+#
+# Parameters:
+#    None
+#==========================================================
+function show_usage() {
+    echo "Usage: ./main [-s <samples>|--samples=<samples>]
+              [-c <corpus>|--corpus=<corpus>] [-v|--verbose]
+              [-o|--off-colors] -t <topic-list>|--topics <topic-list>
+              [-h|--help]"
+}
+
+#=== FUNCTION =============================================
+# Display detailed information about command options and
+# its parameters
+#
+# Parameters:
+#    None
+#==========================================================
+function show_help() {
+    show_usage
+
+    e_secondary "-s <samples>, --samples=<samples>"
+    echo "      Set <samples> as the quantity of executions that will occurs."
+    echo "      After, the mean and standard deviation over the samples are taken."
+    echo "      The standard value is 1."
+
+    echo ""
+    e_secondary "-c <corpus>, --corpus=<corpus>"
+    echo "      Specifies the name of the corpus to be used."
+
+    echo ""
+    e_secondary "-t <topic-list>, --topics=<topic-list>"
+    echo "      Specifies which topics will be computed by the method."
+    echo "      <topic-list> must be a space separated string, containing"
+    echo "      one or more topics."
+
+    echo ""
+    e_secondary "-v, --verbose"
+    echo "      If specified, verbose messages will be shown during execution."
+
+    echo ""
+    e_secondary "-o, --off-colors"
+    echo "      Turns off colors of terminal outputs."
+
+    echo ""
+    e_secondary "-h, --help"
+    echo "      Show this message."
+}
+
+
+#----------------------------------------------------------------------
+# set standard values
+#----------------------------------------------------------------------
+POSITIONAL=()                   # stores not recognized parameters
+SAMPLES=1
+CORPUS="toyDataset"
+VERBOSE=false
+TOPICS_CONSIDERED="empty"      # dummy value for empty topic list verification
+
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors
+
+#----------------------------------------------------------------------
+# space separated argument parsing
+#----------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    key=$1; shift
+
+    case $key in
+        -s )
+            SAMPLES=$1
+            shift
+            ;;
+
+        -c )
+            CORPUS=$1
+            shift
+            ;;
+
+        -t )
+            declare -a TOPICS_CONSIDERED=($1)
+            shift
+            ;;
+
+        -v | --verbose )
+            VERBOSE=true
+            ;;
+
+        -o | --off-colors )
+            sed -r -i "s/COLORS_ON=true/COLORS_ON=false/" colors
+            source "${ABS_PATH}/colors"
+            ;;
+
+        -h | --help )
+            show_help
+            exit
+            ;;
+
+        * )
+            POSITIONAL+=("$key")
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL[@]}"
+
+#----------------------------------------------------------------------
+# equals separated argument parsing
+#----------------------------------------------------------------------
+while [[ $# -gt 0 ]]; do
+    key=$1; shift
+
+    case $key in
+        --samples=* )
+            SAMPLES="${key#*=}"
+            shift
+            ;;
+
+        --corpus=* )
+            CORPUS="${key#*=}"
+            shift
+            ;;
+
+        --topics=* )
+            topics="${key#*=}"
+            declare -a TOPICS_CONSIDERED=($topics)
+            ;;
+
+        * )
+            e_error "Unknown option '$key'."
+            show_usage
+            exit
+            ;;
+    esac
+done
+
+if [[ $TOPICS_CONSIDERED == "empty" ]]; then
+    e_error "Topics must be explicitly specified, but none was given."
+    show_usage
+    exit
+fi
+
+RESULT_DIR="result/${CORPUS}"
+ALL_RESULTS_HELPER="all_results/runs.describe.txt"
+
+#rm -rf all_results
+#mkdir all_results
+
+rm -rf results
+mkdir results
+
+
+
+#-------------------------------------------------------------------------
+# runs the main code <SAMPLES> times
+#-------------------------------------------------------------------------
+for i in $(seq -f "%02g" ${SAMPLES}); do
+
+    e_info "Running sample ${i}."
+
+    rm -rf all_results/result-${i}
+    mkdir all_results/result-${i}
+
+    #---------------------------------------------------------------------
+    # iterates over every topic:query pair, and executes the method for
+    # them.
+    #---------------------------------------------------------------------
+    while IFS="" read -r line || [[ -n $line ]]; do
+        IFS=':' read -ra TEXT <<< "$line"
+        
+        TOPIC="${TEXT[0]}"
+        e_info "Running sample ${i} with topic $TOPIC---."
+       
+        
+        if ! contains $TOPIC "${TOPICS_CONSIDERED[@]}"; then
+            continue
+        fi
+
+        QUERY="${TEXT[1]}"
+
+        if [[ -z $TOPIC ]]; then
+            throw $EMPTY_VARIABLE_EXCEPTION "Variable TOPIC is empty"
+
+        elif [[ -z $QUERY ]]; then
+            throw $EMPTY_VARIABLE_EXCEPTION "Variable QUERY is empty"
+
+        fi
+
+        echo -e "${WHITE}Topic${END}:$TOPIC"
+        echo -e "${WHITE}Query${END}:$QUERY"
+        
+        $VERBOSE && echo "do split input file "
+        
+        pushd $TOPIC 
+        sed -e 's/[^ ]*/0/' ../$CORPUS.svm.fil | .././dosplit        
+        popd
+        
+        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
+        
+        source ./seed_selection $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
+        echo "round is $round"
+        continue;
+        
+        source ./training $TOPIC "$QUERY" $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE $round
+
+        pushd $TOPIC
+
+        $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."
+        $VERBOSE && echo "20: Estimate ρ̂ = 1.05."
+        export prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
+            | bc`
+
+        $VERBOSE && echo "Prevalence: $prevalence"
+
+        export m=`echo "scale=5; ($prevalence * $TOTAL_DOCUMENTS ) * 0.90" \
+            | bc`
+        prevalence_int=${m%.*}
+
+        python3 ../selectRound.py store_estimation $prevalence_int
+
+        export j=`cat flagOut`
+
+        export t=`wc -l < new$j.$TOPIC`
+
+        ranking_size=$(($TOTAL_DOCUMENTS - $t))
+
+        sort -k 2 -n inlr.out.$round.$TOPIC > sorted_ranking
+
+        tail -$ranking_size sorted_ranking \
+            | cut -d$'\t' -f1 > result_ranking.$TOPIC
+
+        n=$(($TOTAL_DOCUMENTS - $prevalence_int))
+
+        tail -$TOTAL_DOCUMENTS sorted_ranking \
+            | cut -d' ' -f1 \
+            | head -$n > result_plus.$TOPIC
+
+        cat result_ranking.$TOPIC > result
+        cat sub_new[0-9][0-9]* >> result
+        cat result \
+            | sort \
+            | uniq > temp
+
+        mv temp result
+
+        # cat ssarp* result_ranking.$TOPIC >> result.$TOPIC
+
+        $VERBOSE && echo "t = $t; j = $j; ranking_size = $ranking_size; TOTAL_DOCUMENTS = $TOTAL_DOCUMENTS;"
+
+        cat ssarp[0-9][0-9].$TOPIC \
+            | sort > already_labeled_docs.$TOPIC
+
+        cat sorted_ranking \
+            | cut -d' ' -f1 > ranking.$TOPIC
+
+        awk 'BEGIN {FS=OFS=" "; Q=" "} {print Q (NR==0 ? ID : ++n) Q, $0}' \
+            ranking.$TOPIC > ranking_with_order.$TOPIC
+
+        sort  -k2 ranking_with_order.$TOPIC \
+            | join - already_labeled_docs.$TOPIC -12 -v1 \
+            | sort -n  -k2 \
+            | cut -d' ' -f1 > final_ranking.$TOPIC
+
+
+        # relevants_found=`cat result.$TOPIC \
+        #     | sort \
+        #     | uniq \
+        #     | join - goldendb \
+        #     | uniq \
+        #     | wc -l`
+        #
+        # documents_labeled=`cat result.$TOPIC \
+        #     | sort \
+        #     | uniq \
+        #     | wc -l`
+
+        relevants_found=`cat result \
+            | join - goldendb \
+            | wc -l`
+
+        documents_labeled=`cat result | wc -l`
+
+        total_relevants=`wc -l < goldendb`
+
+        recall=`echo "scale=5; ($relevants_found / $total_relevants)" \
+            | bc`
+
+            precision=`echo "scale=5; ($relevants_found / $documents_labeled)" \
+            | bc`
+
+        e_primary "-------------------------------------------------------------"
+        e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
+        echo -e "\tRelevants Found: $relevants_found"
+        echo -e "\tTotal Relevants: $total_relevants"
+        echo -e "\tLabeled Documents: $documents_labeled"
+        echo -e "\tRanking Size: $ranking_size"
+        echo -e "\tRecall: $recall"
+        echo -e "\tPrecision: $precision"
+        e_primary "-------------------------------------------------------------"
+
+        e_primary "Calling second sampling strategy proposed by REVEAL"
+        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
+
+        popd
+
+        mv $TOPIC "${RESULT_DIR}/"
+        rm $TOPIC.seed.doc
+
+    done < "judgement/$CORPUS.topic.stemming.txt"
+
+    for topic in `ls ${RESULT_DIR}/`; do
+        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.rate
+        cp "${RESULT_DIR}/${topic}/reveal.final" all_results/result-${i}/reveal.final
+        cp "${RESULT_DIR}/${topic}/runs.log" all_results/result-${i}/runs.log
+
+        echo "${topic} ${i}" >> $ALL_RESULTS_HELPER
+    done
+done
+
+e_info "Iniciate S-CAL process"
+
+source ./wrap_results                          # takes mean and standard deviations
+
+sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option

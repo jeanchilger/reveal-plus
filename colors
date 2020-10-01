@@ -1,11 +1,51 @@
 #!/bin/bash
 
-RED="\e[31;1m"
-GREEN="\e[32;1m"
-BLUE="\e[34;1m"
-WHITE="\e[37;1m"
-MAGENTA="\e[35;1m"
-YELLOW="\e[33;1m"
+COLORS_ON=true
+
+if ! $COLORS_ON; then
+    RED=""
+    GREEN=""
+    BLUE=""
+    WHITE=""
+    MAGENTA=""
+    YELLOW=""
+
+    END=""
+
+else
+    RED="\e[31;1m"
+    GREEN="\e[32;1m"
+    BLUE="\e[34;1m"
+    WHITE="\e[37;1m"
+    MAGENTA="\e[35;1m"
+    YELLOW="\e[33;1m"
+
+    END="\e[0m"
+fi
 
 
-END="\e[0m"
+declare -A COLORS=( ["red"]=$RED ["green"]=$GREEN ["blue"]=$BLUE ["white"]=$WHITE ["magenta"]=$MAGENTA ["yellow"]=$YELLOW);
+
+e_error () {
+    echo -e "${COLORS[red]}${1}${END}";
+}
+
+e_primary () {
+    echo -e "${COLORS[blue]}${1}${END}";
+}
+
+e_success () {
+    echo -e "${COLORS[green]}${1}${END}";
+}
+
+e_secondary () {
+    echo -e "${COLORS[white]}${1}${END}";
+}
+
+e_warning () {
+    echo -e "${COLORS[magenta]}${1}${END}";
+}
+
+e_info () {
+    echo -e "${COLORS[yellow]}${1}${END}";
+}

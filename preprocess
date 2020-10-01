@@ -1,0 +1,271 @@
+#!/bin/bash
+
+#===============================================================================
+#       USAGE:  ./preprocess <judgeclass> <verbose> <topic> <query>
+#
+# DESCRIPTION: Creates and loads start up files, creates seed trainsets.
+#===============================================================================
+
+source "${ABS_PATH}/handle_errors"
+source "${ABS_PATH}/colors"
+
+JUDGECLASS=$1; shift
+VERBOSE=false; [[ $1 == "true" ]] && VERBOSE=true; shift
+TOPIC=$1; shift
+QUERY=$1; shift
+
+
+RESULT_DIR="result/${JUDGECLASS}"
+
+$VERBOSE && e_primary "Creating directories to store results..."
+
+try
+(
+    rm -rf "${RESULT_DIR}/${TOPIC}/"
+    mkdir -p "${RESULT_DIR}/${TOPIC}/"
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+$VERBOSE && e_success "Done."
+
+
+$VERBOSE && e_primary "Creating topic directory..."
+
+try
+(
+    rm -rf $TOPIC
+    mkdir $TOPIC
+    cp -r SSARP $TOPIC/
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+
+$VERBOSE && e_success "Done."
+
+$VERBOSE && e_primary "Creating goldendb..."
+
+try
+(
+cat judgement/qrels.$JUDGECLASS.list \
+    | grep "$TOPIC " \
+    | cut -d' ' -f3 \
+    | sort > $TOPIC/goldendb
+
+)
+
+$VERBOSE && e_primary "Creating goldendb with size `wc -l < $TOPIC/goldendb`"
+2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+$VERBOSE && e_success "Done."
+
+
+#----------------------------------------------------------------------
+# if data is already prepared, skips data extraction
+#----------------------------------------------------------------------
+if [ ! -f "${JUDGECLASS}.svm.fil" ]; then
+    pushd Corpus
+
+    e_primary "Preparing dataset (executing dofast)..."
+    ./dofast "$JUDGECLASS" $VERBOSE
+    e_success "Done."
+
+    cp "$JUDGECLASS".df ../"$JUDGECLASS".df > /dev/null
+
+    cp "$JUDGECLASS".svm.fil ../"$JUDGECLASS".svm.fil
+
+      
+    #rm "$JUDGECLASS".svm.fil.svd
+     
+    popd
+fi
+
+
+
+
+pushd Corpus
+
+echo "$QUERY" > "$TOPIC".seed.doc
+cp $TOPIC.seed.doc ../$TOPIC.seed.doc
+
+e_primary "bm25 seed selection `echo $QUERY` $TOPIC ..."
+mkdir obj
+tar -cvzf seed.$TOPIC.tgz "$TOPIC".seed.doc
+
+zcat seed.$TOPIC.tgz | ./tar /dev/stdin  |  cut -d' ' -f3 > PorterSeed.$TOPIC 2> /dev/null  
+
+
+try
+(        
+   python3 bm25.py ${JUDGECLASS}.tfdf PorterSeed.$TOPIC ../$TOPIC/goldendb $TOPIC
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+popd
+
+e_success "Done."
+
+
+# $VERBOSE && e_primary "Set the total number of docs relevants..."
+# 
+# try
+# (
+#     echo `wc -l < "$JUDGECLASS".svm.fil` > N
+# 
+# ) 2> $STD_ERROR_OUT
+# 
+# catch || {
+#     exit_on_error
+# }
+
+$VERBOSE && e_success "Done."
+
+pushd $TOPIC
+
+
+
+ln -n ../$JUDGECLASS.svm.fil $JUDGECLASS.svm.fil
+
+$VERBOSE && echo "Preparing 'docfils' file with all documents..."
+
+try
+(
+    cut -d' ' -f1 ../$JUDGECLASS.svm.fil \
+        | sed -e 's/.*/& &/' > docfil
+
+    cut -d' ' -f1 docfil \
+        | cat -n > docfils
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+$VERBOSE && e_success "Done."
+
+$VERBOSE && echo "Preparing auxiliary and result files..."
+
+try
+(
+    touch rel.$TOPIC.fil
+    touch prel.$TOPIC
+
+    rm -rf prevalence.rate
+    touch prevalence.rate
+
+    rm -rf rel.rate
+    touch rel.rate
+
+    rm -f new[0-9][0-9].$TOPIC tail[0-9][0-9].$TOPIC self*.$TOPIC gold*.$TOPIC
+    touch new00.$TOPIC
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+$VERBOSE && e_success "Done."
+
+popd
+
+$VERBOSE && e_primary "Executing ./dofeaturesseed..."
+./dofeaturesseed $TOPIC.seed.doc $TOPIC $JUDGECLASS $VERBOSE
+$VERBOSE && e_success "Finished ./dofeaturesseed."
+
+pushd $TOPIC
+
+# TODO: Adds error detection here.
+$VERBOSE && e_primary "Preparing ../$JUDGECLASS.svm.fil (runs ../dosplit)..."
+
+sed -e 's/[^ ]*/0/' ../$JUDGECLASS.svm.fil \
+    | ../dosplit
+
+$VERBOSE && e_success "Done."
+
+$VERBOSE && e_primary "Preparing $TOPIC.synthetic.seed..."
+
+try
+(
+    sed -e 's/[^ ]*/1/' svm.$TOPIC.seed.doc.fil > $TOPIC.synthetic.seed
+
+) 2> $STD_ERROR_OUT
+
+catch || {
+    exit_on_error
+}
+
+$VERBOSE && e_success "Done."
+
+
+
+# if [ ! -f "${JUDGECLASS}.svm.fil.svd" ]; then
+    $VERBOSE && e_primary "Running feature compression SVD..."  
+    try
+    ( 
+
+#   cat $TOPIC.synthetic.seed > seed.short.$TOPIC
+    #cat $TOPIC.synthetic.seed >>   $JUDGECLASS.svm.fil
+    ../svd/./script_create_svd.sh  $JUDGECLASS.svm.fil $TOPIC.synthetic.seed 10
+    #esse Topic.synthetic.seed tem que ter os 300 ultimos do seedranking"topic"
+    mv ../svd/$JUDGECLASS.svm.fil.svd .
+    tail -n 1 $JUDGECLASS.svm.fil.svd > $TOPIC.synthetic.seed.svd  
+    
+    sed -i -e 's/^/0 /' $TOPIC.synthetic.seed.svd  
+    
+    head -n -1 $JUDGECLASS.svm.fil.svd > temp.txt ; mv temp.txt $JUDGECLASS.svm.fil.svd
+    
+     $VERBOSE && e_secondary "New svd file size is  `wc -l < $JUDGECLASS.svm.fil.svd`..."     
+    ) 2> $STD_ERROR_OUT
+
+    catch || {
+        exit_on_error
+    }    
+# fi
+
+
+
+$VERBOSE && e_success "Done."
+
+#-------------------------------------------------------------------------
+# set kissdb parameters and execute it if database doesn't exists
+#-------------------------------------------------------------------------
+KEYSIZE=$(awk 'BEGIN{a=0}{len = length($1); a=a<len?len:a}END{print a}' \
+    $JUDGECLASS.svm.fil)
+VALSIZE=$(awk 'BEGIN{a=0}{len = length($0); a=a<len?len:a}END{print a}' \
+    $JUDGECLASS.svm.fil)
+export KEYSIZE=$((KEYSIZE+2))
+export VALSIZE=$((VALSIZE+2))
+
+if [ ! -f "$JUDGECLASS.db" ]; then
+    $VERBOSE && e_primary "Indexing $JUDGECLASS, keysize = $KEYSIZE, valsize = $VALSIZE"
+
+    try
+    (
+        ../indexer $JUDGECLASS.svm.fil "$JUDGECLASS".db $KEYSIZE $VALSIZE
+
+    ) 2> $STD_ERROR_OUT
+
+    catch || {
+        exit_on_error
+    }
+
+    $VERBOSE && e_success "Done."
+fi
+
+popd

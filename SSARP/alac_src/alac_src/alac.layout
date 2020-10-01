@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="Makefile" open="1" top="0" tabpos="16">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="cache.c" open="1" top="0" tabpos="1">
+		<Cursor position="444" topLine="0" />
+	</File>
+	<File name="cache.h" open="1" top="0" tabpos="2">
+		<Cursor position="476" topLine="0" />
+	</File>
+	<File name="core.c" open="1" top="0" tabpos="3">
+		<Cursor position="4392" topLine="71" />
+	</File>
+	<File name="core.h" open="1" top="0" tabpos="5">
+		<Cursor position="293" topLine="0" />
+	</File>
+	<File name="evaluation.c" open="1" top="0" tabpos="11">
+		<Cursor position="1791" topLine="15" />
+	</File>
+	<File name="itemset.c" open="1" top="0" tabpos="6">
+		<Cursor position="2194" topLine="58" />
+	</File>
+	<File name="lazy.c" open="1" top="0" tabpos="8">
+		<Cursor position="1408" topLine="68" />
+	</File>
+	<File name="limits.h" open="1" top="1" tabpos="10">
+		<Cursor position="120" topLine="0" />
+	</File>
+	<File name="list.h" open="1" top="0" tabpos="7">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="17">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="rule.c" open="1" top="0" tabpos="9">
+		<Cursor position="3396" topLine="106" />
+	</File>
+	<File name="score.c" open="1" top="0" tabpos="13">
+		<Cursor position="956" topLine="18" />
+	</File>
+	<File name="test.c" open="1" top="0" tabpos="4">
+		<Cursor position="1541" topLine="42" />
+	</File>
+	<File name="test.h" open="1" top="0" tabpos="12">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="training.c" open="1" top="0" tabpos="14">
+		<Cursor position="921" topLine="23" />
+	</File>
+	<File name="training.h" open="1" top="0" tabpos="15">
+		<Cursor position="326" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>

@@ -1,0 +1,887 @@
+//pc22.11
+/*
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 2 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program; if not, write to the Free Software
+ *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+/*
+ *    EntropyBin.java
+ *    Copyright (C) 2005 Gabi Schmidberger
+ *
+ *    Class represents a bin that is prepared to return entropy information
+ *    about the class of its instances
+ */
+
+package weka.filters.unsupervised.attribute;
+
+import java.io.Serializable;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.Utils;
+import weka.estimators.BinningUtils;
+import weka.oops.Oops;
+
+/** 
+ *
+ * Class represents a bin. EntropyBin is produced by a discretizing algorithm<p>
+ *
+ * @author Gabi Schmidberger (gabi@cs.waikato.ac.nz)
+ * @version $Revision: 0.0 $
+ */
+
+public class EntropyBin extends Bin implements Serializable{
+
+  /** array to keep the training counts for classes in this bin */
+  double m_trainCounts[];
+
+  /** array to keep the testing counts for classes in this bin */
+  double m_testCounts[];
+
+  /** split depth from which the bin originates from */
+  private int m_splitDepth;
+
+  /** split path */
+  String m_splitPath = null;
+
+  /** number of instances in the bin */
+  private double m_trainEntropy = Double.NaN;
+
+  /** number of instances in the bin */
+  private double m_trainNumInst;
+
+  /** number of instances in the bin */
+  private double m_testNumInst;
+
+  /** leftBegin index in sorted train dataset */
+  private int m_trainBegin = -1;
+
+  /** leftEnd index in sorted train dataset */
+  private int m_trainEnd = -1;
+
+  /** leftBegin index in sorted test dataset */
+  private int m_testBegin = -1;
+
+  /** leftEnd index in sorted test dataset */
+  private int m_testEnd = -1;
+
+  /** minimum value of the bin, left leftEnd of range */
+  private double m_minValue;
+
+  /** maximum value of the bin, is right leftEnd of range */
+  private double m_maxValue;
+
+  /** flag if min is including leftEnd points */
+  private boolean m_minIncl = false;
+
+  /** flag if max is including leftEnd points */
+  private boolean m_maxIncl = true;
+
+
+  /** total number of instances of the dataset the bin is trained with */
+  private double m_totalNum = -1.0;
+
+  /** number of classes in the related data set */
+  private int m_numClasses = -1;
+
+  /** flag if the bin contains an illegal cut */
+  private boolean m_illegalCut = false;
+
+  /** uniform noise level in this bin */
+  private double m_alpha;
+
+
+  /** Constructor */
+  public EntropyBin() {
+  }
+
+  /** 
+   * Constructor that sets all values that have to be set
+   * @param min minimal value in the bin
+   * @param max maximal value in the bin
+   * @param alpha for empty bins
+  */
+  public EntropyBin(double min, boolean minIncl, double max, boolean maxIncl,
+		    double [] trainCounts, double alpha) {
+    m_numClasses = -1;
+    m_trainCounts = null;
+    m_testCounts = null;
+    m_splitDepth = -1;
+
+    m_totalNum = -1;
+    m_trainEntropy = Double.NaN;
+    m_trainNumInst = 0;
+    m_testNumInst = 0.0;
+    m_trainBegin = -1;
+    m_trainEnd = -1;
+
+    m_minValue = min;
+    m_maxValue = max;
+    m_minIncl = minIncl;
+    m_maxIncl = maxIncl;
+    if (trainCounts != null) {
+      m_trainCounts = (double [])trainCounts.clone();
+    }
+
+    m_alpha = alpha;
+  }
+
+   /** 
+   * Constructor that only sets the bin borders
+   * @param data sorted data set 
+   * @param attrIndex index of the relevant attribute
+   * @param numClasses number of classes
+   * @param splitDepth depth of the split
+   * @param totalNum total number of instances in the overall model
+   * @param num number of instances in this bin
+   * @param leftBegin leftBegin index in this bin
+   * @param leftEnd leftEnd index in ordered dataset
+   * @param min minimal value in the bin
+   * @param max maximal value in the bin
+   * @param alpha for empty bins
+  */
+  public EntropyBin(int numClasses,
+		    int splitDepth,
+		    double totalNum,
+		    double num, int begin, int end,
+		    double min, double max,
+		    double [] trainCounts, double alpha) {
+    //Oops.pln("EntropyBin min "+min+" max "+max);
+    m_numClasses = numClasses;
+    m_trainCounts = new double[numClasses];
+    m_testCounts = new double[numClasses];
+    m_splitDepth = splitDepth;
+
+    m_totalNum = totalNum;
+    m_trainNumInst = Double.NaN;
+    m_trainNumInst = num;
+    m_testNumInst = 0.0;
+    m_trainBegin = begin;
+    m_trainEnd = end;
+
+    m_minValue = min;
+    m_maxValue = max;
+    if (trainCounts != null) {
+      m_trainCounts = (double [])trainCounts.clone();
+    }
+
+    m_alpha = alpha;
+  }
+
+ /** 
+   * Makes a new right descendant
+   * the right descendant at first has all the range
+   * @return the new right bin
+   *
+   */
+  public EntropyBin copyNewRight() {
+
+    //Oops.pln("copyNewRight \n" + debToString());
+    EntropyBin newRight = new EntropyBin();
+    newRight.m_trainCounts = new double[m_trainCounts.length];
+    System.arraycopy(m_trainCounts, 0,  newRight.m_trainCounts, 0, m_trainCounts.length);
+
+    newRight.m_testCounts = new double[m_trainCounts.length];
+    newRight.m_splitDepth = m_splitDepth + 1;
+    newRight.m_splitPath = m_splitPath + "R";
+
+    newRight.m_totalNum = m_totalNum;
+    newRight.m_numClasses = m_numClasses;
+    newRight.m_trainNumInst = m_trainNumInst;
+    newRight.m_trainEntropy = m_trainEntropy;
+    newRight.m_testNumInst = 0.0;
+
+    newRight.m_trainBegin = m_trainBegin;
+    newRight.m_trainEnd = m_trainEnd;
+    newRight.m_minValue = m_minValue;
+    newRight.m_maxValue = m_maxValue;
+    newRight.m_illegalCut =  m_illegalCut;
+    newRight.m_alpha = m_alpha;
+    return newRight;
+  }
+
+  /** 
+   * Makes a new left descendant
+   * the left descendant is at first all empty
+   * @return the new left bin
+   *
+   */
+  public EntropyBin copyNewLeft() {
+
+    EntropyBin newLeft = new EntropyBin();
+
+    newLeft.m_trainCounts = new double[m_trainCounts.length];
+    newLeft.m_testCounts = new double[m_trainCounts.length];
+    newLeft.m_splitDepth = m_splitDepth + 1;
+    newLeft.m_splitPath = m_splitPath + "L";
+
+    newLeft.m_totalNum = m_totalNum;
+    newLeft.m_numClasses = m_numClasses;
+    newLeft.m_trainEntropy = 0.0; /////todo
+    newLeft.m_trainNumInst = 0.0;
+    m_testNumInst = 0.0;
+
+    newLeft.m_trainBegin = m_trainBegin;
+    newLeft.m_trainEnd = m_trainBegin - 1;
+    newLeft.m_minValue = m_minValue;
+    newLeft.m_maxValue = m_minValue;
+    newLeft.m_alpha = m_alpha;
+    return newLeft;
+  }
+
+  /**
+   * Sets the class counts
+   * checks must happen outside of method
+   * @param data instances from which the count is taken
+   * @param leftBegin leftBegin of range where instances are in bin
+   * @param leftEnd leftEnd of range where instances are in bin
+   */
+  public void setTestCounts(Instances data, int begin, int end)
+
+  {
+    m_testNumInst = 0;
+    m_testBegin = begin;
+    m_testEnd = end;
+    m_testCounts = new double[data.numClasses()];
+    for (int i = m_testBegin; i <= m_testEnd; i++) {
+      addInstance(data.instance(i));
+    }
+  }
+
+  /**
+   * Sets the training counts
+   * checks must happen outside of method
+   * @param data instances from which the count is taken
+   * @param leftBegin leftBegin of range where instances are in bin
+   * @param leftEnd leftEnd of range where instances are in bin
+   */
+  public void setTrainCounts(Instances data, int begin, int end)
+  {
+    m_trainNumInst = 0;
+    m_trainBegin = begin;
+    m_trainEnd = end;
+    m_trainCounts = new double[m_numClasses];
+    for (int i = m_trainBegin; i <= m_trainEnd; i++) {
+      m_trainNumInst += data.instance(i).weight();
+      m_trainCounts[(int)data.instance(i).classValue()] +=
+	data.instance(i).weight();
+    }
+  }
+    
+  /**
+   * Takes off one count
+   *
+   *@param instance instance that is taken away
+   */
+  public void minusCount(Instance instance) {
+				
+    m_trainCounts[(int)instance.classValue()] -= 1.0;
+      //	instance.weight();
+  }
+
+  /**
+   * Adds one count
+   *
+   *@param instance instance that is added 
+   */
+  public void addCount(Instance instance) {
+				
+    m_trainCounts[(int)instance.classValue()] += 1.0;
+    //	instance.weight();
+  }
+
+  /**
+   * move leftEnd to right
+   * checks must happen before this method is called
+   *
+   *@param instances data set
+   */
+  public void moveEndRight(Instances instances) {
+				
+    m_trainEnd++;
+    m_trainNumInst++;
+    addCount(instances.instance(m_trainEnd));
+  }
+
+  /**
+   * move leftBegin to right
+   * checks must happen before this method is called
+   *
+   *@param instances data set
+   */
+  public void moveBeginRight(Instances instances) {
+				
+    m_trainNumInst--;
+    minusCount(instances.instance(m_trainBegin));
+    m_trainBegin++;
+  }
+
+  /**
+   * Get precomputed training entropy part
+   * @return the part of the training entropy that depends on this bin only
+   */
+  public double getPrecomputedTrainEntropy () {
+
+    return m_trainEntropy;
+  }
+
+  /**
+   * Set precomputed training entropy part
+   * @param the part of the training entropy that depends on this bin only
+   */
+  public void setPrecomputedTrainEntropy (double ety) {
+    m_trainEntropy = ety;
+  }
+
+  /**
+   * Get training entropy part (train-num-inst * codelength)
+   * @return the part of the training entropy that depends on this bin only
+   */
+  public double getTrainEntropyPart() {
+
+    double sum = 0.0;
+    int numClasses = m_trainCounts.length;
+    //Oops.p("\ngetTrainEntropyPart ");
+    int notnull = 0;
+
+    double ety = 0.0;
+    // check if entropy is null any way
+
+    for (int i = 0; i < numClasses; i++) {
+      if (m_trainCounts[i] > 0.0) { 
+	notnull++;  
+      }
+    }
+
+    if (notnull > 1) {
+      for (int i = 0; i < numClasses; i++) {
+	//Oops.p(" "+m_trainCounts[i]);
+	if (m_trainCounts[i] >= 1e-6) {
+	  ety -= m_trainCounts[i] * Math.log(m_trainCounts[i]);
+	}
+	sum +=  m_trainCounts[i];
+	/////      ety -= m_trainCounts[i] * Math.log(m_trainCounts[i] + 1.0);
+      }
+      ety += sum * Math.log(sum);
+      ///// ety += m_trainNumInst * Math.log(m_trainNumInst + numClasses);
+      //Oops.pln("");
+      ety = ety * sum;
+    }
+
+    m_trainEntropy = ety;
+    return ety;
+  }
+
+  /**
+   * Get Entropy part.
+   * @return the part of the entropy that depends on this bin only
+   */
+  public double getEntropyPart() {
+
+    double ety = 0.0;
+    double sum = 0.0;
+    int numClasses = m_trainCounts.length;
+    //Oops.p("\ngetEntropyPart ");
+    for (int i = 0; i < numClasses; i++) {
+      //Oops.p(" ts "+m_testCounts[i]+" tr "+ m_trainCounts[i]);
+      if (m_trainCounts[i] >= 1e-6) {
+	ety -= m_testCounts[i] * Math.log(m_trainCounts[i]);
+      }
+      sum +=  m_testCounts[i];
+    }
+    ety += sum * Math.log(m_trainNumInst);
+    //Oops.pln(" trainnumInst "+m_trainNumInst);
+    ety = ety * sum;
+    return ety;
+  }
+
+  /**
+   * Gets the counts from training.
+   * @return the training counts
+   */
+  public double [] getTrainCounts() {
+    return m_trainCounts;
+  }
+
+   /**
+   * Gets the depth of the bin.
+   * @return depth of the bin
+   */
+  public int getSplitDepth() {
+    return m_splitDepth;
+  }
+
+  /**
+   * Sets the spli path of that bin.
+   * @param String new split path of the bin
+   */
+  public void setSplitDepth(int depth) {
+    m_splitDepth = depth;
+  }
+
+  /**
+   * Gets the split path of the bin.
+   * @return split path of the bin
+   */
+  public String getSplitPath() {
+    return m_splitPath;
+  }
+
+  /**
+   * Sets the depth of that bin.
+   * @param index new depth of the bin
+   */
+  public void setSplitPath(String path) {
+    m_splitPath = path;
+  }
+
+  /**
+   * Sets the number of instances in that bin to zero.
+   * @param numInst new number of instances
+   */
+  public void emptyBin() {
+    m_testNumInst = 0.0;
+    m_testCounts = new double[m_numClasses];
+  }
+
+  /**
+   * Gets the width of the the bin which is maximum minus the minimum
+   * @return width of the range of the bin
+   */
+  public double getWidth() {
+    return m_maxValue - m_minValue;
+  }
+
+  /**
+   * Gets the number of train instances the bin was done for.
+   * @return number of train instances
+   */
+  public double getNumInst() {
+    return getTrainNumInst();
+  }
+
+  /**
+   * Gets the number of test instances currently in the bin.
+   * @return number of test instances
+   */
+  public double getTestNumInst() {
+    return m_testNumInst;
+  }
+
+  /**
+   * Gets the number of train instances the bin was done for.
+   * @return number of train instances
+   */
+  public double getTrainNumInst() {
+    return m_trainNumInst;
+  }
+
+  /**
+   * Sets the weight that bin.
+   * @param weight new weight
+   */
+  public void setTrainNumInst(double weight) {
+    m_trainNumInst = weight;
+  }
+
+  /**
+   * Gets the total number of instances of the whole histogram the bin is part of.
+   * @return the total number of instances of the histogram
+   */
+  public double getTotalNum() {
+    return m_totalNum;
+  }
+
+  /**
+   * Returns the tip text for this property
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String maxValueTipText() {
+    return "Specify range upper value.";
+  }
+
+  /**
+   * Gets the right border of that bin.
+   * @return maxValue right border of the bin
+   */
+  public double getMaxValue() {
+    return m_maxValue;
+  }
+
+  /**
+   * Sets the right border of that bin.
+   * @param maxValue right border of the bin
+   */
+  public void setMaxValue(double maxValue) {
+    m_maxValue = maxValue;
+  }
+
+  /**
+   * Gets the right border type of that bin.
+   * @return maxIncl right border type of the bin
+   */
+  public boolean getMaxIncl() {
+    return m_maxIncl;
+  }
+
+  /**
+   * Sets the right border type of that bin.
+   * @param maxIncl right border type of the bin
+   */
+  public void setMaxIncl(boolean maxIncl) {
+    m_maxIncl = maxIncl;
+  }
+  /**
+   * Returns the tip text for this property
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String minValueTipText() {
+    return "Specify range lower value.";
+  }
+
+  /**
+   * Gets the left border of that bin.
+   * @return minValue left border of the bin
+   */
+  public double getMinValue() {
+    return m_minValue;
+  }
+
+  /**
+   * Sets the left border of that bin.
+   * @param minValue left border of the bin
+   */
+  public void setMinValue(double minValue) {
+    m_minValue = minValue;
+  }
+
+  /**
+   * Gets the left border type of that bin.
+   * @return minIncl left border type of the bin
+   */
+  public boolean getMinIncl() {
+    return m_minIncl;
+  }
+
+  /**
+   * Sets the left border type of that bin.
+   * @param minIncl left border type of the bin
+   */
+  public void setMinIncl(boolean minIncl) {
+    m_minIncl = minIncl;
+  }
+
+  /**
+   * Gets the flag is the bin was an illegal cut
+   * @return minopen flag if minimum border is open
+   */
+  public boolean getIllegalCut() {
+    return m_illegalCut;
+  }
+
+  /**
+   * Sets if the bin has an illegal cut.
+   * @param flag the new value of the flag
+   */
+  public void setIllegalCut(boolean flag) {
+    m_illegalCut = flag;
+  }
+
+  /**
+   * Tests itself if the bin has an illegal cut and then sets the flag..
+   * @param flag the new value of the flag
+   */
+  public void setIllegalCut() {
+    //m_illegalCut = (EstimatorUtils.isIllegalCut((int) m_weight, m_maxValue - m_minValue,
+    //m_totalLen, m_totalNum));
+     double width =  m_maxValue - m_minValue;
+     //     Oops.pln("Bin.setIllegalCut "+m_illegalCut+" : "+m_weight+
+     //	      " : "+width+" : "+m_totalLen);
+  }
+
+
+  /**
+   * Returns the tip text for this property
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String beginTipText() {
+    return "Specify the first index if the dataset is sorted.";
+  }
+
+  /**
+   * Gets the leftBegin index of the instances (if the dataset is sorted).
+   * @return leftBegin index of the instances
+   */
+  public int getBegin() {
+    return m_trainBegin;
+  }
+
+  /**
+   * Sets the leftBegin index of the instances (if the dataset is sorted).
+   * @param leftBegin index of the instances
+   */
+  public void setBegin(int begin)  {
+    m_trainBegin = begin;
+  }
+
+
+  /**
+   * Returns the tip text for this property
+   * @return tip text for this property suitable for
+   * displaying in the explorer/experimenter gui
+   */
+  public String endTipText() {
+    return "Specify the last index, if the dataset is sorted.";
+  }
+
+  /**
+   * Gets the leftEnd index of the instances (if the dataset is sorted).
+   * @return leftEnd index of the instances
+   */
+  public int getEnd() {
+    return m_trainEnd;
+  }
+
+  /**
+   * Sets the leftEnd index of the instances (if the dataset is sorted).
+   * @param leftEnd index of the instances
+   */
+  public void setEnd(int end)  {
+    m_trainEnd = end;
+  }
+
+
+
+ /**
+   * Add one instance to the bin
+   */
+  public void addInstance (Instance inst) {
+    m_testNumInst += inst.weight();
+    m_testCounts[(int)inst.classValue()] += inst.weight();
+  }
+
+ /**
+   * Add one instance to the bin
+   */
+  public void addInstance () {
+  //   m_numInst++;
+  }
+
+  /**
+   * Add one instance as weight to the border bin
+   * @param left if true it is the left border else the right
+   */
+  public void addBorderInstance(boolean left, double value) {
+//     m_numInst++;
+//     if (left) {
+//       if (value < m_minValue) {
+// 	m_minValue = value;
+//       } 
+//     } else {
+//       if (value > m_maxValue) {
+// 	m_maxValue = value;
+//       }
+//     }
+  }
+
+
+  /**
+   * Add one instance as weight to the border bin
+   * @param left if true it is the left border else the right
+   */
+  public void addBorderWeight (boolean left, double value) {
+//     m_weight++;
+//     if (left) {
+//       if (value < m_minValue) {
+// 	m_minValue = value;
+//       } 
+//     } else {
+//       if (value > m_maxValue) {
+// 	m_maxValue = value;
+//       }
+//     }
+  }
+
+  /**
+   * Get probability.
+   * @return the probability
+   * @exception Exception if likelihood is not computeable
+   */
+  public double getProbability() throws Exception{
+
+//  Oops.pln("totalNum "+m_totalNum );
+//  Oops.pln("weight "+m_weight );
+  double prob  = 0.0; //m_weight / m_totalNum;
+    return prob;
+  }
+
+
+  /**
+   * For debug purposes: only the arrays
+   */
+  public String debTrainArrayToString() {
+    StringBuffer text = new StringBuffer("");
+    //text.append("trainCounts.length "+ m_trainCounts.length+"\n#");
+    for (int i = 0; i < m_trainCounts.length; i++) {
+      text.append(""+m_trainCounts[i]+" ");
+   }
+    //text.append("");
+   return text.toString();
+  }
+
+  /**
+   * For debug purposes: only the arrays
+   */
+  public String debTestArrayToString() {
+    StringBuffer text = new StringBuffer(" ");
+    // text.append("testCounts.length "+ m_testCounts.length+"\n#");
+    for (int i = 0; i < m_testCounts.length; i++) {
+      text.append(""+m_testCounts[i]+" ");
+   }
+    //text.append("");
+   return text.toString();
+  }
+
+  /**
+   * For debug purposes: only the arrays
+   */
+  public String debArrayToString() {
+    StringBuffer text = new StringBuffer("#| ");
+    //text.append("trainCounts.length "+ m_trainCounts.length+"\n#");
+    //text.append("testCounts.length "+ m_testCounts.length+"\n#");
+    for (int i = 0; i < m_trainCounts.length; i++) {
+      text.append(""+m_trainCounts[i]+" ");
+   }
+   text.append("\n");
+   return text.toString();
+  }
+
+  /**
+   * For debug purposes: all information of a bin
+   */
+  public String debToString() {
+    StringBuffer text = new StringBuffer("#| ");
+
+  text.append("splitDepth "+ m_splitDepth+"\n");
+
+  /** split path */
+   text.append("splitPath "+ m_splitPath+"\n");
+
+  /** number of instances in the bin */
+   text.append("numInst "+ m_trainNumInst+"\n");
+
+   text.append("testnumInst "+ m_testNumInst+"\n");
+
+
+  /** leftBegin index in sorted dataset */
+   text.append("leftBegin "+ m_trainBegin+"\n");
+
+  /** leftEnd index in sorted dataset */
+   text.append("leftEnd "+ m_trainEnd+"\n");
+
+   text.append("testbegin "+ m_testBegin+"\n");
+
+   text.append("testend "+ m_testEnd+"\n");
+
+  /** total number of instances of the histogram */
+   text.append("totalNum "+ m_totalNum+"\n");
+
+  /** minimum value of the bin, minValue is standard to be printed to the left */
+   text.append("minValue "+ m_minValue+"\n");
+ 
+  /** maximum value of the bin, maxValue is standard to be printed to the right*/
+   text.append("maxValue "+ m_maxValue+"\n");
+   text.append("minIncl "+ m_minIncl +"\n");
+   text.append("maxIncl "+ m_maxIncl +"\n");
+
+
+  text.append("numClasses "+ m_numClasses+"\n");
+
+  /** flag if the bin contains an illegal cut */
+   text.append("illegalCut "+ m_illegalCut+"\n");
+
+  /** uniform noise level in this bin */
+   text.append("alpha "+ m_alpha+"\n");
+
+   text.append("trainCounts "+ m_trainCounts+"\n");
+   text.append("testCounts "+ m_testCounts+"\n");
+   text.append("trainCounts.length "+ m_trainCounts.length+"\n");
+   text.append("testCounts.length "+ m_testCounts.length+"\n");
+   for (int i = 0; i < m_trainCounts.length; i++) {
+     text.append(""+m_trainCounts[i]+" ");
+   }
+   text.append("\n");
+   return text.toString();
+  }
+
+
+  /**
+   * Print main information of a bin
+   */
+  public String toString() {
+    StringBuffer text = new StringBuffer(" ");
+    if (m_minIncl) { text.append("["); } else { text.append("("); }
+    text.append(""+Utils.doubleToString(m_minValue, 6)+
+		", "+Utils.doubleToString(m_maxValue, 6));
+    if (m_maxIncl) { text.append("]"); } else { text.append(")"); }
+
+    text.append(" | ");
+    text.append("   "+Utils.doubleToString(m_trainNumInst, 6, 0));
+    text.append(" | ");
+    if (m_totalNum > 0.0) {
+       text.append(" "+percentString(m_totalNum, m_trainNumInst, 6)+"%");
+    }
+    text.append(" ||");
+    text.append(""+debTrainArrayToString());
+    text.append(" || ");
+    text.append("  "+Utils.doubleToString(m_testNumInst, 6, 0));
+    text.append(" | ");
+    if (m_totalNum > 0.0) {
+       text.append(" "+percentString(m_totalNum, m_testNumInst, 6)+"%");
+    }
+    text.append(" ||");
+    text.append(""+debTestArrayToString());
+    text.append(" || ");
+     
+//     try {
+    text.append(" |E " + Utils.doubleToString(getPrecomputedTrainEntropy() ,6));
+//       text.append(" |P " + Utils.doubleToString(getProbability() ,6));
+//       //text.append(" | " + Utils.doubleToString((m_weight/9.0) - m_numInst, 6) );
+//       text.append(" |L " + Utils.doubleToString(getLoglikelihood() ,6));
+//       text.append(" |LO " + Utils.doubleToString(getLoglikeliForOne() ,6));
+//     } catch (Exception ex) {}
+       text.append(" |\n");
+    return text.toString();
+  }
+
+
+  /**
+   * Main method for testing this class.
+   *
+   * @param argv should contain arguments to the filter: use -h for help
+   */
+  public static void main(String [] argv) {
+
+    try {
+      EntropyBin bin = new EntropyBin();
+      Oops.pln("" + bin.toString()); 
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.out.println(ex.getMessage());
+    }
+  }
+
+}
