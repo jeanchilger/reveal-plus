@@ -10,8 +10,7 @@ TOPIC=$1; shift
 roundActive=$1; shift
 discretize=$1; shift
 flag_allac_first_time=$1; shift
-git=$1; shift
-
+file_input=$1; shift
 
 $VERBOSE && e_primary    "Starting active learning..."
 
