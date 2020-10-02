@@ -13,7 +13,11 @@ while [ $loop == 1 ]; do
   ../alac`echo $rule` -i alac_$1 -t $1 -s 1 -m 3 -e 1000000000 -c 0.001 -j 1 -d 3 -o 1 > result_temp_$1/result_temp$count.txt
   instance=`cat result_temp_$1/result_temp$count.txt | grep inserting | awk '{ print $3 }'`; 
   newclass=`cat result_temp_$1/result_temp$count.txt | grep "New CLASS" | awk '{ print $4 }'`;
-
+  
+  #echo inserting instance $instance into alac_$1 `cat $1 | grep "^$instance\ " | cut -d' ' -f2`
+  cat $1 | grep "^$instance\ " |  grep "CLASS=1"
+  
+  
   exists=`cat alac_$1 | grep "^$instance\ "`; 
   if [ "$exists" == "" ]; then 
     echo inserting instance $instance into alac_$1 `cat $1 | grep "^$instance\ " | cut -d' ' -f2`

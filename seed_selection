@@ -13,19 +13,17 @@ pushd $TOPIC
 
 $VERBOSE && e_success "Starting seed selection..."
 cp ../Corpus/SeedRanking"$TOPIC" .
-tail -n 1000 SeedRanking"$TOPIC" > TAIL_FILE
 
-shuf -n 1000 TAIL_FILE   \
-                | sort -k1 \
-                | join - $JUDGECLASS.svm.fil.svd -2 1 -1 1 \
-                | cut -d' ' -f2- \
-                | sed -e's/[^ ]*/-1/' > seed_ssarp_labels.$TOPIC
+
+cat $TOPIC.synthetic.seed.svd | cut -d' ' -f2-  > syntetic_seed 
+
+
 
 export discretize=0
 #loop over the ranking
 roundSize=30
 startActive=1
-#cat $TOPIC.synthetic.seed.svd  > seed_ssarp_labels.$TOPIC
+
 i=0
 echo "VAMO Q AGORA É PRA DAR CERTO"
 while true; do
@@ -33,6 +31,17 @@ while true; do
    begin=$((i*roundSize+1))
    end=$((i*roundSize+roundSize))
    sed -n "${begin},${end}p" ../Corpus/"SeedRanking"$TOPIC > sub_new$i.$TOPIC
+   
+   
+   #cada rodada trocar os random docs 
+   tail -n 5000 SeedRanking"$TOPIC" \
+                | shuf -n 1000 \
+                | sort -k1 \
+                | join - $JUDGECLASS.svm.fil.svd -2 1 -1 1 \
+                | cut -d' ' -f2- \
+                | sed -e's/[^ ]*/-1/' > random_seed 
+                
+    cat random_seed syntetic_seed > seed_ssarp_labels.$TOPIC
    
    #cat ranking/ranking`echo $TOPIC`.txt> top_small
    #head -n 10 goldendb.$TOPIC

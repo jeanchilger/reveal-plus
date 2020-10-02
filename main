@@ -237,12 +237,14 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "${WHITE}Query${END}:$QUERY"
         
         $VERBOSE && echo "do split input file "
+             
+        
+        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
         
         pushd $TOPIC 
         sed -e 's/[^ ]*/0/' ../$CORPUS.svm.fil | .././dosplit        
         popd
         
-        source ./preprocess $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
         
         source ./seed_selection $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
         echo "round is $round"
@@ -252,6 +254,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         pushd $TOPIC
 
+        TOTAL_DOCUMENTS = `wc -l < ../$CORPUS.svm.fil`
         $VERBOSE && echo "Select the top 95% relevant documents from the last ranking."
         $VERBOSE && echo "20: Estimate ρ̂ = 1.05."
         export prevalence=`echo "scale=5; ($estimate * 1.05) / $TOTAL_DOCUMENTS" \
@@ -269,21 +272,24 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         export t=`wc -l < new$j.$TOPIC`
 
-        ranking_size=$(($TOTAL_DOCUMENTS - $t))
+        ranking_size=$(($t))
 
         sort -k 2 -n inlr.out.$round.$TOPIC > sorted_ranking
 
         tail -$ranking_size sorted_ranking \
             | cut -d$'\t' -f1 > result_ranking.$TOPIC
-
+        
         n=$(($TOTAL_DOCUMENTS - $prevalence_int))
+        
+        
+        $VERBOSE && echo "Selected documents from $ranking_size... and n $n"
 
-        tail -$TOTAL_DOCUMENTS sorted_ranking \
-            | cut -d' ' -f1 \
-            | head -$n > result_plus.$TOPIC
+#         tail -$TOTAL_DOCUMENTS sorted_ranking \
+#             | cut -d' ' -f1 \
+#             | head -$n > result_plus.$TOPIC
 
-        cat result_ranking.$TOPIC > result
-        cat sub_new[0-9][0-9]* >> result
+        #cat result_ranking.$TOPIC > result
+        cat sub_new[0-9][0-9]* > result
         cat result \
             | sort \
             | uniq > temp
@@ -309,17 +315,14 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
             | cut -d' ' -f1 > final_ranking.$TOPIC
 
 
-        # relevants_found=`cat result.$TOPIC \
-        #     | sort \
-        #     | uniq \
-        #     | join - goldendb \
-        #     | uniq \
-        #     | wc -l`
-        #
-        # documents_labeled=`cat result.$TOPIC \
-        #     | sort \
-        #     | uniq \
-        #     | wc -l`
+        ##############
+        tail -n $ranking_size final_ranking.$TOPIC >> result
+       
+        
+        documents_labeled=`cat result \
+            | sort \
+            | uniq \
+            | wc -l`
 
         relevants_found=`cat result \
             | join - goldendb \
@@ -345,8 +348,8 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         echo -e "\tPrecision: $precision"
         e_primary "-------------------------------------------------------------"
 
-        e_primary "Calling second sampling strategy proposed by REVEAL"
-        ../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
+       # e_primary "Calling second sampling strategy proposed by REVEAL"
+        #../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
 
         popd
 

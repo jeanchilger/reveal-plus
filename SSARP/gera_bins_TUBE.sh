@@ -36,4 +36,4 @@ while [ $i -le $f ]; do
 		done
 		i=$(($i+1))
 done
-#for i in `seq 1 50`; do  mv "train-B50-`echo $i`-0null.hist" "train-B50-`echo $i`-0LL.hist"; done
+for i in `seq 1 50`; do  mv "train-B50-`echo $i`-0null.hist" "train-B50-`echo $i`-0LL.hist"; done
