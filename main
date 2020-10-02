@@ -366,6 +366,6 @@ done
 
 e_info "Iniciate S-CAL process"
 
-source ./wrap_results                          # takes mean and standard deviations
+source ./wrap_results $TOPIC                      # takes mean and standard deviations
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option
