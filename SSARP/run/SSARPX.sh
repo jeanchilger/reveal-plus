@@ -78,7 +78,7 @@ then
 
 ../discretize_TUBE.pl train-$suffix $seed_ssarp $numfeatures  lac_train_TUBE_seed.txt.$topic
 echo "seed_ssarp----------"
-cat $seed_ssarp
+#cat $seed_ssarp
 ./updateRows.pl lac_train_TUBE_seed.txt.$topic  lac_train_TUBEfinal_seed.txt.$topic   0
 
     cat lac_train_TUBEfinal_seed.txt.$topic  >> alac_full_lac_train_TUBEfinal.txt.$topic
@@ -88,7 +88,7 @@ cat $seed_ssarp
     cat bkpseed >> alac_lac_train_TUBEfinal.txt.$topic
 
     echo "bkp seed is "
-    cat bkpseed 
+    #cat bkpseed 
     cp alac_lac_train_TUBEfinal.txt.$topic  bkppairs
    # python3 testeActive.py lac_train_TUBE.txt.$topic 5 /tmp/fullAllacfile.$topic lac_train_TUBE_seed.txt.$topic 1
 

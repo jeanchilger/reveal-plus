@@ -246,7 +246,7 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
         
         source ./seed_selection $CORPUS `echo $VERBOSE` $TOPIC "$QUERY"
         echo "round is $round"
-        continue;
+#         continue;
         
         source ./training $TOPIC "$QUERY" $CORPUS `echo $VERBOSE` $KEYSIZE $VALSIZE $round
 

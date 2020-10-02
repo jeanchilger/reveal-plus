@@ -51,7 +51,7 @@ if [ $discretize -eq 0 ]; then
 
         pushd SSARP/run/
         rm train*
-        .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 50 10 10
+        .././gera_bins_TUBE.sh /tmp/total.$TOPIC.arff 10 10 10
         popd
 
 fi
@@ -79,7 +79,7 @@ pushd SSARP/run/
 
 ./SSARPX.sh out.$roundActive.$TOPIC \
     trainset.$roundActive.$TOPIC \
-    50 \
+    10 \
     $roundActive \
     seed_out.$roundActive.$TOPIC.arff \
     $TOPIC \
