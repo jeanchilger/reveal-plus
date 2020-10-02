@@ -297,7 +297,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         # the active learning method needs at least 1 negative and
         # 1 positive document
         #-----------------------------------------------------------------
-        if [ $not_relevants -lt 1 ] || [ $relevants -lt 1 ]; then
+        if [ $not_relevants -lt 1000000000000 ] || [ $relevants -lt 10000000000000 ]; then
             $VERBOSE && e_secondary "\tStoring seed in ssarp file..."
 
             cp sub_new"$round".$TOPIC ssarp"$round".$TOPIC
