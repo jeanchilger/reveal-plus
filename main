@@ -204,9 +204,10 @@ mkdir results
 for i in $(seq -f "%02g" ${SAMPLES}); do
 
     e_info "Running sample ${i}."
-
+    num=$i
     rm -rf all_results/result-${i}
     mkdir all_results/result-${i}
+    echo "------------------------------------ ${num}"
 
     #---------------------------------------------------------------------
     # iterates over every topic:query pair, and executes the method for
@@ -340,17 +341,17 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
 
         e_primary "-------------------------------------------------------------"
         e_secondary "Final result SCAL ${YELLOW}Topic:${END} $TOPIC"
-        echo -e "\tRelevants Found: $relevants_found"
-        echo -e "\tTotal Relevants: $total_relevants"
-        echo -e "\tLabeled Documents: $documents_labeled"
-        echo -e "\tRanking Size: $ranking_size"
-        echo -e "\tRecall: $recall"
-        echo -e "\tPrecision: $precision"
+        echo -e "\tRelevants Found: $relevants_found" >> scal.final
+        echo -e "\tTotal Relevants: $total_relevants" >> scal.final
+        echo -e "\tLabeled Documents: $documents_labeled" >> scal.final
+        echo -e "\tRanking Size: $ranking_size" >> scal.final
+        echo -e "\tRecall: $recall" >> scal.final
+        echo -e "\tPrecision: $precision" >> scal.final
         e_primary "-------------------------------------------------------------"
 
        # e_primary "Calling second sampling strategy proposed by REVEAL"
         #../script_select_pairs.sh $TOPIC $JUDGECLASS $prevalence_int $rules 20
-
+        echo "------------------------------------ ${num}"
         popd
 
         mv $TOPIC "${RESULT_DIR}/"
@@ -359,16 +360,15 @@ for i in $(seq -f "%02g" ${SAMPLES}); do
     done < "judgement/$CORPUS.topic.stemming.txt"
 
     for topic in `ls ${RESULT_DIR}/`; do
-        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${i}/rel.rate
-        cp "${RESULT_DIR}/${topic}/reveal.final" all_results/result-${i}/reveal.final
-        cp "${RESULT_DIR}/${topic}/runs.log" all_results/result-${i}/runs.log
+        cp "${RESULT_DIR}/${topic}/rel.rate" all_results/result-${num}/rel.rate.${topic}
+        cp "${RESULT_DIR}/${topic}/scal.final" all_results/result-${num}/scal.final.${topic}
 
-        echo "${topic} ${i}" >> $ALL_RESULTS_HELPER
+        echo "${topic} ${num}" >> $ALL_RESULTS_HELPER
     done
 done
 
-e_info "Iniciate S-CAL process"
+#e_info "Iniciate S-CAL process"
 
-source ./wrap_results $TOPIC                      # takes mean and standard deviations
+#source ./wrap_results $TOPIC                      # takes mean and standard deviations
 
 sed -r -i "s/COLORS_ON=false/COLORS_ON=true/" colors  # resets color option

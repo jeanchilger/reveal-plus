@@ -430,7 +430,6 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         $VERBOSE  && e_info "\tCurrent relevants . $current_rel"
         $VERBOSE  && e_info "\tTotal relevants ... `wc -l < goldendb`"
         $VERBOSE  && e_info "\tRevelants missed .. $MISSING_REL"
-
         relevants=$(($relevants + \
             ($rel_found_sample * $SAMPLE_SIZE) / $sub_sample))
 
@@ -452,6 +451,7 @@ for _round in $(seq -f "%02g" $ROUND 99); do
         SAMPLE_SIZE=$(($SAMPLE_SIZE + ($SAMPLE_SIZE + 9) / 10))
     fi
 done
+
 
 # TODO: Change this approach
 export estimate=$estimate
