@@ -674,9 +674,13 @@ for CORP in "${CORPLIST[@]}"; do
 
          popd
 
-# 
+
+         
+	 mv $TOPIC/posit_seed ../reveal-plus
          mv $TOPIC result/"$PURPOSE"/"$CORP"/$TOPIC
-         #rm $TOPIC.seed.doc
+	 mkdir $TOPIC/
+         mv ../reveal-plus/posit_seed $TOPIC/
+	 #rm $TOPIC.seed.doc
 
     done < "judgement/$CORP.topic.stemming.txt"
 
