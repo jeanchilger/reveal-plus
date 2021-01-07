@@ -658,11 +658,11 @@ for CORP in "${CORPLIST[@]}"; do
         echo "Precisão: $precisao" >> n_docs_ranking
         echo "Recall: $recall" >> n_docs_ranking
         echo "Tamanho ranking: $NumberDocument" >> n_docs_ranking
-        echo "Numero de positivos encontrados: $RelevantDocs" >>n_docs_ranking
+        echo "Numero de positivos encontrados: $RelevantDocs" >> n_docs_ranking
         echo "----------------------------------------------------------" 
         echo "RESULTADO FINAL:"
-        echo "    Documentos Rotulados: $NumberDocsResult"
-        echo "    Total de positivos existentes: $totalRelevants"
+        echo "    Documentos Rotulados: $NumberDocsResult" >> n_docs_ranking
+        echo "    Total de positivos existentes: $totalRelevants" >>n_docs_ranking
         echo "    Positivos encontrados: $RelevantDocs"
         echo "    Recall: $recall"
         echo "    Precisao: $precisao"

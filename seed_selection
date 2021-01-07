@@ -26,6 +26,7 @@ startActive=1
 
 i=0
 echo "VAMO Q AGORA É PRA DAR CERTO"
+MISSING_REL=0
 while true; do
    step=$((i+1))
    begin=$((i*roundSize+1))
@@ -52,7 +53,57 @@ while true; do
    source ../active_learning $CORPUS `echo $VERBOSE` $TOPIC $round $discretize $startActive  sub_new$i.$TOPIC
    discretize=1
    startActive=2
-   
+        #-----------------------------------------------------------------
+        # statics calculation
+        #-----------------------------------------------------------------
+        not_relevants=$(($not_relevants + `wc -l < x_negat."$round"`))
+
+        
+        
+#         if [ $acc -eq 0 ]; then
+#             memory=$(($memory +1))
+#             if [ $memory -gt 5 ]; then
+#                 echo "memory stop"
+#                 break
+#             fi
+#         else
+#             memory=0
+#         fi
+#        echo "memory value is $memory"
+        rel_found_sample=`wc -l < x_posit."$round"`  # relevants on previous sample
+        rel_rate=`echo "scale=4; $rel_found_sample / $SAMPLE_SIZE" | bc`
+        current_rel=`cat x_posit.* | wc -l`
+
+        # TODO: Check if all_docs may be replaced with TOTAL_DOCUMENTS.
+        already_labeled_docs=`cat ssarp* | wc -l`
+        all_docs=`cat new[0-9][0-9].$TOPIC | wc -l`
+
+        
+        $VERBOSE && e_info "\tNegative documents .............. `wc -l < x_negat.$round`"
+            
+           
+        temp=$((`wc -l < sub_new_positives.$round`- `wc -l < x_posit.$round`))
+        
+        MISSING_REL=$(($temp+$MISSING_REL))    
+        
+#             
+            
+        $VERBOSE  && e_info "\tRelevants lab ..... $rel_found_sample" 
+        $VERBOSE  && e_info "\tNot Relevants lab. `wc -l < x_negat."$round"`" 
+        
+        $VERBOSE  && e_info "\tSample size ....... $SAMPLE_SIZE"
+        $VERBOSE  && e_info "\tRel in the Sample . $all_positive"
+        $VERBOSE  && e_info "\tSub sample size ... $sub_sample"   
+        
+        $VERBOSE  && e_info "\tSub sample Rel Doc. `wc -l < sub_new_positives.$round`" 
+        $VERBOSE  && e_info "\tSample Rel Doc..... `cat new"$round".$TOPIC | sort | join - goldendb | wc -l`" 
+     
+        $VERBOSE  && e_info "\tAlready labeled ... $already_labeled_docs" 
+        $VERBOSE  && e_info "\tAll docs .......... $all_docs"
+        $VERBOSE  && e_info "\tRelevants rate .... $rel_rate"
+        $VERBOSE  && e_info "\tCurrent relevants . $current_rel"
+        $VERBOSE  && e_info "\tTotal relevants ... `wc -l < goldendb`"
+        $VERBOSE  && e_info "\tRevelants missed .. $MISSING_REL"
    pos=`wc -l < x_posit.$round`
    if [ $pos -ge 1 ]
    then 
@@ -65,6 +116,7 @@ while true; do
    fi
    i=$(($i+1))
 done
+
 popd
   
   
