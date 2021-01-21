@@ -15,8 +15,10 @@ while [ $loop == 1 ]; do
   newclass=`cat result_temp_$1/result_temp$count.txt | grep "New CLASS" | awk '{ print $4 }'`;
   
   #echo inserting instance $instance into alac_$1 `cat $1 | grep "^$instance\ " | cut -d' ' -f2`
-  cat $1 | grep "^$instance\ " |  grep "CLASS=1"
-  
+  cat $1 | grep "^$instance\ " |  grep "CLASS=1" >> testearquivo
+  echo "$1"
+  echo "$instance"
+  echo "TESTADOOOOOOO"
   
   exists=`cat alac_$1 | grep "^$instance\ "`; 
   if [ "$exists" == "" ]; then 
@@ -64,6 +66,9 @@ while [ $loop == 1 ]; do
     loop=0;
 
   fi 
+  if [ `cat testearquivo | wc -l` -ne 0 ]; then
+    break;
+  fi
 done
 
 
