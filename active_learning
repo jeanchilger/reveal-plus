@@ -13,7 +13,7 @@ flag_allac_first_time=$1; shift
 file_input=$1; shift
 
 $VERBOSE && e_primary    "Starting active learning..."
-
+echo "$file_input"
 rules=5
 if [ `wc -l < $file_input` -eq 0 ]; then
     $VERBOSE && e_secondary "Error input  active learning "
@@ -132,4 +132,9 @@ cat x_posit.$roundActive x_negat.$roundActive \
     | uniq > ssarp$roundActive.$TOPIC
     
 ssarp_relevants=`wc -l < x_posit.$roundActive`
+echo "$ssarp_relevants"
+echo "$ssarp_relevants"
+echo "$ssarp_relevants"
+echo "$ssarp_relevants"
+echo "$ssarp_relevants"
 
